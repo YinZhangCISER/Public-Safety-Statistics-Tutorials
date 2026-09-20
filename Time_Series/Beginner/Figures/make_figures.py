@@ -252,7 +252,248 @@ def fig_05():
     plt.close(fig)
 
 
+# ------------------------------------------------ 6. missing and zero
+def fig_06():
+    fig, (a1, a2, a3) = plt.subplots(1, 3, figsize=(13.5, 4.3))
+
+    d = m[(m["agency_id"] == "A009") & (m["year_month"] >= "2021-07")
+          & (m["year_month"] <= "2022-12")]
+    cal = pd.period_range("2021-07", "2022-12", freq="M").astype(str)
+    have = dict(zip(d["year_month"], d["total_cfs"]))
+    joined = [have.get(c, np.nan) for c in cal]
+    ticks = [i for i, c in enumerate(cal) if c[5:] in ("07", "01")]
+    labs = [c for c in cal if c[5:] in ("07", "01")]
+
+    naive = pd.Series(joined).interpolate().tolist()
+    a1.plot(range(len(cal)), naive, color=ORANGE, lw=2, zorder=3)
+    a1.set_xticks(ticks); a1.set_xticklabels(labs, fontsize=8.5)
+    a1.set_ylim(1100, 1900); a1.set_ylabel("calls for service")
+    style(a1)
+    title(a1, "Wrong: the line runs straight through",
+          "Three months are absent. The chart quietly invents them.")
+
+    a2.plot(range(len(cal)), joined, color=BLUE, lw=2, zorder=3)
+    gi = [i for i, c in enumerate(cal) if c in ("2022-03", "2022-04", "2022-05")]
+    a2.axvspan(gi[0] - 0.5, gi[-1] + 0.5, color=INK3, alpha=0.16, zorder=1)
+    a2.text((gi[0] + gi[-1]) / 2, 1160, "never\nsubmitted", ha="center",
+            fontsize=8.5, color=INK2)
+    a2.set_xticks(ticks); a2.set_xticklabels(labs, fontsize=8.5)
+    a2.set_ylim(1100, 1900); a2.set_ylabel("calls for service")
+    style(a2)
+    title(a2, "Right: the gap is left open",
+          "The reader can see there is nothing to know here.")
+
+    e = m[(m["agency_id"] == "A006") & (m["year"] == "2023")].sort_values("mon")
+    vals = e["n_uof"].tolist()
+    a3.bar(MONTHS, vals, color=BLUE, width=0.62, zorder=3)
+    zeros = [i for i, v in enumerate(vals) if v == 0]
+    a3.plot(zeros, [0] * len(zeros), marker="o", ls="none", ms=9,
+            mfc=ORANGE, mec=SURFACE, mew=1.4, zorder=5)
+    a3.text(0.02, 0.93, "● a reported zero", transform=a3.transAxes,
+            fontsize=9, color=ORANGE)
+    a3.set_ylim(-0.25, 5); a3.set_yticks(range(6))
+    a3.set_ylabel("use of force incidents")
+    style(a3)
+    title(a3, "A zero is not a gap",
+          "Elkhorn, 2023. Four months reported a true zero.")
+    a3.tick_params(labelsize=8.5)
+    for lab in a3.get_xticklabels()[1::2]:
+        lab.set_visible(False)
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_06_missing_and_zero.png", dpi=150)
+    plt.close(fig)
+
+
+# ----------------------------------------------------------- 7. trend
+def fig_07():
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(12, 4.4))
+
+    d = m[(m["agency_id"] == "A001") & (m["year"] == "2023")].sort_values("mon")
+    v = d["n_uof"].tolist()
+    a1.plot(MONTHS, v, color=BLUE, lw=2, marker="o", ms=5, mfc=SURFACE, mew=1.6, zorder=3)
+    a1.plot([5], [v[5]], marker="o", ms=13, mfc="none", mec=ORANGE, mew=2.2, zorder=4)
+    a1.annotate("June: 79\nthe highest month\nof the year",
+                (5, v[5]), textcoords="offset points", xytext=(4, 20),
+                fontsize=9, color=INK, ha="center")
+    a1.set_ylim(0, 110); a1.set_ylabel("use of force incidents")
+    style(a1)
+    title(a1, "One year on its own", "Riverbend, 2023. June looks like the story.")
+    a1.tick_params(labelsize=8.5)
+    for lab in a1.get_xticklabels()[1::2]:
+        lab.set_visible(False)
+
+    years = [str(y) for y in range(2019, 2026)]
+    d2 = m[(m["agency_id"] == "A001") & (m["year"].isin(years))]
+    rate = [100 * d2[d2["year"] == y]["n_uof"].sum() / d2[d2["year"] == y]["n_arrests"].sum()
+            for y in years]
+    fit = np.poly1d(np.polyfit(range(7), rate, 1))
+    a2.plot(years, [fit(i) for i in range(7)], color=INK3, lw=1.3, ls=(0, (4, 3)), zorder=2)
+    a2.plot(years, rate, color=BLUE, lw=2, marker="o", ms=6, mfc=SURFACE, mew=1.8, zorder=3)
+    for i in (0, 6):
+        a2.annotate(f"{rate[i]:.2f}", (i, rate[i]), textcoords="offset points",
+                    xytext=(0, 12), ha="center", fontsize=9.5, color=INK, weight="bold")
+    a2.set_ylim(0, 4.8); a2.set_ylabel("use of force per 100 arrests")
+    style(a2)
+    title(a2, "The same agency over seven years",
+          "Down every single year. June 2023 sits inside a long decline.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_07_trend.png", dpi=150)
+    plt.close(fig)
+
+
+# ----------------------------------------------------- 8. seasonality
+def fig_08():
+    fig, (a1, a2, a3) = plt.subplots(1, 3, figsize=(13.8, 4.4))
+
+    d = m[(m["provisional"] == 0) & (m["agency_id"] != "A010")]
+    idx = d.groupby("mon").apply(lambda x: 100 * x["n_uof"].sum() / x["n_arrests"].sum())
+    idx = idx / idx.mean()
+    cols = [ORANGE if v >= 1.15 else BLUE for v in idx.values]
+    a1.bar(MONTHS, idx.values, color=cols, width=0.66, zorder=3)
+    a1.axhline(1.0, color=INK3, lw=1.1, ls=(0, (4, 3)), zorder=4)
+    a1.text(0, 1.03, "annual average", ha="left", fontsize=8.5, color=INK2)
+    a1.set_ylim(0, 1.45); a1.set_ylabel("share of the annual average rate")
+    style(a1)
+    title(a1, "Every agency pooled, 2019 to 2026",
+          "June and July run about 25 percent above average.")
+    a1.tick_params(labelsize=8.5)
+    for lab in a1.get_xticklabels()[1::2]:
+        lab.set_visible(False)
+
+    years = [str(y) for y in range(2019, 2026)]
+    jan = [int(m[(m["agency_id"] == "A012") & (m["year"] == y) & (m["mon"] == 1)]["n_uof"].iloc[0])
+           for y in years]
+    jul = [int(m[(m["agency_id"] == "A012") & (m["year"] == y) & (m["mon"] == 7)]["n_uof"].iloc[0])
+           for y in years]
+    x = np.arange(7)
+    a2.bar(x - 0.2, jan, width=0.38, color=BLUE, label="January", zorder=3)
+    a2.bar(x + 0.2, jul, width=0.38, color=ORANGE, label="July", zorder=3)
+    a2.set_xticks(x); a2.set_xticklabels(years, fontsize=8.5)
+    a2.legend(fontsize=8.5, frameon=False, loc="upper right")
+    a2.set_ylim(0, 205); a2.set_ylabel("use of force incidents")
+    style(a2)
+    title(a2, "Grandview, July against January",
+          "July wins in all seven years. That is what predictable means.")
+
+    c = pd.read_csv(DATA / "cfs_monthly_by_type.csv")
+    a = c[c["agency_id"] == "A010"].groupby("year_month", as_index=False)["n_calls"].sum()
+    a["mon"] = a["year_month"].str[5:7].astype(int)
+    camp = a.groupby("mon")["n_calls"].mean()
+    camp = camp / camp.mean()
+    cols = [ORANGE if v >= 1.25 else BLUE for v in camp.values]
+    a3.bar(MONTHS, camp.values, color=cols, width=0.66, zorder=3)
+    a3.axhline(1.0, color=INK3, lw=1.1, ls=(0, (4, 3)), zorder=4)
+    a3.set_ylim(0, 1.45); a3.set_ylabel("share of the annual average calls")
+    style(a3)
+    title(a3, "The campus agency disagrees",
+          "Pinecrest peaks in September and empties out in June.")
+    a3.tick_params(labelsize=8.5)
+    for lab in a3.get_xticklabels()[1::2]:
+        lab.set_visible(False)
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_08_seasonality.png", dpi=150)
+    plt.close(fig)
+
+
+# ------------------------------------------ 9. cycles and seasonality
+def fig_09():
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(12.5, 4.4))
+
+    d = m[(m["agency_id"] == "A012") & (m["provisional"] == 0)].sort_values("year_month")
+    x = pd.PeriodIndex(d["year_month"], freq="M").to_timestamp()
+    a1.plot(x, d["n_uof"], color=BLUE, lw=1.4, zorder=3)
+    yr = d[d["year"] <= "2025"].groupby("year")["n_uof"].mean()
+    a1.plot([pd.Timestamp(f"{y}-07-01") for y in yr.index], yr.values,
+            color=ORANGE, lw=2.2, zorder=4)
+    a1.text(pd.Timestamp("2024-09-01"), 26, "yearly average", color=ORANGE, fontsize=9)
+    a1.text(pd.Timestamp("2019-03-01"), 172, "each spike is July", color=INK2, fontsize=9)
+    a1.set_ylim(0, 195); a1.set_ylabel("use of force incidents")
+    style(a1)
+    title(a1, "What is in this dataset: season plus trend",
+          "A peak every twelve months, on a level that drifts slowly down.")
+
+    t = np.linspace(0, 7, 400)
+    cyc = 100 + 26 * np.sin(2 * np.pi * t / 4.7 - 0.8)
+    a2.plot(2019 + t, cyc, color=INK3, lw=2.2, zorder=3)
+    a2.set_xlim(2019, 2026); a2.set_ylim(0, 195)
+    a2.set_ylabel("illustrative level")
+    a2.set_xticks(range(2019, 2027))
+    a2.set_xticklabels([str(y) for y in range(2019, 2027)], fontsize=8.5)
+    a2.text(2019.25, 172, "ILLUSTRATION ONLY", fontsize=9, color=ORANGE, weight="bold")
+    a2.text(2019.25, 158, "not from this dataset", fontsize=8.5, color=INK2)
+    a2.annotate("", xy=(2020.1, 40), xytext=(2024.8, 40),
+                arrowprops=dict(arrowstyle="<->", color=INK2, lw=1))
+    a2.text(2022.4, 30, "one full swing: close to five years",
+            ha="center", fontsize=8.5, color=INK2)
+    style(a2)
+    title(a2, "What a cycle would look like",
+          "No fixed length, no fixed month. Years between turns.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_09_cycles_and_seasonality.png", dpi=150)
+    plt.close(fig)
+
+
+# ----------------------------------------------------------- 10. noise
+def fig_10():
+    fig, (a1, a2, a3) = plt.subplots(1, 3, figsize=(13.8, 4.3))
+
+    d = m[(m["agency_id"] == "A008") & (m["year"] == "2023")].sort_values("mon")
+    v = d["n_uof"].tolist()
+    a1.plot(MONTHS, v, color=BLUE, lw=2, marker="o", ms=5, mfc=SURFACE, mew=1.6, zorder=3)
+    a1.annotate("14", (9, v[9]), textcoords="offset points", xytext=(0, 11),
+                ha="center", fontsize=9.5, color=INK, weight="bold")
+    a1.annotate("4", (10, v[10]), textcoords="offset points", xytext=(0, -20),
+                ha="center", fontsize=9.5, color=INK, weight="bold")
+    a1.set_ylim(0, 19); a1.set_ylabel("use of force incidents")
+    style(a1)
+    title(a1, "Lakeshore County, 2023",
+          "October 14, November 4. A 71 percent drop, and nothing caused it.")
+    a1.tick_params(labelsize=8.5)
+    for lab in a1.get_xticklabels()[1::2]:
+        lab.set_visible(False)
+
+    years = [str(y) for y in range(2019, 2026)]
+    d2 = m[(m["agency_id"] == "A008") & (m["year"].isin(years))]
+    rate = [100 * d2[d2["year"] == y]["n_uof"].sum() / d2[d2["year"] == y]["n_arrests"].sum()
+            for y in years]
+    a2.plot(years, rate, color=BLUE, lw=2, marker="o", ms=6, mfc=SURFACE, mew=1.8, zorder=3)
+    a2.axhline(np.mean(rate), color=INK3, lw=1.2, ls=(0, (4, 3)), zorder=2)
+    a2.text(6.35, np.mean(rate), f" average\n {np.mean(rate):.2f}", fontsize=9, color=INK2, va="center")
+    a2.set_xlim(-0.35, 7.8); a2.set_ylim(0, 3.6)
+    a2.tick_params(labelsize=8.5)
+    a2.set_ylabel("use of force per 100 arrests")
+    style(a2)
+    title(a2, "The same agency, seven years",
+          "No direction at all. The monthly swings were noise around this line.")
+
+    e = m[(m["agency_id"] == "A006") & (m["year"] == "2023")].sort_values("mon")
+    vals = e["n_uof"].tolist()
+    a3.bar(MONTHS, vals, color=BLUE, width=0.62, zorder=3)
+    zeros = [i for i, v in enumerate(vals) if v == 0]
+    a3.plot(zeros, [0] * len(zeros), marker="o", ls="none", ms=9,
+            mfc=ORANGE, mec=SURFACE, mew=1.4, zorder=5)
+    a3.annotate("0 in June,\n4 in July", (6, 4), textcoords="offset points",
+                xytext=(0, 12), ha="center", fontsize=9, color=INK)
+    a3.set_ylim(-0.3, 6); a3.set_yticks(range(7))
+    a3.set_ylabel("use of force incidents")
+    style(a3)
+    title(a3, "Elkhorn, eight officers",
+          "Small numbers make every month a headline.")
+    a3.tick_params(labelsize=8.5)
+    for lab in a3.get_xticklabels()[1::2]:
+        lab.set_visible(False)
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_10_noise.png", dpi=150)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
-    for fn in (fig_01, fig_02, fig_03, fig_04, fig_05):
+    for fn in (fig_01, fig_02, fig_03, fig_04, fig_05,
+               fig_06, fig_07, fig_08, fig_09, fig_10):
         fn()
         print("built", fn.__name__)

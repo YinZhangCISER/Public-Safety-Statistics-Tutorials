@@ -6,7 +6,7 @@
 
 **No statistics. No math. No code.** Twenty self contained modules, about five minutes each. Read them in order for a complete foundation, or jump to the one that answers the question in front of you.
 
-> **Publication status:** Topics 1 through 5 are published. Topics 6 through 20 are being written and their titles below are not yet links.
+> **Publication status:** Topics 1 through 10 are published. Topics 11 through 20 are being written and their titles below are not yet links.
 
 ---
 
@@ -21,7 +21,7 @@
 | 3 | [Visualizing a Time Series](Topic_03_Visualizing_A_Time_Series.md) | Why is a line better than a bar for data over time? |
 | 4 | [Time Units, Frequency, and Aggregation](Topic_04_Time_Units_Frequency_And_Aggregation.md) | How does daily against monthly change the conclusion? |
 | 5 | [Counts and Rates](Topic_05_Counts_And_Rates.md) | Does a higher count mean more danger, or just more activity? |
-| 6 | Missing Time Points and Reporting Gaps | What do you do when a month is simply not there? |
+| 6 | [Missing Time Points and Reporting Gaps](Topic_06_Missing_Time_Points_And_Reporting_Gaps.md) | What do you do when a month is simply not there? |
 
 ## Part II. Patterns
 
@@ -29,10 +29,10 @@
 
 | # | Topic | The question it answers |
 |---|---|---|
-| 7 | Trend, the Long Term Direction | Is it really getting worse, or is one bad month misleading us? |
-| 8 | Seasonality | Is the summer spike a crisis, or is it just summer? |
-| 9 | Cycles and Seasonality | What repeats every year, and what repeats every few years? |
-| 10 | Noise and Irregular Fluctuation | When should we *not* try to explain a change? |
+| 7 | [Trend, the Long Term Direction](Topic_07_Trend.md) | Is it really getting worse, or is one bad month misleading us? |
+| 8 | [Seasonality](Topic_08_Seasonality.md) | Is the summer spike a crisis, or is it just summer? |
+| 9 | [Cycles and Seasonality](Topic_09_Cycles_And_Seasonality.md) | What repeats every year, and what repeats every few years? |
+| 10 | [Noise and Irregular Fluctuation](Topic_10_Noise_And_Irregular_Fluctuations.md) | When should we *not* try to explain a change? |
 | 11 | Outliers and Spikes | One extraordinary event inflated our annual average. Now what? |
 | 12 | Short Term Fluctuation and Long Term Change | How do we avoid reacting to noise as though it were a trend? |
 | 13 | Smoothing and Moving Averages | How do we cut through month to month noise? |
