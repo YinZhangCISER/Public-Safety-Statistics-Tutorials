@@ -1,6 +1,5 @@
 # Topic 5: Counts and Rates
 
-> **Level:** Beginner | **Reading time:** about 5 minutes
 > **Prepared by Yin Zhang**, Center for Interdisciplinary Statistical Education and Research (CISER), Washington State University
 
 **The question this module answers:** *The biggest department in the state has the most use of force incidents. Is it the most forceful department in the state?*

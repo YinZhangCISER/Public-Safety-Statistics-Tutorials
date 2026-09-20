@@ -1,9 +1,8 @@
 # Topic 3: Visualizing a Time Series
 
-> **Level:** Beginner | **Reading time:** about 5 minutes
 > **Prepared by Yin Zhang**, Center for Interdisciplinary Statistical Education and Research (CISER), Washington State University
 
-**The question this module answers:** *This chart makes our numbers look alarming. Is the alarm in the data, or in the chart?*
+**The question this module answers:** *A chart makes a department's numbers look alarming. Is the alarm in the data, or in the chart?*
 
 ---
 
@@ -61,9 +60,9 @@ Bars are built for comparing separate categories, like four agency types. They p
 </details>
 
 <details>
-<summary><b>3.</b> You need to show trends for eight precincts. What should you do?</summary>
+<summary><b>3.</b> A report has to show trends for eight precincts. What should it do?</summary>
 
-Not eight lines on one chart. Either draw eight small panels side by side with the same vertical axis, so shapes can be compared at a glance, or pick the two or three precincts the decision actually concerns and chart those, with the others summarized as a single average line for context.
+Not eight lines on one chart. Either eight small panels side by side sharing one vertical axis, so the shapes can be compared at a glance, or just the two or three precincts the decision actually concerns, with the rest summarized as a single average line for context.
 </details>
 
 ## Key Takeaway

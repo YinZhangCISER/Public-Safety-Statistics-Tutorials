@@ -10,7 +10,9 @@ Every module in this repository follows one of the three templates below. The te
 
 **Length.** Beginner modules are a five minute read. Intermediate modules are eight to twelve minutes plus a notebook. Advanced modules are fifteen to twenty minutes plus a notebook.
 
-**Every concept arrives through a public safety question, never through a definition.** The first sentence of a module is a question a commander, an analyst, or a reporter would actually ask. The method appears only after the question has been made to matter.
+**Every concept arrives through a public safety question, never through a definition.** The first sentence of a module is a question someone would actually ask about public safety data. The method appears only after the question has been made to matter.
+
+**Write from outside the agency, not inside it.** The audience includes residents, reporters, council members, students and researchers as well as officers and agency staff, so a module never assumes the reader works in a department. Do not write "our numbers", "our agency", or "how did we do". Write "a department reports", "the agency's rate", "what does that number tell you". Where a scene needs a person in it, name several: a commander, a reporter, a council member. The one exception is dialogue, where an outside speaker may of course say "our city".
 
 **One dataset.** Every example uses the synthetic WADEPS dataset in [Data/](../Data/). Never introduce a new dataset for one example.
 
@@ -33,10 +35,9 @@ Every module in this repository follows one of the three templates below. The te
 ```markdown
 # Topic NN: Title
 
-> **Level:** Beginner | **Reading time:** about 5 minutes
 > **Prepared by Yin Zhang**, Center for Interdisciplinary Statistical Education and Research (CISER), Washington State University
 
-**The question this module answers:** *one sentence, in the voice of the person who would ask it.*
+**The question this module answers:** *one sentence, phrased so that a resident, a reporter, a council member, and an officer would all recognize it as their own question.*
 ```
 
 ## Footer block, at the bottom of every module

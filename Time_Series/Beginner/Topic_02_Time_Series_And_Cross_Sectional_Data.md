@@ -1,9 +1,8 @@
 # Topic 2: Time Series and Cross Sectional Data
 
-> **Level:** Beginner | **Reading time:** about 5 minutes
 > **Prepared by Yin Zhang**, Center for Interdisciplinary Statistical Education and Research (CISER), Washington State University
 
-**The question this module answers:** *A report ranks our agency against the one next door. Does that ranking mean we are doing worse?*
+**The question this module answers:** *A report ranks two agencies side by side. Does the one with the higher number have the worse record?*
 
 ---
 
@@ -19,7 +18,7 @@ A photograph cannot show motion. That sounds obvious, and it is still the most c
 
 ## Why It Matters
 
-Rankings are photographs. Every year a report comes out placing agencies in order, and everyone reads their own position as a verdict on how they are doing.
+Rankings are photographs. Every year a report comes out placing agencies in order, and the ordering gets read as a verdict on how each one is doing.
 
 It is not. A ranking tells you where an agency sits today. It says nothing about whether it is climbing or falling, and those are the facts that decide whether a current strategy should be kept or abandoned.
 
@@ -55,7 +54,7 @@ Whatever Summit County has been doing since 2019, the snapshot gives it no credi
 
 ## What To Watch For
 
-- **Each view is right for a different question.** Where should we send resources this quarter? That is a photograph question. Is this agency's situation improving? That is a movie question. Using one for the other is the error.
+- **Each view is right for a different question.** Where should resources go this quarter? That is a photograph question. Is this agency's situation improving? That is a movie question. Using one for the other is the error.
 - **A crossing point is not an event.** When two lines cross, nothing happened that year. The crossing is a consequence of directions set long before.
 - **Ask for at least three years.** Two points always make a line. Three or more show whether the line is real.
 

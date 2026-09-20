@@ -1,9 +1,8 @@
 # Topic 1: What Is a Time Series?
 
-> **Level:** Beginner | **Reading time:** about 5 minutes
 > **Prepared by Yin Zhang**, Center for Interdisciplinary Statistical Education and Research (CISER), Washington State University
 
-**The question this module answers:** *My chief asked how we did on use of force last year. Is one number enough?*
+**The question this module answers:** *A police department reports 1,136 use of force incidents for the year. What does that number actually tell you?*
 
 ---
 
@@ -15,11 +14,11 @@ The word that matters is *sequence*. A time series does not just tell you **how 
 
 ## Why It Matters
 
-A commander asks how the year went. There are two ways to answer.
+Someone asks how the year went. It could be a commander, a reporter, a council member, or a resident at a community meeting. There are two ways the question can be answered.
 
-**The one number answer.** "We had 1,136 use of force incidents." True, and almost useless. It cannot tell you whether the year got better or worse, whether anything you did made a difference, or what to expect next year.
+**The one number answer.** "There were 1,136 use of force incidents." True, and almost useless. It cannot tell you whether the year got better or worse, whether anything you did made a difference, or what to expect next year.
 
-**The time series answer.** "We started the year at 50 a month, climbed to 157 in July, and came back down to 78 by December." Now there is something to act on. Someone will ask what happened in July. That question is worth asking. The single number never prompts it.
+**The time series answer.** "The year started at 50 a month, climbed to 157 in July, and came back down to 78 by December." Now there is something to act on. Someone will ask what happened in July. That question is worth asking. The single number never prompts it.
 
 This is not a small difference. Budgets, staffing, and training calendars all get set from answers to questions like this one. An average hides the very thing a decision needs.
 

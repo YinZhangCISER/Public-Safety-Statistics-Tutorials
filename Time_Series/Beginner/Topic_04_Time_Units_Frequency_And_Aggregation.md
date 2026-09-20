@@ -1,6 +1,5 @@
 # Topic 4: Time Units, Frequency, and Aggregation
 
-> **Level:** Beginner | **Reading time:** about 5 minutes
 > **Prepared by Yin Zhang**, Center for Interdisciplinary Statistical Education and Research (CISER), Washington State University
 
 **The question this module answers:** *Should I be looking at this daily, monthly, or yearly? Does it matter?*
@@ -60,7 +59,7 @@ None of the three is wrong. They answer different questions.
 ## What To Watch For
 
 - **Match the frequency to the question.** Planning next summer's staffing is a monthly question. Judging a seven year reform is a yearly question. Neither is answerable at the other frequency.
-- **Never compare across frequencies.** "We had ten incidents on Saturday, against a monthly average of 95" is a meaningless sentence. Compare days to days and months to months.
+- **Never compare across frequencies.** "There were ten incidents on Saturday, against a monthly average of 95" is a meaningless sentence. Compare days to days and months to months.
 - **Smaller units mean bigger swings, always.** A quiet day is normal. A quiet year is not. The smaller the time unit, the larger the share of what you see that is pure chance.
 - **Monthly is usually the right default for public safety data.** It is short enough to catch a policy taking effect and long enough to average out the noise.
 
