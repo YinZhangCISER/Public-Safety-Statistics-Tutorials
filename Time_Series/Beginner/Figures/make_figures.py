@@ -492,8 +492,221 @@ def fig_10():
     plt.close(fig)
 
 
+# -------------------------------------------------------- 11. outliers
+def fig_11():
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(12.5, 4.4))
+
+    d = m[(m["agency_id"] == "A002") & (m["year"] == "2021")].sort_values("mon")
+    v = d["n_uof"].tolist()
+    a1.plot(MONTHS, v, color=BLUE, lw=2, marker="o", ms=5, mfc=SURFACE, mew=1.6, zorder=3)
+    a1.plot([5], [v[5]], marker="o", ms=9, mfc=ORANGE, mec=SURFACE, mew=1.6, zorder=5)
+    a1.annotate("June 2021: 176\na week of civil unrest", (5, v[5]),
+                textcoords="offset points", xytext=(18, -6), fontsize=9, color=INK)
+    a1.axhline(np.median(v), color=INK3, lw=1.2, ls=(0, (4, 3)), zorder=2)
+    a1.text(11.4, np.median(v) + 6, "typical month: 31", ha="right", fontsize=8.5, color=INK2)
+    a1.set_ylim(0, 195); a1.set_ylabel("use of force incidents")
+    style(a1)
+    title(a1, "Cedar Falls, 2021", "One month is nearly six times the typical month.")
+    a1.tick_params(labelsize=8.5)
+    for lab in a1.get_xticklabels()[1::2]:
+        lab.set_visible(False)
+
+    years = [str(y) for y in range(2019, 2026)]
+    dd = m[(m["agency_id"] == "A002") & (m["year"].isin(years))]
+    with_o = [dd[dd["year"] == y]["n_uof"].mean() for y in years]
+    keep = dd[~((dd["year"] == "2021") & (dd["mon"] == 6))]
+    without = [keep[keep["year"] == y]["n_uof"].mean() for y in years]
+    x = np.arange(7)
+    a2.bar(x - 0.2, with_o, width=0.38, color=ORANGE, label="June 2021 included", zorder=3)
+    a2.bar(x + 0.2, without, width=0.38, color=BLUE, label="June 2021 set aside", zorder=3)
+    a2.annotate("43.0", (1.8, 43.0), textcoords="offset points", xytext=(0, 5),
+                ha="center", fontsize=9, color=INK, weight="bold")
+    a2.annotate("30.9", (2.2, 30.9), textcoords="offset points", xytext=(0, 5),
+                ha="center", fontsize=9, color=INK, weight="bold")
+    a2.set_xticks(x); a2.set_xticklabels(years, fontsize=8.5)
+    a2.legend(fontsize=8.5, frameon=False, loc="upper right")
+    a2.set_ylim(0, 54); a2.set_ylabel("average incidents a month")
+    style(a2)
+    title(a2, "What that one month does to every yearly average",
+          "It invents a bad year in 2021 that the agency did not have.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_11_outliers.png", dpi=150)
+    plt.close(fig)
+
+
+# ----------------------------------------- 12. short term, long term
+def fig_12():
+    fig, (a1, a2, a3) = plt.subplots(1, 3, figsize=(13.8, 4.3))
+    d = m[(m["agency_id"] == "A012") & (m["year"] == "2023")].sort_values("mon")
+    v = d["n_uof"].tolist()
+
+    a1.plot(MONTHS[:6], v[:6], color=ORANGE, lw=2.2, marker="o", ms=5,
+            mfc=SURFACE, mew=1.6, zorder=3)
+    a1.set_ylim(0, 185); a1.set_ylabel("use of force incidents")
+    style(a1)
+    title(a1, "Six months: up 156 percent", "January 50 to June 128. A department in trouble.")
+
+    a2.plot(MONTHS[5:], v[5:], color=AQUA, lw=2.2, marker="o", ms=5,
+            mfc=SURFACE, mew=1.6, zorder=3)
+    a2.set_ylim(0, 185); a2.set_ylabel("use of force incidents")
+    style(a2)
+    title(a2, "The next six: down 39 percent", "June 128 to December 78. A turnaround.")
+
+    years = [str(y) for y in range(2019, 2026)]
+    tot = [m[(m["agency_id"] == "A012") & (m["year"] == y)]["n_uof"].sum() for y in years]
+    a3.plot(years, tot, color=BLUE, lw=2.2, marker="o", ms=6, mfc=SURFACE, mew=1.8, zorder=3)
+    a3.set_ylim(0, 1650); a3.set_ylabel("use of force incidents a year")
+    a3.tick_params(labelsize=8.5)
+    style(a3)
+    title(a3, "Seven years: down 25 percent", "1,405 to 1,058. Neither of the above happened.")
+
+    for a in (a1, a2):
+        a.tick_params(labelsize=8.5)
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_12_windows.png", dpi=150)
+    plt.close(fig)
+
+
+# ------------------------------------------------------- 13. smoothing
+def fig_13():
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(12.5, 4.4))
+
+    d = m[(m["agency_id"] == "A008") & (m["year"] == "2023")].sort_values("mon")
+    raw = pd.Series(d["n_uof"].tolist())
+    ma = raw.rolling(3).mean()
+    a1.plot(MONTHS, raw, color=INK3, lw=1.4, marker="o", ms=4, mfc=SURFACE,
+            mew=1.2, zorder=3, label="what was reported")
+    a1.plot(MONTHS, ma, color=BLUE, lw=2.4, zorder=4, label="three month average")
+    a1.set_ylim(0, 19); a1.set_ylabel("use of force incidents")
+    a1.legend(fontsize=8.5, frameon=False, loc="lower left")
+    style(a1)
+    title(a1, "Lakeshore County, 2023",
+          "The 14 to 4 drop becomes 9.7 to 8.3 once the noise is averaged out.")
+    a1.tick_params(labelsize=8.5)
+    for lab in a1.get_xticklabels()[1::2]:
+        lab.set_visible(False)
+
+    g = m[(m["agency_id"] == "A012") & (m["provisional"] == 0)].sort_values("year_month")
+    x = pd.PeriodIndex(g["year_month"], freq="M").to_timestamp()
+    raw = pd.Series(g["n_uof"].tolist())
+    a2.plot(x, raw, color=INK3, lw=1.1, zorder=3, label="what was reported")
+    a2.plot(x, raw.rolling(12).mean(), color=BLUE, lw=2.6, zorder=4,
+            label="twelve month average")
+    a2.set_ylim(0, 195); a2.set_ylabel("use of force incidents")
+    a2.legend(fontsize=8.5, frameon=False, loc="lower left")
+    style(a2)
+    title(a2, "Grandview, 2019 to 2026",
+          "A twelve month average erases the summer entirely, leaving the trend.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_13_smoothing.png", dpi=150)
+    plt.close(fig)
+
+
+# ------------------------------------------------ 14. comparison group
+def fig_14():
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(12.8, 4.6))
+
+    trio = [("A002", "Cedar Falls", ORANGE), ("A012", "Grandview", BLUE),
+            ("A008", "Lakeshore County", AQUA)]
+    for aid, lab, c in trio:
+        d = m[(m["agency_id"] == aid) & (m["year"] == "2021")].sort_values("mon")
+        v = np.array(d["n_uof"].tolist(), dtype=float) / d["n_uof"].median()
+        a1.plot(MONTHS, v, color=c, lw=2, marker="o", ms=4, mfc=SURFACE,
+                mew=1.2, zorder=3, label=lab)
+    a1.axhline(1.0, color=INK3, lw=1.1, ls=(0, (4, 3)), zorder=2)
+    a1.legend(fontsize=8.5, frameon=False, loc="upper left")
+    a1.set_ylim(0, 6.4); a1.set_ylabel("times the agency's own typical month")
+    style(a1)
+    title(a1, "The same twelve months, three agencies",
+          "Each drawn against its own normal, so the sizes can be compared.")
+    a1.tick_params(labelsize=8.5)
+    for lab in a1.get_xticklabels()[1::2]:
+        lab.set_visible(False)
+
+    rows = []
+    for aid in sorted(m["agency_id"].unique()):
+        d = m[(m["agency_id"] == aid) & (m["year"] == "2021")]
+        med = max(d["n_uof"].median(), 0.5)
+        rows.append((d["agency_name"].iloc[0].replace(" Police Department", "")
+                     .replace(" Sheriff's Office", "").replace(" Police", ""),
+                     float(d[d["mon"] == 6]["n_uof"].iloc[0]) / med))
+    rows.sort(key=lambda r: r[1])
+    names = [r[0] for r in rows]; vals = [r[1] for r in rows]
+    cols = [ORANGE if n == "Cedar Falls" else BLUE for n in names]
+    a2.barh(names, vals, color=cols, height=0.68, zorder=3)
+    for y, v in enumerate(vals):
+        a2.text(v + 0.08, y, f"{v:.1f}", va="center", fontsize=9, color=INK2)
+    a2.axvline(1.0, color=INK3, lw=1.1, ls=(0, (4, 3)), zorder=4)
+    a2.set_xlim(0, 6.6)
+    a2.set_xlabel("June 2021, as times that agency's own typical month")
+    style(a2, ygrid=False)
+    a2.grid(axis="x", color=GRID, lw=0.8); a2.set_axisbelow(True)
+    title(a2, "Every agency in June 2021",
+          "Eleven agencies had an ordinary June. One did not.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_14_comparison_group.png", dpi=150)
+    plt.close(fig)
+
+
+# ---------------------------------------------------------- 15. lag
+def fig_15():
+    TRAINED = ["A001", "A002", "A004", "A007", "A010"]
+    d = m[(m["provisional"] == 0)].copy()
+    d = d[~((d["agency_id"] == "A002") & (d["year_month"] == "2021-06"))]
+    d["grp"] = np.where(d["agency_id"].isin(TRAINED), "trained", "control")
+    g = (d.groupby(["grp", "year_month"])[["n_uof", "n_arrests"]].sum()
+           .reset_index())
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(12.8, 4.5))
+
+    for grp, c, lab in [("trained", ORANGE, "agencies that adopted the training"),
+                        ("control", BLUE, "agencies that did not")]:
+        s = g[g["grp"] == grp].sort_values("year_month")
+        x = pd.PeriodIndex(s["year_month"], freq="M").to_timestamp()
+        roll = (100 * s["n_uof"].rolling(12).sum() / s["n_arrests"].rolling(12).sum())
+        a1.plot(x, roll, color=c, lw=2.2, zorder=3, label=lab)
+    a1.axvline(pd.Timestamp("2023-07-01"), color=INK, lw=1.1, ls=(0, (4, 3)), zorder=4)
+    a1.text(pd.Timestamp("2023-07-20"), 3.82, "training begins", fontsize=8.5, color=INK2)
+    sep = g[(g["grp"] == "trained")].sort_values("year_month").reset_index(drop=True)
+    i = list(sep["year_month"]).index("2023-09")
+    ysep = 100 * sep["n_uof"].iloc[i - 11:i + 1].sum() / sep["n_arrests"].iloc[i - 11:i + 1].sum()
+    a1.plot([pd.Timestamp("2023-09-01")], [ysep], marker="o", ms=10, mfc="none",
+            mec=INK, mew=1.8, zorder=6)
+    a1.annotate("two months in, a report\nwritten here calls it a failure",
+                xy=(pd.Timestamp("2023-09-20"), ysep),
+                xytext=(pd.Timestamp("2024-03-01"), 3.62), fontsize=8.5, color=INK,
+                arrowprops=dict(arrowstyle="->", lw=0.9, color=INK2))
+    a1.set_ylim(1.5, 4.1); a1.set_ylabel("use of force per 100 arrests")
+    a1.legend(fontsize=8.5, frameon=False, loc="lower left", bbox_to_anchor=(0.01, 0.0))
+    style(a1)
+    title(a1, "Twelve month trailing rate",
+          "Two months in, the trained group had not moved at all.")
+
+    labs = ["12 months\nbefore", "first 3 months\nafter launch", "fully in place\nNov 2023 onward"]
+    gaps = [20.9, 17.2, 8.3]
+    cols = [INK3, INK3, ORANGE]
+    b = a2.bar(labs, gaps, color=cols, width=0.55, zorder=3)
+    for bb, v in zip(b, gaps):
+        a2.text(bb.get_x() + bb.get_width() / 2, v + 0.6, f"{v:.1f}%",
+                ha="center", fontsize=10.5, color=INK, weight="bold")
+    a2.set_ylim(0, 26)
+    a2.set_ylabel("how far the trained group sits above the others")
+    a2.tick_params(labelsize=9)
+    style(a2)
+    title(a2, "The gap between the two groups",
+          "Barely moved at three months. Cut by more than half once in place.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_15_lagged_effects.png", dpi=150)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     for fn in (fig_01, fig_02, fig_03, fig_04, fig_05,
-               fig_06, fig_07, fig_08, fig_09, fig_10):
+               fig_06, fig_07, fig_08, fig_09, fig_10,
+               fig_11, fig_12, fig_13, fig_14, fig_15):
         fn()
         print("built", fn.__name__)

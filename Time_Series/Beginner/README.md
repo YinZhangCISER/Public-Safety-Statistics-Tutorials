@@ -6,7 +6,7 @@
 
 **No statistics. No math. No code.** Twenty self contained modules, about five minutes each. Read them in order for a complete foundation, or jump to the one that answers the question in front of you.
 
-> **Publication status:** Topics 1 through 10 are published. Topics 11 through 20 are being written and their titles below are not yet links.
+> **Publication status:** Topics 1 through 15 are published. Topics 16 through 20 are being written and their titles below are not yet links.
 
 ---
 
@@ -33,11 +33,11 @@
 | 8 | [Seasonality](Topic_08_Seasonality.md) | Is the summer spike a crisis, or is it just summer? |
 | 9 | [Cycles and Seasonality](Topic_09_Cycles_And_Seasonality.md) | What repeats every year, and what repeats every few years? |
 | 10 | [Noise and Irregular Fluctuation](Topic_10_Noise_And_Irregular_Fluctuations.md) | When should we *not* try to explain a change? |
-| 11 | Outliers and Spikes | One extraordinary event inflated our annual average. Now what? |
-| 12 | Short Term Fluctuation and Long Term Change | How do we avoid reacting to noise as though it were a trend? |
-| 13 | Smoothing and Moving Averages | How do we cut through month to month noise? |
-| 14 | Comparing Multiple Time Series | Is this a local problem or a city wide one? |
-| 15 | Lagged Effects | How long should we wait before deciding a program is working? |
+| 11 | [Outliers and Spikes](Topic_11_Outliers_And_Spikes.md) | One extraordinary event inflated our annual average. Now what? |
+| 12 | [Short Term Fluctuation and Long Term Change](Topic_12_Short_Vs_Long_Term_Change.md) | How do we avoid reacting to noise as though it were a trend? |
+| 13 | [Smoothing and Moving Averages](Topic_13_Smoothing_And_Moving_Averages.md) | How do we cut through month to month noise? |
+| 14 | [Comparing Multiple Time Series](Topic_14_Comparing_Multiple_Time_Series.md) | Is this a local problem or a city wide one? |
+| 15 | [Lagged Effects](Topic_15_Lagged_Effects.md) | How long should we wait before deciding a program is working? |
 | 16 | Autocorrelation, the Memory of Data | Why does this month tell us so much about next month? |
 | 17 | Stationarity, the Stable Baseline | What does it mean for data to be stable, and why does forecasting need it? |
 | 18 | Year over Year Comparison | Why compare to the same month last year instead of to last month? |
