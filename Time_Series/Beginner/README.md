@@ -6,6 +6,8 @@
 
 **No statistics. No math. No code.** Twenty self contained modules, about five minutes each. Read them in order for a complete foundation, or jump to the one that answers the question in front of you.
 
+> **Publication status:** Topics 1 through 5 are published. Topics 6 through 20 are being written and their titles below are not yet links.
+
 ---
 
 ## Part I. Foundations
@@ -14,11 +16,11 @@
 
 | # | Topic | The question it answers |
 |---|---|---|
-| 1 | What Is a Time Series? | Why does timing matter as much as the total count? |
-| 2 | Time Series and Cross Sectional Data | What is the difference between a snapshot and a movie? |
-| 3 | Visualizing a Time Series | Why is a line better than a bar for data over time? |
-| 4 | Time Units, Frequency, and Aggregation | How does daily against monthly change the conclusion? |
-| 5 | Counts and Rates | Does a higher count mean more danger, or just more activity? |
+| 1 | [What Is a Time Series?](Topic_01_What_Is_A_Time_Series.md) | Why does timing matter as much as the total count? |
+| 2 | [Time Series and Cross Sectional Data](Topic_02_Time_Series_And_Cross_Sectional_Data.md) | What is the difference between a snapshot and a movie? |
+| 3 | [Visualizing a Time Series](Topic_03_Visualizing_A_Time_Series.md) | Why is a line better than a bar for data over time? |
+| 4 | [Time Units, Frequency, and Aggregation](Topic_04_Time_Units_Frequency_And_Aggregation.md) | How does daily against monthly change the conclusion? |
+| 5 | [Counts and Rates](Topic_05_Counts_And_Rates.md) | Does a higher count mean more danger, or just more activity? |
 | 6 | Missing Time Points and Reporting Gaps | What do you do when a month is simply not there? |
 
 ## Part II. Patterns
