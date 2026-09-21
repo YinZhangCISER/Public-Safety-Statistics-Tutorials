@@ -517,8 +517,256 @@ def fig_08():
     plt.close(fig)
 
 
+
+def _win(ids, lo_ym, hi_ym):
+    d = F[F["agency_id"].isin(ids) & (F["year_month"] >= lo_ym) & (F["year_month"] < hi_ym)]
+    return 100 * d["n_uof"].sum() / d["n_arrests"].sum()
+
+
+def fig_09():
+    """Module 9. Regression to the mean, and how much of it is real."""
+    import statsmodels.api as sm
+
+    early = {a: _win([a], "2019-01", "2020-07") for a in COMPARISON}
+    late = {a: _win([a], "2022-07", "2023-07") for a in COMPARISON}
+    h1 = {a: _win([a], "2019-01", "2021-04") for a in COMPARISON}
+    h2 = {a: _win([a], "2021-04", "2023-07") for a in COMPARISON}
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13.4, 5.0))
+
+    x = np.array([early[a] for a in COMPARISON])
+    y = np.array([100 * (late[a] / early[a] - 1) for a in COMPARISON])
+    z = sm.OLS(y, sm.add_constant(x)).fit()
+    a1.scatter(x, y, s=95, color=BLUE, zorder=5)
+    for a, xi, yi in zip(COMPARISON, x, y):
+        a1.annotate(SHORT[a], (xi, yi), fontsize=8.5, color=INK2,
+                    xytext=(7, -3), textcoords="offset points")
+    xs = np.linspace(x.min() - 0.15, x.max() + 0.15, 20)
+    a1.plot(xs, z.params[0] + z.params[1] * xs, color=ORANGE, lw=2.2, zorder=4)
+    a1.axhline(0, color=INK3, lw=1.2, zorder=3)
+    a1.text(2.05, 22,
+            f"slope {z.params[1]:.1f} points per unit\np = {z.pvalues[1]:.2f}, "
+            f"R squared {z.rsquared:.2f}", fontsize=9.5, color=ORANGE)
+    a1.set_xlabel("use of force rate, 2019 to mid 2020")
+    a1.set_ylabel("percent change by 2022 to mid 2023")
+    a1.set_xlim(1.95, 3.85)
+    a1.set_ylim(-22, 30)
+    style(a1)
+    title(a1, "Agencies that started higher fell further",
+          "Seven agencies, none of which received any program.")
+
+    u = np.array([h1[a] for a in COMPARISON])
+    v = np.array([h2[a] for a in COMPARISON])
+    a2.scatter(u, v, s=95, color=AQUA, zorder=5)
+    for a, ui, vi in zip(COMPARISON, u, v):
+        a2.annotate(SHORT[a], (ui, vi), fontsize=8.5, color=INK2,
+                    xytext=(7, -3), textcoords="offset points")
+    lim = [1.9, 3.6]
+    a2.plot(lim, lim, color=INK3, lw=1.4, ls="--", zorder=3)
+    a2.text(2.0, 3.35, f"correlation {np.corrcoef(u, v)[0, 1]:.2f}",
+            fontsize=11, color=AQUA, weight="bold")
+    a2.set_xlim(*lim)
+    a2.set_ylim(*lim)
+    a2.set_xlabel("rate in the first half of the pre period")
+    a2.set_ylabel("rate in the second half")
+    style(a2)
+    title(a2, "And yet the level differences are almost entirely real",
+          "An agency high in one half is high in the other. Little of the ranking is luck.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_09_regression_to_mean.png", dpi=150)
+    plt.close(fig)
+
+
+def _did(t_ids, c_ids):
+    tb = rate(F[F["agency_id"].isin(t_ids) & (F["period"] == "before")])
+    ta = rate(F[F["agency_id"].isin(t_ids) & (F["period"] == "after")])
+    cb = rate(F[F["agency_id"].isin(c_ids) & (F["period"] == "before")])
+    ca = rate(F[F["agency_id"].isin(c_ids) & (F["period"] == "after")])
+    return 100 * ((ta / tb) / (ca / cb) - 1)
+
+
+def fig_10():
+    """Module 10. Selection on the outcome, isolated."""
+    base = profile.set_index("agency_id")["pre_program_uof_per_100_arrests"]
+    ranked = sorted(COMPARISON, key=lambda a: -base[a])
+    worst, best = ranked[:3], ranked[-3:]
+
+    tb = rate(F[F["agency_id"].isin(NO_A007) & (F["period"] == "before")])
+    ta = rate(F[F["agency_id"].isin(NO_A007) & (F["period"] == "after")])
+
+    rows = [
+        ("the real program,\nbefore and after only", 100 * (ta / tb - 1), -12.0, ORANGE),
+        ("the real program,\ndifference in differences", _did(NO_A007, COMPARISON),
+         -12.0, AQUA),
+        ("no program at all,\ngiven to the worst three",
+         _did(worst, [a for a in COMPARISON if a not in worst]), 0.0, ORANGE),
+        ("no program at all,\ngiven to the best three",
+         _did(best, [a for a in COMPARISON if a not in best]), 0.0, ORANGE),
+    ]
+
+    fig, ax = plt.subplots(figsize=(12.6, 5.2))
+    ys = np.arange(len(rows))[::-1]
+    for (lab, est, truth, c), yy in zip(rows, ys):
+        ax.barh(yy, est, color=c, height=0.36, zorder=3)
+        off = -0.6 if est < 0 else 0.6
+        ha = "right" if est < 0 else "left"
+        ax.text(est + off, yy, f"{est:+.1f}%", ha=ha, va="center", fontsize=11,
+                color=INK, weight="bold")
+        ax.scatter([truth], [yy], s=150, marker="|", color=INK, zorder=6, linewidths=2.4)
+        ax.text(truth, yy + 0.30, f"truth {truth:+.0f}%", ha="center", fontsize=8.5,
+                color=INK)
+    ax.axvline(0, color=INK3, lw=1.2, zorder=2)
+    ax.set_yticks(ys)
+    ax.set_yticklabels([r[0] for r in rows], fontsize=9.5)
+    ax.set_xlim(-34, 17)
+    ax.set_ylim(-0.7, 3.65)
+    ax.set_xlabel("what a difference in differences reports")
+    style(ax, ygrid=False)
+    ax.grid(axis="x", color=GRID, lw=0.8, zorder=0)
+    ax.set_axisbelow(True)
+    title(ax, "Selecting on the outcome manufactures an effect of its own",
+          "The bottom two rows use agencies that received nothing. The truth for them is zero.")
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_10_selection_on_outcome.png", dpi=150)
+    plt.close(fig)
+
+
+def _box(ax, xy, w, h, text, fc, ec, fs=9.5):
+    from matplotlib.patches import FancyBboxPatch
+    x, y = xy
+    ax.add_patch(FancyBboxPatch((x - w / 2, y - h / 2), w, h,
+                                boxstyle="round,pad=0.02,rounding_size=0.06",
+                                fc=fc, ec=ec, lw=1.6, zorder=3))
+    ax.text(x, y, text, ha="center", va="center", fontsize=fs, color=INK, zorder=5)
+
+
+def _arrow(ax, a, b, color, curve=0.0, lw=2.0):
+    ax.annotate("", xy=b, xytext=a, zorder=4,
+                arrowprops=dict(arrowstyle="-|>", color=color, lw=lw,
+                                shrinkA=17, shrinkB=17,
+                                connectionstyle=f"arc3,rad={curve}"))
+
+
+def fig_11():
+    """Module 11. Three shapes, three different instructions."""
+    fig, axes = plt.subplots(1, 3, figsize=(14.4, 4.4))
+    specs = [
+        ("Confounder", "control for it", AQUA,
+         "the statewide decline", 4.9, [(4.9, 2.0, 0.18), (4.9, 8.0, -0.18)]),
+        ("Mediator", "do NOT control for it", ORANGE,
+         "how officers handle a call", 4.9, None),
+        ("Collider", "do NOT control for it", ORANGE,
+         "the agency gets reviewed", 1.2, None),
+    ]
+    for ax, (name, rule, col, mid, _, _) in zip(axes, specs):
+        ax.set_xlim(0, 10); ax.set_ylim(0.6, 6.6); ax.axis("off")
+        title(ax, name, rule)
+        _box(ax, (2.2, 2.0), 3.2, 1.0, "took the\ntraining", "#eaf1fb", BLUE)
+        _box(ax, (7.8, 2.0), 3.2, 1.0, "use of force\nfell", "#eaf1fb", BLUE)
+        _arrow(ax, (2.2, 2.0), (7.8, 2.0), INK3, lw=1.6)
+        if name == "Confounder":
+            _box(ax, (5.0, 5.0), 4.4, 1.0, mid, "#e7f6f0", AQUA)
+            _arrow(ax, (5.0, 5.0), (2.2, 2.0), AQUA, curve=0.18)
+            _arrow(ax, (5.0, 5.0), (7.8, 2.0), AQUA, curve=-0.18)
+            ax.text(5.0, 1.15, "both arrows point out of it", ha="center",
+                    fontsize=8.5, color=AQUA)
+        elif name == "Mediator":
+            _box(ax, (5.0, 5.0), 4.4, 1.0, mid, "#fdeee7", ORANGE)
+            _arrow(ax, (2.2, 2.0), (5.0, 5.0), ORANGE, curve=-0.18)
+            _arrow(ax, (5.0, 5.0), (7.8, 2.0), ORANGE, curve=-0.18)
+            ax.text(5.0, 1.15, "it sits on the path you are measuring",
+                    ha="center", fontsize=8.5, color=ORANGE)
+        else:
+            _box(ax, (5.0, 5.0), 4.4, 1.0, mid, "#fdeee7", ORANGE)
+            _arrow(ax, (2.2, 2.0), (5.0, 5.0), ORANGE, curve=-0.18)
+            _arrow(ax, (7.8, 2.0), (5.0, 5.0), ORANGE, curve=0.18)
+            ax.text(5.0, 1.15, "both arrows point into it", ha="center",
+                    fontsize=8.5, color=ORANGE)
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_11_confounders_mediators_colliders.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_12():
+    """Module 12. Placebo tests: fake dates and fake outcomes."""
+    import statsmodels.api as sm
+    import statsmodels.formula.api as smf
+
+    d = F[F["agency_id"].isin(NO_A007 + COMPARISON)].copy()
+    d["lo"] = np.log(d["n_arrests"])
+    d["tr"] = d["agency_id"].isin(NO_A007).astype(float)
+    d["settled"] = ((d["tr"] == 1) & (d["period"] == "after")).astype(float)
+    d["phase"] = ((d["tr"] == 1) & (d["period"] == "phase")).astype(float)
+    pre = d[d["period"] == "before"].copy()
+    pf = lambda b: 100 * (np.exp(b) - 1)
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13.6, 5.0))
+
+    cuts = ["2020-07", "2021-01", "2021-07", "2022-01", "2022-07"]
+    est, los, his = [], [], []
+    for cut in cuts:
+        s = pre.copy()
+        s["fake"] = ((s["tr"] == 1) & (s["year_month"] >= cut)).astype(float)
+        z = smf.glm("n_uof ~ C(agency_id) + C(year_month) + fake", s,
+                    family=sm.families.Poisson(), offset=s["lo"]).fit()
+        lo, hi = z.conf_int().loc["fake"]
+        est.append(pf(z.params["fake"])); los.append(pf(lo)); his.append(pf(hi))
+    xs = np.arange(len(cuts))
+    a1.errorbar(xs, est, yerr=[np.array(est) - np.array(los), np.array(his) - np.array(est)],
+                fmt="none", ecolor=AQUA, elinewidth=2.8, capsize=0, zorder=3)
+    a1.scatter(xs, est, s=95, color=AQUA, zorder=5)
+    for x, e in zip(xs, est):
+        a1.text(x + 0.13, e, f"{e:+.1f}%", fontsize=9.5, va="center", color=INK)
+    a1.axhline(0, color=INK, lw=2, ls="--", zorder=4)
+    a1.text(4.42, 0.9, "what a placebo should find", fontsize=9, color=INK, ha="right")
+    a1.set_xticks(xs)
+    a1.set_xticklabels([c for c in cuts], fontsize=9.5, rotation=20)
+    a1.set_xlim(-0.4, 4.6)
+    a1.set_ylim(-15, 9)
+    a1.set_ylabel("estimated effect of a program that did not exist")
+    a1.set_xlabel("fake intervention date, all inside the pre period")
+    style(a1)
+    title(a1, "Five dates, no program on any of them",
+          "Every interval covers zero, and the drift is the residual pre trend gap.")
+
+    outcomes = [("use of force\nthe real outcome", "n_uof", d["lo"], BLUE),
+                ("arrests", "n_arrests", None, AQUA),
+                ("calls for service", "total_cfs", None, ORANGE)]
+    labs, e2, l2, h2 = [], [], [], []
+    for lab, col, off, c in outcomes:
+        z = smf.glm(f"{col} ~ C(agency_id) + C(year_month) + settled + phase", d,
+                    family=sm.families.Poisson(),
+                    offset=off if off is not None else None).fit()
+        lo, hi = z.conf_int().loc["settled"]
+        labs.append(lab); e2.append(pf(z.params["settled"]))
+        l2.append(pf(lo)); h2.append(pf(hi))
+    ys = np.arange(len(labs))[::-1]
+    for yy, lab, e, lo, hi, (_, _, _, c) in zip(ys, labs, e2, l2, h2, outcomes):
+        a2.plot([lo, hi], [yy, yy], color=c, lw=3.2, solid_capstyle="round", zorder=3)
+        a2.scatter([e], [yy], s=100, color=c, zorder=5)
+        a2.text(3.0, yy, f"{e:+.2f}%  [{lo:+.2f}, {hi:+.2f}]", ha="left", va="center",
+                fontsize=9.5, color=INK, weight="bold")
+    a2.axvline(0, color=INK, lw=2, ls="--", zorder=4)
+    a2.set_yticks(ys)
+    a2.set_yticklabels(labs, fontsize=9.5)
+    a2.set_xlim(-21, 22)
+    a2.set_ylim(-0.6, 2.6)
+    a2.set_xlabel("estimated effect of the real program")
+    style(a2, ygrid=False)
+    a2.grid(axis="x", color=GRID, lw=0.8, zorder=0)
+    a2.set_axisbelow(True)
+    title(a2, "Three outcomes, only one the program should touch",
+          "Arrests are untouched. Calls move 0.42 percent, which is detectable and meaningless.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_12_placebo_tests.png", dpi=150)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     for fn in (fig_01, fig_02, fig_03, fig_04,
-               fig_05, fig_06, fig_07, fig_08):
+               fig_05, fig_06, fig_07, fig_08,
+               fig_09, fig_10, fig_11, fig_12):
         fn()
         print("built", fn.__name__)
