@@ -8,6 +8,8 @@ For officers, agency staff, government analysts, and undergraduate students who 
 
 Formulas appear, but every one of them is followed by the same statement in plain words.
 
+> **Publication status:** Part I, Modules 1 through 4, is published. Modules 5 through 16 are being written and their titles below are not yet links.
+
 ---
 
 ## Part I. Getting the Data Right
@@ -16,10 +18,10 @@ Formulas appear, but every one of them is followed by the same statement in plai
 
 | # | Module | The question it answers |
 |---|---|---|
-| 1 | From Incident Records to a Time Series | How do I turn a file of individual calls into a monthly series? |
-| 2 | Building an Honest Calendar | What do I do about missing months, zeros, and records still being entered? |
-| 3 | Choosing a Denominator | Per resident, per call, per officer, or per arrest? Each answers a different question. |
-| 4 | Why Small Agencies Look Volatile | Why does an 8 officer agency's rate swing so wildly, and what can I say about it? |
+| 1 | [From Incident Records to a Time Series](Module_01_From_Incident_Records_To_A_Time_Series.md) | How do I turn a file of individual calls into a monthly series? |
+| 2 | [Building an Honest Calendar](Module_02_Building_An_Honest_Calendar.md) | What do I do about missing months, zeros, and records still being entered? |
+| 3 | [Choosing a Denominator](Module_03_Choosing_A_Denominator.md) | Per resident, per call, per officer, or per arrest? Each answers a different question. |
+| 4 | [Why Small Agencies Look Volatile](Module_04_Why_Small_Agencies_Look_Volatile.md) | Why does an 8 officer agency's rate swing so wildly, and what can I say about it? |
 
 ## Part II. Describing the Series
 

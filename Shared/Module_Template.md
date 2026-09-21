@@ -50,9 +50,16 @@ Education and Research (CISER) at Washington State University. Version 1.0,
 [Month Year]. Questions, errors, or suggestions: yin.zhang@wsu.edu*
 ```
 
-> **Open item.** An ORCID iD will be added to the top byline of every module,
-> to CITATION.cff, and to the README once it is registered. Nothing carries a
-> placeholder in the meantime.
+> **Open items, to be resolved before publication.**
+>
+> 1. An ORCID iD will be added to the top byline of every module, to
+>    CITATION.cff, and to the README once it is registered. Nothing carries a
+>    placeholder in the meantime.
+> 2. Three things still carry the placeholder `OWNER/REPO` and must be
+>    rewritten once the repository has a home: the raw data URL in every
+>    notebook, the same URL in `Data/DATA_DICTIONARY.md`, and the Open in Colab
+>    badge in every Intermediate and Advanced module. Every notebook falls back
+>    to a local relative path, so they run inside a clone in the meantime.
 
 ## Footer block, at the bottom of every module
 
