@@ -8,7 +8,7 @@ For agency data analysts, graduate students outside statistics, and early career
 
 Notation is used freely, proofs are not. The emphasis throughout is on **what a model assumes, how you check the assumption, and what it costs you when the assumption fails.**
 
-> **Publication status:** Parts I, II and III, Modules 1 through 10, are published. Modules 11 through 14 are in development and their titles below are not yet links.
+> **Publication status:** complete. All fourteen modules are published, each with a notebook.
 
 ---
 
@@ -43,15 +43,15 @@ Three habits that every later module depends on.
 
 | # | Module | The question it answers |
 |---|---|---|
-| 11 | Interrupted Time Series Done Properly | Separating a level change from a slope change, with honest standard errors |
-| 12 | Structural Breaks and Changepoints | Finding the date you were not told about |
-| 13 | Intervention Analysis and Transfer Functions | Modeling the shape of a response, and the handoff to causal inference |
+| 11 | [Interrupted Time Series Done Properly](Module_11_Interrupted_Time_Series.md) | Separating a level change from a slope change, with honest standard errors |
+| 12 | [Structural Breaks and Changepoints](Module_12_Structural_Breaks.md) | Finding the date you were not told about |
+| 13 | [Intervention Analysis and Transfer Functions](Module_13_Intervention_Analysis.md) | Modeling the shape of a response, and the handoff to causal inference |
 
 ## Closing
 
 | # | Module | The question it answers |
 |---|---|---|
-| 14 | Reporting, and Work That Outlives You | What to put in front of a chief, what you are not entitled to claim, and how to leave an analysis someone else can rerun |
+| 14 | [Reporting, and Work That Outlives You](Module_14_Reporting_And_Reproducibility.md) | What to put in front of a chief, what you are not entitled to claim, and how to leave an analysis someone else can rerun |
 
 ---
 

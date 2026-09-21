@@ -1011,8 +1011,336 @@ def fig_10():
     plt.close(fig)
 
 
+
+def _its_frame():
+    """The panel every Part IV figure works from."""
+    f = FINAL.copy()
+    f = f[~((f["agency_id"] == "A002") & (f["year_month"] == "2021-06"))]
+    treated = ["A001", "A002", "A004", "A007", "A010"]
+    f["treated"] = f["agency_id"].isin(treated).astype(int)
+    f["lo"] = np.log(f["n_arrests"])
+    pi = pd.PeriodIndex(f["year_month"], freq="M")
+    f["t"] = (pi.year.values - 2019) * 12 + pi.month.values - 1
+    f["dt"] = pi.to_timestamp()
+    f["mo"] = pi.month.values
+    start = (2023 - 2019) * 12 + 6                      # 2023-07, programme starts
+    settled = (2023 - 2019) * 12 + 10                   # 2023-11, fully in place
+    f["k"] = f["t"] - start
+    f["phase"] = ((f["t"] >= start) & (f["t"] < settled)).astype(int)
+    f["post"] = (f["t"] >= settled).astype(int)
+    f["since"] = np.maximum(0, f["t"] - settled + 1) / 12.0
+    return f
+
+
+def _pois(formula, data):
+    import statsmodels.api as sm
+    import statsmodels.formula.api as smf
+    return smf.glm(formula, data, family=sm.families.Poisson(), offset=data["lo"]).fit()
+
+
+_PCT = lambda b: 100 * (np.exp(b) - 1)
+
+
+def fig_11():
+    f = _its_frame()
+    d = f[f["agency_id"] == "A001"].sort_values("t")
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13.8, 5.0))
+
+    rate = 100 * d["n_uof"].values / d["n_arrests"].values
+    a1.plot(d["dt"], rate, color=INK3, lw=1.4, zorder=3, label="Stonewick, rate per 100 arrests")
+    pre = d[d["k"] < 0]
+    z = _pois("n_uof ~ I(t/12.0)", pre)
+    tt = d["t"].values / 12.0
+    fitted = 100 * np.exp(z.params["Intercept"] + z.params["I(t / 12.0)"] * tt)
+    a1.plot(d["dt"], fitted, color=BLUE, lw=2.2, ls="--", zorder=5,
+            label="the pre period trend, extrapolated")
+    cut = d[d["k"] == 4]["dt"].iloc[0]
+    a1.axvline(cut, color=ORANGE, lw=2, zorder=4)
+    a1.axvspan(d[d["k"] == 0]["dt"].iloc[0], cut, color=ORANGE, alpha=0.15, zorder=1)
+    a1.text(cut, 6.0, "  fully in place", fontsize=9, color=ORANGE, va="top")
+    a1.set_ylabel("use of force per 100 arrests")
+    a1.set_ylim(0, 6.4)
+    a1.legend(fontsize=8.5, frameon=False, loc="lower left")
+    style(a1)
+    title(a1, "One agency, one interruption",
+          "The level term here is -3.0 percent, interval -13.4 to +8.7.")
+
+    clean = f[f["agency_id"] != "A007"]
+    both = _pois("n_uof ~ C(agency_id)+C(year_month)+treated:phase+treated:post+treated:since",
+                 clean)
+    level = _pois("n_uof ~ C(agency_id)+C(year_month)+treated:phase+treated:post", clean)
+    s = np.sort(clean[clean["post"] == 1]["since"].unique())
+    path = both.params["treated:post"] + both.params["treated:since"] * s
+    flat = np.full_like(s, level.params["treated:post"])
+
+    a2.plot(s, _PCT(path), color=BLUE, lw=2.4, zorder=5,
+            label="level and slope, both estimated")
+    a2.plot(s, _PCT(flat), color=AQUA, lw=2.4, zorder=5, label="level change only")
+    a2.axhline(-12.0, color=ORANGE, lw=2, ls="--", zorder=4)
+    a2.text(s.max(), -11.2, "the truth  ", fontsize=9, color=ORANGE, ha="right")
+    a2.scatter([s.mean()], [_PCT(path.mean())], s=90, color=BLUE, zorder=6)
+    a2.annotate(f"average of the sloped line, {_PCT(path.mean()):+.1f}%",
+                (s.mean(), _PCT(path.mean())), fontsize=9, color=INK,
+                xytext=(10, -22), textcoords="offset points")
+    a2.set_xlabel("years since the programme was fully in place")
+    a2.set_ylabel("estimated change in the rate")
+    a2.set_ylim(-22, 2)
+    a2.legend(fontsize=8.5, frameon=False, loc="lower left")
+    style(a2)
+    title(a2, "The two specifications disagree everywhere but on average",
+          "AIC prefers the sloped one by 2 points. The slope is not real.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_a11_its.png", dpi=150)
+    plt.close(fig)
+
+
+def _design(index):
+    n = len(index)
+    return np.column_stack([np.ones(n), np.arange(n) / 12.0,
+                            np.sin(2 * np.pi * index.month.values / 12),
+                            np.cos(2 * np.pi * index.month.values / 12)])
+
+
+def _scan(y, X, trim=0.15):
+    import statsmodels.api as sm
+    n = len(y)
+    k0 = int(trim * n)
+    rows = []
+    for k in range(k0, n - k0):
+        dd = (np.arange(n) >= k).astype(float)
+        r = sm.OLS(y, np.column_stack([X, dd])).fit()
+        rows.append((k, float((r.params[-1] / r.bse[-1]) ** 2), float(r.params[-1])))
+    return rows
+
+
+def fig_12():
+    import statsmodels.api as sm
+
+    prov = set(monthly[monthly["provisional"] == 1]["year_month"])
+    bt = pd.read_csv(DATA / "cfs_monthly_by_type.csv")
+    bt = bt[~bt["year_month"].isin(prov)]
+    a = (bt[bt["agency_id"] == "A003"]
+         .pivot(index="year_month", columns="incident_type", values="n_calls").sort_index())
+    a.index = pd.PeriodIndex(a.index, freq="M").to_timestamp()
+    X = _design(a.index)
+
+    po = np.log(a["Public Order Offense"].values.astype(float))
+    tot = np.log(a.sum(axis=1).values.astype(float))
+    s_po, s_tot = _scan(po, X), _scan(tot, X)
+
+    fig, (a1, a2, a3) = plt.subplots(1, 3, figsize=(15.0, 4.9))
+
+    a1.plot(a.index, a["Public Order Offense"], color=BLUE, lw=1.8, zorder=4,
+            label="public order offences")
+    a1.plot(a.index, a["Other"], color=ORANGE, lw=1.8, zorder=4, label="Other")
+    a1.plot(a.index, a.sum(axis=1), color=INK3, lw=1.8, zorder=3, label="all calls")
+    a1.axvline(pd.Timestamp("2023-01-01"), color=INK, lw=1.4, ls="--", zorder=5)
+    a1.text(pd.Timestamp("2023-02-01"), 4900, " January 2023", fontsize=9, color=INK)
+    a1.set_ylabel("calls a month")
+    a1.legend(fontsize=8.5, frameon=False, loc="center left")
+    style(a1)
+    title(a1, "Havenbrook: a break in two parts, none in the whole",
+          "The total moves 6 percent. Its two largest components move 60 and 26.")
+
+    ks = [a.index[k] for k, _, _ in s_po]
+    a2.plot(ks, [w for _, w, _ in s_po], color=BLUE, lw=2.2, zorder=5,
+            label="public order offences")
+    a2.plot(ks, [w for _, w, _ in s_tot], color=INK3, lw=2.0, zorder=4, label="all calls")
+    a2.axhline(8.85, color=ORANGE, lw=1.8, ls="--", zorder=3)
+    a2.axhline(3.84, color=INK3, lw=1.4, ls=":", zorder=3)
+    a2.text(ks[0], 15.0, "  correct 5% value, 8.85", fontsize=8.5, color=ORANGE, ha="left")
+    a2.text(ks[0], 1.55, "  the value people use, 3.84", fontsize=8.5, color=INK2, ha="left")
+    a2.set_yscale("log")
+    a2.set_ylim(0.03, 600)
+    a2.set_ylabel("Wald statistic for a break at this date (log scale)")
+    a2.legend(fontsize=8.5, frameon=False, loc="lower left")
+    style(a2)
+    title(a2, "Testing every date, one at a time",
+          "The peak is at 2023-01, the month the definition changed.")
+
+    rng = np.random.default_rng(7)
+    n = 88
+    idx = pd.period_range("2019-01", periods=n, freq="M").to_timestamp()
+    Xs = _design(idx)
+    beta = np.array([3.0, -0.05, 0.1, 0.15])
+    maxes = []
+    for _ in range(400):
+        ys = Xs @ beta + rng.normal(0, 0.25, n)
+        maxes.append(max(w for _, w, _ in _scan(ys, Xs)))
+    maxes = np.array(maxes)
+    a3.hist(maxes, bins=28, color=BLUE, zorder=3)
+    a3.axvline(3.84, color=INK3, lw=1.6, ls=":", zorder=5)
+    a3.axvline(8.85, color=ORANGE, lw=2, ls="--", zorder=5)
+    a3.text(12.4, 40, f"{100 * (maxes > 3.84).mean():.0f}% of these series clear\nthe dotted line",
+            fontsize=9, color=INK2)
+    a3.text(12.4, 27, f"{100 * (maxes > 8.85).mean():.0f}% clear\nthe dashed line",
+            fontsize=9, color=ORANGE)
+    a3.set_xlabel("largest Wald statistic found by searching")
+    a3.set_ylabel("number of series")
+    a3.set_xlim(0, 22)
+    style(a3)
+    title(a3, "400 series with no break at all",
+          "Searching for the date is what inflates the statistic.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_a12_breaks.png", dpi=150)
+    plt.close(fig)
+
+
+def _tfcol(dd, delta):
+    out = []
+    for _, g in dd.groupby("agency_id"):
+        g = g.sort_values("t")
+        x, vals = 0.0, []
+        tre = g["treated"].iloc[0]
+        for kk in g["k"].values:
+            inp = 1.0 if (tre == 1 and kk >= 0) else 0.0
+            x = delta * x + (1 - delta) * inp
+            vals.append(x)
+        out.append(pd.Series(vals, index=g.index))
+    return pd.concat(out).reindex(dd.index)
+
+
+def fig_13():
+    f = _its_frame()
+    d = f[f["agency_id"] != "A007"].copy()
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13.8, 5.0))
+
+    ev = d.copy()
+    ev["ek"] = np.clip(ev["k"], -6, 8).astype(int)
+    ev.loc[ev["treated"] == 0, "ek"] = -99
+    js = [j for j in range(-6, 9) if j != -1]
+    terms = " + ".join([f"I((treated==1)&(ek=={j}))" for j in js])
+    z = _pois("n_uof ~ C(agency_id)+C(year_month)+" + terms, ev)
+    est, lo, hi = [], [], []
+    for j in js:
+        key = [k for k in z.params.index if f"ek == {j}" in k][0]
+        l, h = z.conf_int().loc[key]
+        est.append(_PCT(z.params[key])); lo.append(_PCT(l)); hi.append(_PCT(h))
+    js_p = np.array(js, dtype=float)
+    a1.errorbar(js_p, est, yerr=[np.array(est) - np.array(lo), np.array(hi) - np.array(est)],
+                fmt="o", ms=5, color=INK3, ecolor=GRID, elinewidth=2, zorder=4,
+                label="one coefficient per month")
+    frac = np.interp(np.arange(-6, 9), [0, 1, 2, 3, 4], [0, .25, .58, .83, 1.0],
+                     left=0, right=1.0)
+    a1.plot(np.arange(-6, 9), 100 * (np.exp(np.log(0.88) * frac) - 1), color=ORANGE,
+            lw=2.6, zorder=6, label="the phase in that is actually there")
+    a1.axhline(0, color=GRID, lw=1)
+    a1.axvline(-0.5, color=INK3, lw=1.2, ls="--", zorder=3)
+    a1.set_xlabel("months since the programme started")
+    a1.set_ylabel("estimated change in the rate")
+    a1.set_ylim(-62, 55)
+    a1.legend(fontsize=8.5, frameon=False, loc="lower left")
+    style(a1)
+    title(a1, "The event study cannot see the phase in",
+          "Estimates swing from -34 to +24 percent around a curve that never leaves -12.")
+
+    deltas = np.array([0.0, 0.3, 0.5, 0.7, 0.8, 0.9, 0.95, 0.97, 0.99])
+    aics, full, avg = [], [], []
+    settled = (d["treated"] == 1) & (d["k"] >= 4)
+    for dl in deltas:
+        d["tf"] = _tfcol(d, dl)
+        z2 = _pois("n_uof ~ C(agency_id)+C(year_month)+tf", d)
+        aics.append(z2.aic)
+        full.append(_PCT(z2.params["tf"]))
+        avg.append(_PCT(z2.params["tf"] * d.loc[settled, "tf"].mean()))
+
+    a2.plot(deltas, full, color=ORANGE, lw=2.4, marker="o", ms=5, zorder=5,
+            label="the effect the model claims at full strength")
+    a2.plot(deltas, avg, color=AQUA, lw=2.4, marker="o", ms=5, zorder=5,
+            label="the average over the settled months")
+    a2.axhline(-12.0, color=INK3, lw=1.8, ls="--", zorder=3)
+    a2.text(0.02, -10.4, "the truth", fontsize=9, color=INK2)
+    a2.set_xlabel("decay parameter, chosen by AIC")
+    a2.set_ylabel("estimated change in the rate")
+    a2.set_ylim(-60, 4)
+    a2.legend(fontsize=8.5, frameon=False, loc="lower left")
+    style(a2)
+    ax = a2.twinx()
+    ax.plot(deltas, aics, color=INK3, lw=1.4, ls=":", zorder=4)
+    ax.set_ylabel("AIC (dotted)", color=INK3, fontsize=9)
+    ax.tick_params(labelsize=8, colors=INK3)
+    ax.spines[["top", "left"]].set_visible(False)
+    ax.spines["right"].set_color(GRID)
+    ax.set_ylim(4738, 4752)
+    title(a2, "AIC follows the decay to the boundary",
+          "Across the whole range AIC moves 2.4 points. The claim moves 41.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_a13_intervention.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_14():
+    f = _its_frame()
+    clean = f[f["agency_id"] != "A007"]
+
+    tr = f[f["treated"] == 1]
+    aft = tr[tr["post"] == 1]
+    bef = tr[(tr["post"] == 0) & (tr["phase"] == 0)]
+    naive = 100 * ((aft["n_uof"].sum() / aft["n_arrests"].sum())
+                   / (bef["n_uof"].sum() / bef["n_arrests"].sum()) - 1)
+
+    def eff(formula, data, term):
+        z = _pois(formula, data)
+        lo, hi = z.conf_int().loc[term]
+        return _PCT(z.params[term]), _PCT(lo), _PCT(hi)
+
+    e1 = eff("n_uof ~ C(agency_id)+treated:phase+treated:post", clean, "treated:post")
+    d1 = f[f["agency_id"] == "A001"]
+    e2 = eff("n_uof ~ I(t/12.0)+I(np.sin(2*np.pi*mo/12))+I(np.cos(2*np.pi*mo/12))"
+             "+phase+post", d1, "post")
+    e3 = eff("n_uof ~ C(agency_id)+C(year_month)+treated:phase+treated:post", f,
+             "treated:post")
+    e4 = eff("n_uof ~ C(agency_id)+C(year_month)+treated:phase+treated:post", clean,
+             "treated:post")
+
+    rows = [
+        ("before and after, treated agencies only", naive, None, None, ORANGE,
+         "absorbs four years of statewide decline"),
+        ("agency effects, no month effects", e1[0], e1[1], e1[2], ORANGE,
+         "the same decline, now inside a fixed effects model"),
+        ("panel, pre trend violator left in", e3[0], e3[1], e3[2], ORANGE,
+         "carries one agency's private trend"),
+        ("one agency, interrupted series", e2[0], e2[1], e2[2], INK3,
+         "correctly run, and 22 points wide"),
+        ("panel, agency and month effects", e4[0], e4[1], e4[2], AQUA,
+         "the estimate this dataset supports"),
+    ]
+
+    fig, ax = plt.subplots(figsize=(13.4, 5.2))
+    ys = np.arange(len(rows))[::-1]
+    for (lab, est, lo, hi, c, note), yy in zip(rows, ys):
+        if lo is not None:
+            ax.plot([lo, hi], [yy, yy], color=c, lw=3.2, solid_capstyle="round", zorder=3)
+        ax.scatter([est], [yy], s=100, color=c, zorder=5)
+        ax.text(est, yy + 0.22, f"{est:+.1f}%", fontsize=9.5, ha="center",
+                color=INK, weight="bold")
+        ax.text(12.5, yy, note, fontsize=8.5, color=INK2, va="center", ha="left")
+    ax.axvline(-12.0, color=INK, lw=2, ls="--", zorder=2)
+    ax.text(-12.7, -0.62, "the truth, a 12 percent reduction ", fontsize=9.5,
+            color=INK, ha="right")
+    ax.set_yticks(ys)
+    ax.set_yticklabels([r[0] for r in rows], fontsize=9.5)
+    ax.set_xlim(-40, 11.5)
+    ax.set_ylim(-0.95, len(rows) - 0.35)
+    ax.set_xlabel("estimated change in the use of force rate")
+    style(ax, ygrid=False)
+    ax.grid(axis="x", color=GRID, lw=0.8, zorder=0)
+    ax.set_axisbelow(True)
+    title(ax, "Every estimate this series produced of one 12 percent effect",
+          "Each was computed correctly. Only the bottom one answers the question.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_a14_summary.png", dpi=150)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     for fn in (fig_01, fig_02, fig_03, fig_04, fig_05, fig_06, fig_07,
-               fig_08, fig_09, fig_10):
+               fig_08, fig_09, fig_10, fig_11, fig_12, fig_13, fig_14):
         fn()
         print("built", fn.__name__)
