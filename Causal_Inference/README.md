@@ -9,7 +9,7 @@ The same three levels, the same synthetic WADEPS dataset, and the same de escala
 | Level | Modules | For | Code | Status |
 |---|---|---|---|---|
 | [Beginner](Beginner/) | 20 | No statistics background at all | None | **Complete** |
-| [Intermediate](Intermediate/) | 16 | Some background, wants to do it | Jupyter notebooks, gentle | Planned |
+| [Intermediate](Intermediate/) | 16 | Some background, wants to do it | Jupyter notebooks, gentle | **4 of 16 published** |
 | [Advanced](Advanced/) | 16 | Fits models and reports results | Jupyter notebooks, complete | Planned |
 
 ---
@@ -60,7 +60,7 @@ The same three levels, the same synthetic WADEPS dataset, and the same de escala
 
 | # | Module |
 |---|---|
-| 1 | From "It Went Down" to "We Caused It" |
+| 1 | From "It Went Down" to "The Program Did It" |
 | 2 | Potential Outcomes Without the Algebra |
 | 3 | The Counterfactual You Have to Construct |
 | 4 | Building a Comparison Group |
