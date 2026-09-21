@@ -704,7 +704,315 @@ def fig_07():
     plt.close(fig)
 
 
+
+def _panel(agency_id):
+    d = FINAL[FINAL["agency_id"] == agency_id].sort_values("year_month").reset_index(drop=True)
+    d = d.assign(dt=pd.PeriodIndex(d["year_month"], freq="M").to_timestamp())
+    d = d.assign(mo=d["dt"].dt.month,
+                 yr=((d["dt"].dt.year - 2019) * 12 + d["dt"].dt.month - 1) / 12.0)
+    return d
+
+
+def _harm(mo, K):
+    out = {}
+    for k in range(1, K + 1):
+        out[f"sin{k}"] = np.sin(2 * np.pi * k * mo / 12)
+        out[f"cos{k}"] = np.cos(2 * np.pi * k * mo / 12)
+    return pd.DataFrame(out)
+
+
+def fig_08():
+    import statsmodels.api as sm
+
+    d = _panel("A001")                      # Stonewick
+    y = d["n_uof"].values.astype(float)
+    off = np.log(d["n_arrests"].values.astype(float))
+
+    designs = {
+        "trend only": pd.DataFrame({"t": d["yr"].values}),
+        "+ 1 harmonic": pd.concat([pd.DataFrame({"t": d["yr"].values}),
+                                   _harm(d["mo"].values, 1)], axis=1),
+        "+ 2 harmonics": pd.concat([pd.DataFrame({"t": d["yr"].values}),
+                                    _harm(d["mo"].values, 2)], axis=1),
+        "+ 3 harmonics": pd.concat([pd.DataFrame({"t": d["yr"].values}),
+                                    _harm(d["mo"].values, 3)], axis=1),
+        "+ 11 monthly\ndummies": pd.concat(
+            [pd.DataFrame({"t": d["yr"].values}),
+             pd.get_dummies(d["mo"], prefix="m", drop_first=True).astype(float)
+               .reset_index(drop=True)], axis=1),
+    }
+    disp, aic, npar = {}, {}, {}
+    for k, X in designs.items():
+        Xc = sm.add_constant(X)
+        m = sm.GLM(y, Xc, family=sm.families.Poisson(), offset=off).fit()
+        disp[k] = float(m.pearson_chi2 / m.df_resid)
+        aic[k] = float(m.aic)
+        npar[k] = Xc.shape[1]
+
+    fig, (a1, a2, a3) = plt.subplots(1, 3, figsize=(14.6, 4.9))
+
+    keys = list(designs)
+    cols = [ORANGE if disp[k] > 1.5 else AQUA for k in keys]
+    a1.bar(range(len(keys)), [disp[k] for k in keys], color=cols, width=0.6, zorder=3)
+    a1.axhline(1.0, color=INK3, lw=1.2, ls="--", zorder=4)
+    a1.text(4.42, 1.0, "  what a Poisson\n  would give", fontsize=8.5, color=INK2,
+            ha="left", va="center")
+    for i, k in enumerate(keys):
+        a1.text(i, disp[k] + 0.06, f"{disp[k]:.2f}", ha="center", fontsize=9.5,
+                color=INK, weight="bold")
+    a1.set_xticks(range(len(keys)))
+    a1.set_xticklabels(keys, fontsize=8, rotation=20, ha="right")
+    a1.set_xlim(-0.65, 5.7)
+    a1.set_ylim(0, 2.6)
+    a1.set_ylabel("Pearson dispersion")
+    style(a1)
+    title(a1, "The overdispersion was the season",
+          "Two extra parameters take it from 2.19 to 1.09.")
+
+    a2.scatter([npar[k] for k in keys], [aic[k] for k in keys], s=70,
+               color=[BLUE if k == "+ 1 harmonic" else INK3 for k in keys], zorder=4)
+    place = {"trend only": (0, -16, "center"),
+             "+ 1 harmonic": (-9, 7, "right"),
+             "+ 2 harmonics": (0, -17, "center"),
+             "+ 3 harmonics": (0, 9, "center"),
+             "+ 11 monthly\ndummies": (0, 9, "center")}
+    for k in keys:
+        dx, dy, ha = place[k]
+        a2.annotate(k.replace("\n", " "), (npar[k], aic[k]), fontsize=8.5,
+                    color=BLUE if k == "+ 1 harmonic" else INK2,
+                    xytext=(dx, dy), textcoords="offset points", ha=ha)
+    a2.set_xlim(0, 16)
+    a2.set_ylim(604, 722)
+    a2.set_xlabel("parameters in the mean model")
+    a2.set_ylabel("AIC")
+    style(a2)
+    title(a2, "Eleven dummies buy nothing",
+          "Nine more parameters, a slightly worse AIC.")
+
+    Xc = sm.add_constant(pd.concat([pd.DataFrame({"t": d["yr"].values}),
+                                    _harm(d["mo"].values, 1)], axis=1))
+    mh = sm.GLM(y, Xc, family=sm.families.Poisson(), offset=off).fit()
+    Xd = sm.add_constant(pd.concat(
+        [pd.DataFrame({"t": d["yr"].values}),
+         pd.get_dummies(d["mo"], prefix="m", drop_first=True).astype(float)
+           .reset_index(drop=True)], axis=1))
+    md = sm.GLM(y, Xd, family=sm.families.Poisson(), offset=off).fit()
+
+    mo = np.arange(1, 13)
+    hs = mh.params["sin1"] * np.sin(2 * np.pi * mo / 12) + \
+         mh.params["cos1"] * np.cos(2 * np.pi * mo / 12)
+    ds = np.array([0.0] + [md.params[f"m_{k}"] for k in range(2, 13)])
+    hs, ds = hs - hs.mean(), ds - ds.mean()
+    truth = 0.20 * np.cos(2 * np.pi * (mo - 7) / 12)
+
+    a3.plot(mo, 100 * (np.exp(truth) - 1), color=INK3, lw=2.4, ls="--", zorder=3,
+            label="the planted season")
+    a3.plot(mo, 100 * (np.exp(hs) - 1), color=BLUE, lw=2.2, zorder=5,
+            label="one harmonic, 2 parameters")
+    a3.plot(mo, 100 * (np.exp(ds) - 1), color=ORANGE, lw=1.6, marker="o", ms=4,
+            zorder=4, label="11 dummies, 11 parameters")
+    a3.axhline(0, color=GRID, lw=1)
+    a3.set_xticks(mo)
+    a3.set_xticklabels(list("JFMAMJJASOND"), fontsize=9)
+    a3.set_ylabel("percent above or below average")
+    a3.legend(fontsize=8.5, frameon=False, loc="lower center")
+    a3.set_ylim(-34, 40)
+    style(a3)
+    title(a3, "Both recover the same shape",
+          "The smooth one recovers it with nine fewer parameters.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_a08_count_regression.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_09():
+    import statsmodels.api as sm
+    from scipy import stats
+
+    d = _panel("A006")                      # Orrindale, 8 sworn officers
+    y = d["n_uof"].values.astype(float)
+    lam = y.mean()
+
+    fig, (a1, a2, a3) = plt.subplots(1, 3, figsize=(14.6, 4.9))
+
+    ks = np.arange(0, 6)
+    obs = np.array([(y == k).mean() for k in ks])
+    exp = stats.poisson.pmf(ks, lam)
+    wd = 0.38
+    a1.bar(ks - wd / 2, 100 * obs, width=wd, color=BLUE, zorder=3,
+           label="months actually observed")
+    a1.bar(ks + wd / 2, 100 * exp, width=wd, color=INK3, zorder=3,
+           label=f"a plain Poisson, mean {lam:.2f}")
+    a1.set_xlabel("use of force incidents in a month")
+    a1.set_ylabel("percent of months")
+    a1.set_ylim(0, 54)
+    a1.legend(fontsize=8.5, frameon=False)
+    style(a1)
+    title(a1, "Orrindale: 43 percent of months are zero",
+          "A Poisson with this mean predicts 45 percent. Nothing is inflated.")
+
+    labs, obsz, expz = [], [], []
+    for aid, nm in [("A006", "Orrindale"), ("A011", "Dunmoor"), ("A005", "Kelsmoor"),
+                    ("A010", "Pinecrest"), ("A009", "Prairie Cty")]:
+        v = FINAL[FINAL["agency_id"] == aid]["n_uof"].values.astype(float)
+        labs.append(nm)
+        obsz.append(100 * (v == 0).mean())
+        expz.append(100 * np.exp(-v.mean()))
+    xs = np.arange(len(labs))
+    a2.bar(xs - wd / 2, obsz, width=wd, color=BLUE, zorder=3, label="observed")
+    a2.bar(xs + wd / 2, expz, width=wd, color=INK3, zorder=3, label="Poisson predicts")
+    a2.set_xticks(xs)
+    a2.set_xticklabels(labs, fontsize=8.5, rotation=15, ha="right")
+    a2.set_ylabel("percent of months at zero")
+    a2.set_ylim(0, 54)
+    a2.legend(fontsize=8.5, frameon=False)
+    style(a2)
+    title(a2, "The same check, five agencies",
+          "Only Kelsmoor has more zeros than the count model expects.")
+
+    sizes, mdes, nms = [], [], []
+    for aid, nm in [("A006", "Orrindale"), ("A011", "Dunmoor"), ("A005", "Kelsmoor"),
+                    ("A010", "Pinecrest"), ("A009", "Prairie Cty"), ("A004", "Millgate"),
+                    ("A003", "Havenbrook"), ("A008", "Lakeshore"), ("A007", "Summit Cty"),
+                    ("A002", "Tarnbridge"), ("A001", "Stonewick"), ("A012", "Ashfell")]:
+        g = _panel(aid)
+        X = sm.add_constant(pd.DataFrame({"t": g["yr"].values}))
+        m = sm.GLM(g["n_uof"].values.astype(float), X, family=sm.families.Poisson(),
+                   offset=np.log(g["n_arrests"].values.astype(float))).fit()
+        sizes.append(g["n_uof"].mean())
+        mdes.append(100 * (np.exp(1.96 * m.bse["t"]) - 1))
+        nms.append(nm)
+    a3.scatter(sizes, mdes, s=62, color=BLUE, zorder=4)
+    a3.axhline(4.9, color=ORANGE, lw=2, ls="--", zorder=3)
+    a3.text(240, 5.3, "the real decline,\n4.9% a year", fontsize=8.5, color=ORANGE,
+            ha="right", va="bottom")
+    marks = {"Orrindale": ("Orrindale and Dunmoor", 7, 3),
+             "Kelsmoor": ("Kelsmoor", 7, 2),
+             "Stonewick": ("Stonewick", 7, 2),
+             "Ashfell": ("Ashfell", 7, -2)}
+    for sz, v, n in zip(sizes, mdes, nms):
+        if n in marks:
+            lab, dx, dy = marks[n]
+            a3.annotate(lab, (sz, v), fontsize=8.5, color=INK2,
+                        xytext=(dx, dy), textcoords="offset points")
+    a3.set_xlim(0.45, 260)
+    a3.set_xscale("log")
+    a3.set_yscale("log")
+    a3.set_xlabel("average incidents a month (log scale)")
+    a3.set_ylabel("smallest annual trend detectable (log scale)")
+    style(a3)
+    title(a3, "What each agency can and cannot see",
+          "Above the dashed line, the real decline is invisible by construction.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_a09_rare_events.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_10():
+    import statsmodels.api as sm
+    import statsmodels.formula.api as smf
+
+    f = FINAL.copy()
+    f = f[~((f["agency_id"] == "A002") & (f["year_month"] == "2021-06"))]
+    treated = ["A001", "A002", "A004", "A007", "A010"]
+    f["treated"] = f["agency_id"].isin(treated).astype(int)
+    f["settled"] = ((f["treated"] == 1) & (f["year_month"] >= "2023-11")).astype(int)
+    f["phasein"] = ((f["treated"] == 1) & (f["year_month"] >= "2023-07")
+                    & (f["year_month"] < "2023-11")).astype(int)
+    f["lo"] = np.log(f["n_arrests"])
+    form = "n_uof ~ C(agency_id) + C(year_month) + settled + phasein"
+    pct = lambda b: 100 * (np.exp(b) - 1)
+
+    def po(formula, data):
+        return smf.glm(formula, data, family=sm.families.Poisson(),
+                       offset=data["lo"]).fit()
+
+    clean = f[f["agency_id"] != "A007"]
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13.6, 5.2))
+
+    rows = []
+    for aid, nm in [("A001", "Stonewick"), ("A002", "Tarnbridge"),
+                    ("A004", "Millgate"), ("A010", "Pinecrest")]:
+        sub = f[((f["agency_id"] == aid) | (f["treated"] == 0)) & (f["agency_id"] != "A007")]
+        z = po(form, sub)
+        lo, hi = z.conf_int().loc["settled"]
+        rows.append((nm, pct(z.params["settled"]), pct(lo), pct(hi)))
+    pooled = po(form, clean)
+    plo, phi = pooled.conf_int().loc["settled"]
+    rows.append(("all four pooled", pct(pooled.params["settled"]), pct(plo), pct(phi)))
+
+    ys = np.arange(len(rows))[::-1]
+    for (nm, e, lo, hi), yy in zip(rows, ys):
+        last = nm.startswith("all")
+        c = BLUE if last else INK3
+        a1.plot([lo, hi], [yy, yy], color=c, lw=3.2 if last else 2.2,
+                solid_capstyle="round", zorder=3)
+        a1.scatter([e], [yy], s=90 if last else 60, color=c, zorder=5)
+        a1.text(hi + 1.1, yy, f"{e:+.1f}%", fontsize=9.5, va="center",
+                color=INK, weight="bold" if last else "normal")
+    a1.axvline(-12.0, color=ORANGE, lw=2, ls="--", zorder=2)
+    a1.text(-12.9, -0.62, "the truth, 12% down", fontsize=9, color=ORANGE, ha="right")
+    a1.axvline(0, color=INK3, lw=1, zorder=2)
+    a1.set_yticks(ys)
+    a1.set_yticklabels([r[0] for r in rows], fontsize=9.5)
+    a1.set_xlim(-42, 14)
+    a1.set_xlabel("estimated change in the use of force rate")
+    a1.set_ylim(-0.7, 4.6)
+    style(a1, ygrid=False)
+    a1.grid(axis="x", color=GRID, lw=0.8, zorder=0)
+    a1.set_axisbelow(True)
+    title(a1, "Four agencies, one identical planted effect",
+          "Separately they span 11 points. Pooled, they land on the truth.")
+
+    specs = [
+        ("neither set of\nfixed effects", "n_uof ~ settled + phasein", clean),
+        ("agency effects\nonly", "n_uof ~ C(agency_id) + settled + phasein", clean),
+        ("agency and month\neffects", form, clean),
+        ("agency and month,\nA007 left in", form, f),
+    ]
+    est, los, his, labs, phase = [], [], [], [], []
+    for lab, formula, data in specs:
+        z = po(formula, data)
+        lo, hi = z.conf_int().loc["settled"]
+        labs.append(lab)
+        est.append(pct(z.params["settled"]))
+        los.append(pct(lo))
+        his.append(pct(hi))
+        phase.append(pct(z.params["phasein"]))
+    xs = np.arange(len(labs))
+    cols = [AQUA if (lo <= -12 <= hi) else ORANGE for lo, hi in zip(los, his)]
+    a2.errorbar(xs, est, yerr=[np.array(est) - np.array(los), np.array(his) - np.array(est)],
+                fmt="none", ecolor=cols, elinewidth=2.6, capsize=0, zorder=3)
+    a2.scatter(xs, est, s=95, color=cols, zorder=5)
+    for x, e in zip(xs, est):
+        a2.text(x + 0.14, e, f"{e:+.1f}%", fontsize=9.5, va="center", color=INK)
+    a2.axhline(-12.0, color=INK3, lw=1.8, ls="--", zorder=2)
+    a2.text(3.45, -11.0, "the truth", fontsize=9, color=INK2, ha="right")
+    a2.set_xticks(xs)
+    a2.set_xticklabels(labs, fontsize=8.5)
+    a2.set_xlim(-0.5, 3.6)
+    a2.set_ylim(-37, 1)
+    for x, ph in zip(xs, phase):
+        bad = ph > 0
+        a2.text(x, -35.4, f"phase in {ph:+.1f}%", fontsize=8.5, ha="center",
+                color=ORANGE if bad else INK2, weight="bold" if bad else "normal")
+    a2.text(-0.42, -32.6, "the coefficient nobody looks at:", fontsize=8.5,
+            color=INK2, ha="left")
+    a2.set_ylabel("estimated change in the use of force rate")
+    style(a2)
+    title(a2, "What the two sets of fixed effects are for",
+          "Agency effects alone are worse than none. Month effects carry the trend.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_a10_panel.png", dpi=150)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
-    for fn in (fig_01, fig_02, fig_03, fig_04, fig_05, fig_06, fig_07):
+    for fn in (fig_01, fig_02, fig_03, fig_04, fig_05, fig_06, fig_07,
+               fig_08, fig_09, fig_10):
         fn()
         print("built", fn.__name__)

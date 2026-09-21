@@ -8,7 +8,7 @@ For agency data analysts, graduate students outside statistics, and early career
 
 Notation is used freely, proofs are not. The emphasis throughout is on **what a model assumes, how you check the assumption, and what it costs you when the assumption fails.**
 
-> **Publication status:** Parts I and II, Modules 1 through 7, are published. Modules 8 through 14 are in development and their titles below are not yet links.
+> **Publication status:** Parts I, II and III, Modules 1 through 10, are published. Modules 11 through 14 are in development and their titles below are not yet links.
 
 ---
 
@@ -35,9 +35,9 @@ Three habits that every later module depends on.
 
 | # | Module | The question it answers |
 |---|---|---|
-| 8 | Poisson and Negative Binomial Regression with Harmonic Seasonality | The right default for monthly incident counts |
-| 9 | Rare Events, Zero Inflation, and When to Aggregate Up | What to do when half the months are zero |
-| 10 | Panel and Hierarchical Time Series | Two hundred agencies at once, and making the parts sum to the whole |
+| 8 | [Poisson and Negative Binomial Regression with Harmonic Seasonality](Module_08_Count_Regression_With_Harmonics.md) | The right default for monthly incident counts |
+| 9 | [Rare Events, Zero Inflation, and When to Aggregate Up](Module_09_Rare_Events.md) | What to do when half the months are zero |
+| 10 | [Panel and Hierarchical Time Series](Module_10_Panel_And_Hierarchical.md) | Two hundred agencies at once, and making the parts sum to the whole |
 
 ## Part IV. Intervention and Change
 
