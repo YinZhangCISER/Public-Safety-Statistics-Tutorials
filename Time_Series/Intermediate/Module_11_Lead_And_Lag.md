@@ -115,7 +115,7 @@ Remove trend and season from both series before correlating them, judge against 
 | | |
 |---|---|
 | **Previous** | [Module 10: Reading ACF and PACF as Pictures](Module_10_Reading_Autocorrelation.md) |
-| **Next** | [Module 12: Comparing Agencies Fairly](Module_12_Comparing_Agencies_Fairly.md) |
+| **Next** | [Module 12: Building a Peer Benchmark Series](Module_12_Building_A_Peer_Benchmark_Series.md) |
 | **Builds on** | [Module 5](Module_05_Decomposition.md), [Module 10](Module_10_Reading_Autocorrelation.md) |
 | **Used again in** | Advanced Modules 6 and 13 |
 

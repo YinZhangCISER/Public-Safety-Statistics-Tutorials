@@ -20,7 +20,7 @@ Formulas appear, but every one of them is followed by the same statement in plai
 |---|---|---|
 | 1 | [From Incident Records to a Time Series](Module_01_From_Incident_Records_To_A_Time_Series.md) | How do I turn a file of individual calls into a monthly series? |
 | 2 | [Building an Honest Calendar](Module_02_Building_An_Honest_Calendar.md) | What do I do about missing months, zeros, and records still being entered? |
-| 3 | [Choosing a Denominator](Module_03_Choosing_A_Denominator.md) | Per resident, per call, per officer, or per arrest? Each answers a different question. |
+| 3 | [Choosing a Denominator](Module_03_Choosing_A_Denominator.md) | Per resident, per call, per officer, or per arrest, and what if the denominator has a trend of its own? |
 | 4 | [Why Small Agencies Look Volatile](Module_04_Why_Small_Agencies_Look_Volatile.md) | Why does an 8 officer agency's rate swing so wildly, and what can I say about it? |
 
 ## Part II. Describing the Series
@@ -39,7 +39,7 @@ Formulas appear, but every one of them is followed by the same statement in plai
 | 9 | [Year over Year, Rolling Totals and Indexing](Module_09_Year_Over_Year_And_Indexing.md) | Which comparison should go in the monthly report? |
 | 10 | [Reading ACF and PACF as Pictures](Module_10_Reading_Autocorrelation.md) | How much memory does this series have? |
 | 11 | [Lead and Lag Between Two Series](Module_11_Lead_And_Lag.md) | Does call volume move before use of force does? |
-| 12 | [Comparing Agencies Fairly](Module_12_Comparing_Agencies_Fairly.md) | Who are this agency's real peers, and how do I show it? |
+| 12 | [Building a Peer Benchmark Series](Module_12_Building_A_Peer_Benchmark_Series.md) | What line should this agency's series sit next to? |
 
 ## Part IV. Forecasting and Change Detection
 

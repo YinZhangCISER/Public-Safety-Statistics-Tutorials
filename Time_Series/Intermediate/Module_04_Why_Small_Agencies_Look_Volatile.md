@@ -132,7 +132,7 @@ Before comparing agencies, check how much of each one's movement is counting noi
 | **Previous** | [Module 3: Choosing a Denominator](Module_03_Choosing_A_Denominator.md) |
 | **Next** | Part II, beginning with Module 5: Decomposition into Trend, Season and Remainder |
 | **Builds on** | [Beginner Topic 10](../Beginner/Topic_10_Noise_And_Irregular_Fluctuations.md), [Module 3](Module_03_Choosing_A_Denominator.md) |
-| **Used again in** | [Module 8: Rolling Statistics and Control Limits](Module_08_Rolling_Statistics_And_Control_Limits.md), [Module 12: Comparing Agencies Fairly](Module_12_Comparing_Agencies_Fairly.md) |
+| **Used again in** | [Module 8: Rolling Statistics and Control Limits](Module_08_Rolling_Statistics_And_Control_Limits.md), [Module 12: Building a Peer Benchmark Series](Module_12_Building_A_Peer_Benchmark_Series.md) |
 
 *This module is part of a series developed for the Washington Data Exchange for Public Safety (WADEPS) through the Center for Interdisciplinary Statistical Education and Research (CISER) at Washington State University. Version 1.0, September 2026. Questions, errors, or suggestions: yin.zhang@wsu.edu*
 

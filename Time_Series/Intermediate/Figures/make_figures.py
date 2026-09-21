@@ -173,7 +173,8 @@ def fig_03():
     ranks = pd.DataFrame({k: v.rank(ascending=False) for k, v in cols.items()})
     ranks.index = d["short"]
 
-    fig, ax = plt.subplots(figsize=(11.5, 5.6))
+    fig, (ax, ax2) = plt.subplots(1, 2, figsize=(14.6, 5.6),
+                                  gridspec_kw={"width_ratios": [1.5, 1]})
     xs = np.arange(len(cols))
     for name, row in ranks.iterrows():
         ax.plot(xs, row.values, color=INK3, lw=1.2, alpha=0.45, zorder=2)
@@ -188,7 +189,7 @@ def fig_03():
         ax.text(3.08, row.values[-1], f"  {name}", ha="left", va="center",
                 fontsize=9.5, color=c, weight="bold")
     ax.set_xticks(xs); ax.set_xticklabels(list(cols.keys()), fontsize=9.5)
-    ax.set_xlim(-1.45, 4.45)
+    ax.set_xlim(-2.05, 5.05)
     ax.set_yticks(range(1, 13))
     ax.set_yticklabels([f"{i}" for i in range(1, 13)], fontsize=9)
     ax.invert_yaxis()
@@ -197,6 +198,39 @@ def fig_03():
     ax.grid(axis="y", color=GRID, lw=0.8); ax.set_axisbelow(True)
     title(ax, "The same twelve agencies, 2023, ranked four ways",
           "Each grey line is one agency. The denominator decides the ranking.")
+
+    # ---- the denominator has a trend of its own
+    import statsmodels.formula.api as smf
+    per_year = lambda b: 100 * (np.exp(12 * b) - 1)
+    rows = []
+    clean = monthly[(monthly["provisional"] == 0) & (monthly["year_month"] <= "2025-12")]
+    clean = clean[~((clean["agency_id"] == "A002") & (clean["year_month"] == "2021-06"))]
+    for aid, g in clean.groupby("agency_id"):
+        g = g.sort_values("year_month").copy()
+        g["t"] = np.arange(len(g))
+        g["rate"] = 100 * g["n_uof"] / g["n_arrests"]
+        c = per_year(smf.ols("np.log(n_uof + 0.5) ~ t", data=g).fit().params["t"])
+        r = per_year(smf.ols("np.log(rate) ~ t", data=g[g["rate"] > 0]).fit().params["t"])
+        rows.append((short(g["agency_name"].iloc[0]), c, r))
+    tr = pd.DataFrame(rows, columns=["agency", "count", "rate"]).sort_values("rate")
+
+    ys = np.arange(len(tr))
+    for yy, (_, r) in zip(ys, tr.iterrows()):
+        ax2.plot([r["rate"], r["count"]], [yy, yy], color=INK3, lw=1.4, zorder=2)
+    ax2.scatter(tr["rate"], ys, s=48, color=BLUE, zorder=4, label="rate per 100 arrests")
+    ax2.scatter(tr["count"], ys, s=48, color=ORANGE, zorder=5, label="incident count")
+    ax2.axvline(0, color=INK2, lw=1.0, zorder=3)
+    ax2.set_yticks(ys)
+    ax2.set_yticklabels(tr["agency"], fontsize=8.5)
+    ax2.set_xlabel("change per year, percent")
+    ax2.set_xlim(-16, 5)
+    ax2.legend(fontsize=8.5, frameon=False, loc="upper left")
+    style(ax2, ygrid=False)
+    ax2.grid(axis="x", color=GRID, lw=0.8)
+    ax2.set_axisbelow(True)
+    title(ax2, "The count and the rate do not agree",
+          "The gap between the dots is the denominator's own trend.")
+
     fig.tight_layout()
     fig.savefig(HERE / "fig_m03_denominators.png", dpi=150)
     plt.close(fig)
@@ -660,85 +694,113 @@ def _gower(df):
 def fig_12():
     from sklearn.manifold import MDS
 
-    y = (monthly[monthly["year_month"].str[:4] == "2023"]
-         .groupby("agency_id", as_index=False)
-         .agg(uof=("n_uof", "sum"), arr=("n_arrests", "sum")))
-    y = y.merge(profile, on="agency_id")
-    y["rate"] = 100 * y["uof"] / y["arr"]
-    y["short"] = y["agency_name"].map(short)
-
-    D = _gower(y)
-    Dd = pd.DataFrame(D, index=y["short"], columns=y["short"])
+    TREATED = ["A001", "A002", "A004", "A007", "A010"]
+    p = profile.copy()
+    p["short"] = p["agency_name"].map(short)
+    D = _gower(p)
+    Dd = pd.DataFrame(D, index=p["agency_id"], columns=p["agency_id"])
+    label = dict(zip(p["agency_id"], p["short"]))
     xy = MDS(n_components=2, dissimilarity="precomputed",
              random_state=1).fit_transform(D)
 
-    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13.4, 5.4))
+    fig = plt.figure(figsize=(14.2, 8.6))
+    gs = fig.add_gridspec(2, 2, height_ratios=[1.15, 1], hspace=0.42, wspace=0.2)
+    a1 = fig.add_subplot(gs[0, :])
+    a2 = fig.add_subplot(gs[1, 0])
+    a3 = fig.add_subplot(gs[1, 1])
 
-    colors = {"Municipal Police": BLUE, "County Sheriff": ORANGE,
-              "Campus Police": AQUA, "Tribal Police": YELLOW}
-    names = list(y["short"])
-
-    # a thin line from each agency to its single nearest peer
+    # ---- the map
+    names = list(p["short"])
     for i, nm in enumerate(names):
-        j = names.index(Dd.loc[nm].drop(nm).idxmin())
+        j = names.index(label[Dd.iloc[i].drop(p["agency_id"].iloc[i]).idxmin()])
         a1.plot([xy[i, 0], xy[j, 0]], [xy[i, 1], xy[j, 1]],
                 color=INK3, lw=0.9, alpha=0.55, zorder=2)
-
-    for t, c in colors.items():
-        sel = (y["agency_type"] == t).values
-        a1.scatter(xy[sel, 0], xy[sel, 1], s=115, color=c, zorder=4,
-                   edgecolors=SURFACE, linewidths=1.2, label=t)
-
+    treated_mask = p["agency_id"].isin(TREATED).values
+    a1.scatter(xy[~treated_mask, 0], xy[~treated_mask, 1], s=120, color=BLUE,
+               edgecolors=SURFACE, linewidths=1.2, zorder=4, label="did not adopt the training")
+    a1.scatter(xy[treated_mask, 0], xy[treated_mask, 1], s=120, color=ORANGE,
+               edgecolors=SURFACE, linewidths=1.2, zorder=4, label="adopted the training")
     nudge = {"Northgate": (0, 12), "Millgate": (0, -19), "Cedar Falls": (0, -19),
              "Harbor Point": (0, 12), "Grandview": (0, 12), "Riverbend": (0, -19),
              "Summit County": (0, -19), "Lakeshore County": (0, 12)}
     for i, nm in enumerate(names):
         a1.annotate(nm, (xy[i, 0], xy[i, 1]), textcoords="offset points",
-                    xytext=nudge.get(nm, (0, 12)), ha="center", fontsize=8, color=INK)
-
-    lonely = {"Grandview": ((0, -30), "center"),
-              "Pinecrest State University": ((16, -13), "left")}
-    for nm, (off, ha) in lonely.items():
-        i = names.index(nm)
-        d = Dd.loc[nm].drop(nm).nsmallest(3).mean()
-        a1.annotate(f"nearest peers are {d:.2f} away", (xy[i, 0], xy[i, 1]),
-                    textcoords="offset points", xytext=off, ha=ha,
-                    fontsize=8, color=ORANGE)
-
+                    xytext=nudge.get(nm, (0, 12)), ha="center", fontsize=8.5, color=INK)
     pad = 0.12
     a1.set_xlim(xy[:, 0].min() - pad, xy[:, 0].max() + pad)
-    a1.set_ylim(xy[:, 1].min() - pad * 1.6, xy[:, 1].max() + pad)
+    a1.set_ylim(xy[:, 1].min() - pad, xy[:, 1].max() + pad)
     a1.set_xticks([]); a1.set_yticks([])
-    a1.legend(fontsize=8, frameon=False, loc="upper left",
-              bbox_to_anchor=(0.0, 1.0), handletextpad=0.3)
+    a1.legend(fontsize=8.5, frameon=False, loc="upper left")
     a1.spines[["top", "right", "left", "bottom"]].set_visible(False)
-    title(a1, "Agencies placed by how alike they are",
-          "Lines join each agency to its single nearest peer.")
+    title(a1, "Who is like whom, and who adopted the programme",
+          "Lines join each agency to its single nearest peer. Riverbend's nearest two both adopted it.")
 
-    state = 100 * y["uof"].sum() / y["arr"].sum()
+    # ---- the benchmark series, and what contamination costs
+    clean = monthly[monthly["provisional"] == 0].copy()
+    clean = clean[~((clean["agency_id"] == "A002") & (clean["year_month"] == "2021-06"))]
+
+    def bench(ids):
+        w = clean[clean["agency_id"].isin(ids)].groupby("year_month")[["n_uof", "n_arrests"]].sum()
+        r = 100 * w["n_uof"].rolling(12).sum() / w["n_arrests"].rolling(12).sum()
+        r.index = pd.PeriodIndex(w.index, freq="M").to_timestamp()
+        return r
+
+    def pooled(ids, lo, hi):
+        w = clean[(clean["agency_id"].isin(ids)) & (clean["year_month"] >= lo)
+                  & (clean["year_month"] <= hi)]
+        return 100 * w["n_uof"].sum() / w["n_arrests"].sum()
+
+    order = Dd.loc["A001"].drop("A001").sort_values()
+    near3 = list(order.index[:3])
+    untreated3 = [x for x in order.index if x not in TREATED][:3]
+    all_untreated = [x for x in p["agency_id"] if x not in TREATED]
+    riv = bench(["A001"])
+
+    a2.plot(riv.index, riv.values, color=ORANGE, lw=2.4, zorder=5, label="Riverbend")
+    a2.plot(bench(near3).index, bench(near3).values, color=INK3, lw=2, zorder=3,
+            label="three nearest peers, two of them also trained")
+    a2.plot(bench(untreated3).index, bench(untreated3).values, color=BLUE, lw=2, zorder=4,
+            label="three nearest peers that were not trained")
+    a2.axvline(pd.Timestamp("2023-07-01"), color=INK, lw=1.1, ls=(0, (4, 3)), zorder=6)
+    a2.text(pd.Timestamp("2023-08-15"), 3.78, "training begins", fontsize=8.5, color=INK2)
+    a2.set_ylim(1.6, 4.05)
+    a2.set_ylabel("use of force per 100 arrests,\ntwelve month trailing")
+    a2.legend(fontsize=7.5, frameon=False, loc="lower left")
+    style(a2)
+    title(a2, "The peer benchmark is a series, not a number",
+          "Which peers you pick changes the line you are compared against.")
+
+    PRE = ("2021-07", "2023-06")
+    POST = ("2023-11", "2026-04")
+    rb, ra = pooled(["A001"], *PRE), pooled(["A001"], *POST)
     rows = []
-    for i, a in enumerate(y["short"]):
-        peers = Dd.loc[a].drop(a).nsmallest(3)
-        pm = y[y["short"].isin(peers.index)]
-        rows.append((a, y["rate"].iloc[i], 100 * pm["uof"].sum() / pm["arr"].sum()))
-    t = pd.DataFrame(rows, columns=["agency", "rate", "peer_rate"]).sort_values("rate")
+    for lab, ids in [("all agencies that\nwere not trained", all_untreated),
+                     ("three nearest peers\nthat were not trained", untreated3),
+                     ("three nearest peers,\nno screening", near3)]:
+        b, a = pooled(ids, *PRE), pooled(ids, *POST)
+        rows.append((lab, 100 * ((ra / rb) / (a / b) - 1)))
 
-    ys = np.arange(len(t))
-    for yy, (_, r) in zip(ys, t.iterrows()):
-        a2.plot([r["peer_rate"], r["rate"]], [yy, yy], color=INK3, lw=1.4, zorder=2)
-    a2.scatter(t["peer_rate"], ys, s=52, color=AQUA, zorder=4, label="its three nearest peers")
-    a2.scatter(t["rate"], ys, s=52, color=BLUE, zorder=5, label="the agency")
-    a2.axvline(state, color=ORANGE, lw=1.6, ls=(0, (5, 3)), zorder=3)
-    a2.text(state + 0.03, len(t) - 0.4, f"state {state:.2f}", fontsize=8.5, color=ORANGE)
-    a2.set_yticks(ys)
-    a2.set_yticklabels(t["agency"], fontsize=9)
-    a2.set_xlabel("use of force per 100 arrests, 2023")
-    a2.set_xlim(1.7, 3.6)
-    a2.legend(fontsize=8.5, frameon=False, loc="lower right")
-    style(a2, ygrid=False)
-    a2.grid(axis="x", color=GRID, lw=0.8); a2.set_axisbelow(True)
-    title(a2, "Against the state, and against its own peers",
-          "Some agencies swap sides depending on which comparison is used.")
+    ys = np.arange(len(rows))
+    cols = [BLUE, BLUE, ORANGE]
+    a3.barh(ys, [r[1] for r in rows], color=cols, height=0.55, zorder=3)
+    for yy, (lab, v) in zip(ys, rows):
+        a3.text(v - 0.5 if v < 0 else v + 0.5, yy, f"{v:+.1f}%",
+                va="center", ha="right" if v < 0 else "left",
+                fontsize=10, color=INK, weight="bold")
+    a3.axvline(-12.0, color=INK, lw=1.6, ls=(0, (5, 3)), zorder=5)
+    a3.text(-12.4, -0.62, "the true effect\nbuilt into the data", ha="right",
+            va="bottom", fontsize=8.5, color=INK)
+    a3.set_yticks([])
+    a3.set_ylim(-1.0, len(rows) - 0.2)
+    a3.set_xlim(-17, 6)
+    for yy, (lab, _) in zip(ys, rows):
+        a3.text(-16.6, yy + 0.33, lab.replace("\n", " "), va="bottom", ha="left",
+                fontsize=8.5, color=INK2)
+    a3.set_xlabel("estimated effect on Riverbend, percent")
+    style(a3, ygrid=False)
+    a3.grid(axis="x", color=GRID, lw=0.8); a3.set_axisbelow(True)
+    title(a3, "What the wrong comparison group costs",
+          "Leave the trained peers in and the programme vanishes.")
 
     fig.tight_layout()
     fig.savefig(HERE / "fig_m12_comparing_agencies.png", dpi=150)

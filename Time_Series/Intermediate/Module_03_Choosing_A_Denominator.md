@@ -43,8 +43,6 @@ Two properties matter when choosing the exposure.
 
 The twelve agencies in 2023, ranked four ways.
 
-![A bump chart. Each of the twelve agencies is a line running across four columns, one per denominator, with the vertical position showing its rank. Most lines stay roughly level. Pinecrest State University falls from fifth to eleventh between arrests and residents, and Elkhorn rises from fourth to first](Figures/fig_m03_denominators.png)
-
 | Agency | per 100 arrests | rank | per 1,000 residents | rank |
 |---|---|---|---|---|
 | Cedar Falls | 3.34 | 1 | 3.57 | 2 |
@@ -68,6 +66,38 @@ Most agencies move a place or two. Two move a long way, and for instructive reas
 
 **The coverage trap.** Prairie County submitted only nine months of 2022. Its 2022 **rate** is fine, because incidents and arrests are both short by the same three months and the ratio is unaffected. Its 2022 **count** is not comparable to any other agency's. Rates tolerate coverage gaps; counts do not.
 
+### The denominator moves too
+
+A rate is a ratio, so its trend is the numerator's trend minus the denominator's:
+
+> change in the rate per year **≈** change in the count **−** change in the denominator
+
+That is not a subtlety. Across this dataset arrests grew between about 1.2 and 1.9 percent a year at almost every agency, so **every agency's rate improves by roughly that much before anything about officer behaviour changes.**
+
+| Agency | Incident count | Arrests | Rate per 100 arrests |
+|---|---|---|---|
+| **Two Rivers Tribal** | **+2.35%** | +1.13% | **−0.21%** |
+| Elkhorn | −0.96% | +1.30% | −2.61% |
+| Lakeshore County | −1.99% | +1.35% | −3.39% |
+| **Harbor Point** | **−3.30%** | +1.89% | **−5.28%** |
+| Grandview | −3.77% | +1.33% | −5.06% |
+| Riverbend | −5.12% | +1.60% | −6.65% |
+| Summit County | −12.43% | +1.47% | −13.99% |
+
+*All figures are log linear trends per year over 2019 to 2025, with the documented Cedar Falls unrest month excluded.*
+
+![Two panels. The left panel is the bump chart of four denominators. The right panel plots, for each agency, its incident count trend and its rate trend as two dots joined by a line, showing that the two always disagree and always in the same direction](Figures/fig_m03_denominators.png)
+
+Two rows are worth reading carefully.
+
+**Two Rivers Tribal recorded more incidents each year, and its rate was flat.** The count rose 2.4 percent a year while arrests rose 1.1 percent, leaving the rate essentially unchanged. A report built on counts would say this agency is deteriorating. A report built on rates would say nothing happened. Both are arithmetically correct and they lead to opposite decisions.
+
+**Harbor Point's rate improved faster than its incidents fell.** The count dropped 3.3 percent a year but the rate dropped 5.3 percent, so **more than a third of the apparent improvement is arrests going up, not incidents coming down.**
+
+The rule that follows is short. **Whenever you report a trend in a rate, report the denominator's trend beside it.** Otherwise a reader cannot tell whether the numerator moved, the denominator moved, or both, and those are three different findings.
+
+One caveat on the arithmetic. The identity is exact for the logarithms of the underlying quantities and approximate for fitted trends, and the approximation loosens for agencies with very small counts, where a month of zero has to be handled before logs can be taken. Prairie County is the visible exception in this dataset.
+
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_03_Choosing_A_Denominator.ipynb](Notebooks/Module_03_Choosing_A_Denominator.ipynb)
@@ -86,6 +116,7 @@ The notebook builds all four rates, produces the rank comparison, demonstrates t
 | A denominator the agency controls | a rate that moves when arrest policy changes | report per call as well as per arrest |
 | Population used for a non residential agency | campus, transit and tribal forces ranked nonsensically | use contacts, not residents, for those agencies |
 | A denominator near zero | enormous rates from tiny agencies | suppress or flag below a minimum exposure, and see Module 4 |
+| A rate trend reported without the denominator's trend | an improvement that is really the denominator growing | publish both trends side by side |
 
 ## Check Your Understanding
 
@@ -102,14 +133,20 @@ Because its resident count does not describe who is exposed to its policing. The
 </details>
 
 <details>
-<summary><b>3.</b> An agency has nine months of data in a year. Which of its 2022 figures can be compared with a twelve month agency, and which cannot?</summary>
+<summary><b>3.</b> An agency's use of force count fell 3 percent a year and its rate per arrest fell 5 percent a year. What happened?</summary>
+
+Arrests rose by about 2 percent a year. The rate's trend is the count's trend minus the denominator's, so a gap of two points between them is the denominator moving. Whether that is good news depends on something the numbers do not say: if the agency is making more arrests and using force in a smaller share of them, that is a real improvement in how contacts are handled. If it is making more low risk arrests that were never likely to involve force, the rate has improved without any change in the encounters that matter. Reporting both trends lets a reader ask the question. Reporting only the rate hides it.
+</details>
+
+<details>
+<summary><b>4.</b> An agency has nine months of data in a year. Which of its 2022 figures can be compared with a twelve month agency, and which cannot?</summary>
 
 Rates can, counts cannot. A rate is a ratio in which both parts cover the same nine months, so the missing quarter cancels. A count is a total over a shorter period and is understated by roughly a quarter. If a count has to be shown, either annualise it and label the estimate, or restrict every agency to the same nine months.
 </details>
 
 ## Key Takeaway
 
-Say which denominator you used, report at least two, and check that both sides of the ratio cover the same months.
+Say which denominator you used, report at least two, check that both sides of the ratio cover the same months, and when you report a trend in a rate, report the denominator's trend next to it.
 
 ---
 
@@ -118,7 +155,7 @@ Say which denominator you used, report at least two, and check that both sides o
 | **Previous** | [Module 2: Building an Honest Calendar](Module_02_Building_An_Honest_Calendar.md) |
 | **Next** | [Module 4: Why Small Agencies Look Volatile](Module_04_Why_Small_Agencies_Look_Volatile.md) |
 | **Builds on** | [Beginner Topic 5](../Beginner/Topic_05_Counts_And_Rates.md), [Module 2](Module_02_Building_An_Honest_Calendar.md) |
-| **Used again in** | [Module 12: Comparing Agencies Fairly](Module_12_Comparing_Agencies_Fairly.md) |
+| **Used again in** | [Module 12: Building a Peer Benchmark Series](Module_12_Building_A_Peer_Benchmark_Series.md) |
 
 *This module is part of a series developed for the Washington Data Exchange for Public Safety (WADEPS) through the Center for Interdisciplinary Statistical Education and Research (CISER) at Washington State University. Version 1.0, September 2026. Questions, errors, or suggestions: yin.zhang@wsu.edu*
 
