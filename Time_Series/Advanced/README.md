@@ -8,7 +8,7 @@ For agency data analysts, graduate students outside statistics, and early career
 
 Notation is used freely, proofs are not. The emphasis throughout is on **what a model assumes, how you check the assumption, and what it costs you when the assumption fails.**
 
-> **Publication status:** in development. Titles below are not yet links.
+> **Publication status:** Part I, Modules 1 through 3, is published. Modules 4 through 14 are in development and their titles below are not yet links.
 
 ---
 
@@ -18,9 +18,9 @@ Three habits that every later module depends on.
 
 | # | Module | The question it answers |
 |---|---|---|
-| 1 | Stationarity Tested, Not Eyeballed | ADF, KPSS, differencing, and what over differencing costs you |
-| 2 | Incident Counts Are Not Gaussian | Poisson and negative binomial thinking, and the right way to use exposure |
-| 3 | Model Selection, Diagnostics and Honest Uncertainty | AIC, residual checks, rolling origin backtesting, simulation based intervals, and whether a forecast distribution is any good |
+| 1 | [Stationarity Tested, Not Eyeballed](Module_01_Stationarity_Tested.md) | ADF, KPSS, differencing, and what over differencing costs you |
+| 2 | [Incident Counts Are Not Gaussian](Module_02_Counts_Are_Not_Gaussian.md) | Poisson and negative binomial thinking, and the right way to use exposure |
+| 3 | [Model Selection, Diagnostics and Honest Uncertainty](Module_03_Model_Selection_And_Uncertainty.md) | AIC, residual checks, rolling origin backtesting, simulation based intervals, and whether a forecast distribution is any good |
 
 ## Part II. Core Univariate Models
 
