@@ -46,7 +46,7 @@ Not sure which method your question calls for? See the [method selection guides]
 | Level | Modules | For | Code | Status |
 |---|---|---|---|---|
 | [Beginner](Causal_Inference/Beginner/) | 20 | No statistics background at all | None | **Complete** |
-| [Intermediate](Causal_Inference/Intermediate/) | 16 | Some background, wants to do it | Jupyter notebooks, gentle | **4 of 16 published** |
+| [Intermediate](Causal_Inference/Intermediate/) | 16 | Some background, wants to do it | Jupyter notebooks, gentle | **8 of 16 published** |
 | [Advanced](Causal_Inference/Advanced/) | 16 | Fits models and reports results | Jupyter notebooks, complete | Planned |
 
 ---

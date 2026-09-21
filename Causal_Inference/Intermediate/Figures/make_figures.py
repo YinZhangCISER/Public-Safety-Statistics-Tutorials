@@ -293,7 +293,232 @@ def fig_04():
     plt.close(fig)
 
 
+
+def _panel(agencies=None):
+    d = F if agencies is None else F[F["agency_id"].isin(agencies)]
+    d = d.copy()
+    d["lo"] = np.log(d["n_arrests"])
+    pi = pd.PeriodIndex(d["year_month"], freq="M")
+    d["yr"] = pi.year.values + (pi.month.values - 1) / 12.0
+    return d
+
+
+def fig_05():
+    """Module 5. The same 2x2 on two scales."""
+    tb, ta = rate(F[F["agency_id"].isin(NO_A007) & (F["period"] == "before")]), \
+             rate(F[F["agency_id"].isin(NO_A007) & (F["period"] == "after")])
+    cb, ca = rate(F[F["agency_id"].isin(COMPARISON) & (F["period"] == "before")]), \
+             rate(F[F["agency_id"].isin(COMPARISON) & (F["period"] == "after")])
+    add_pts = (ta - tb) - (ca - cb)
+    add_pct = 100 * add_pts / tb
+    mult_pct = 100 * ((ta / tb) / (ca / cb) - 1)
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13.4, 5.0),
+                                 gridspec_kw={"width_ratios": [1.2, 1]})
+
+    x = [0, 1]
+    a1.plot(x, [tb, ta], color=BLUE, lw=3, marker="o", ms=11, zorder=5,
+            label="took the training")
+    a1.plot(x, [cb, ca], color=INK3, lw=3, marker="o", ms=11, zorder=5, label="did not")
+    a1.plot(x, [tb, tb + (ca - cb)], color=ORANGE, lw=2.6, ls="--", marker="o", ms=9,
+            zorder=4, label="Y(0), same change in rate points")
+    a1.plot(x, [tb, tb * (ca / cb)], color=AQUA, lw=2.6, ls="--", marker="o", ms=9,
+            zorder=4, label="Y(0), same proportional change")
+    for v, c in [(tb, BLUE), (cb, INK3)]:
+        a1.text(-0.04, v, f"{v:.2f}", ha="right", va="center", fontsize=10, color=c)
+    a1.text(1.04, ta, f"{ta:.2f}", va="center", fontsize=10, color=BLUE)
+    a1.text(1.04, tb + (ca - cb), f"{tb + (ca - cb):.2f}", va="center", fontsize=10,
+            color=ORANGE)
+    a1.text(1.04, tb * (ca / cb) - 0.055, f"{tb * (ca / cb):.2f}", va="center",
+            fontsize=10, color=AQUA)
+    a1.set_xticks(x)
+    a1.set_xticklabels(["before the training", "after it was in place"], fontsize=10)
+    a1.set_xlim(-0.22, 1.30)
+    a1.set_ylim(1.9, 3.95)
+    a1.set_ylabel("use of force per 100 arrests")
+    a1.legend(fontsize=8.5, frameon=False, loc="lower left")
+    style(a1)
+    title(a1, "Two counterfactuals from the same comparison group",
+          "The comparison group fell 0.52 rate points, and 19.5 percent. Not the same thing.")
+
+    labs = ["same change in\nrate points", "same proportional\nchange"]
+    vals = [add_pct, mult_pct]
+    cols = [ORANGE, AQUA]
+    a2.bar([0, 1], vals, color=cols, width=0.46, zorder=3)
+    for xx, v in zip([0, 1], vals):
+        a2.text(xx, v - 1.1, f"{v:+.1f}%", ha="center", fontsize=12.5, color=INK,
+                weight="bold")
+    a2.axhline(-12.0, color=INK, lw=2, ls="--", zorder=5)
+    a2.text(1.42, -11.4, "the truth", fontsize=9.5, color=INK, ha="right")
+    a2.set_xticks([0, 1])
+    a2.set_xticklabels(labs, fontsize=10)
+    a2.set_xlim(-0.55, 1.55)
+    a2.set_ylim(-18, 1)
+    a2.set_ylabel("estimated change in the use of force rate")
+    style(a2)
+    title(a2, "The scale is a modelling choice",
+          "The planted effect acts on the rate, so the proportional version recovers it.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_05_two_by_two.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_06():
+    """Module 6. Three specifications, one answer."""
+    import statsmodels.api as sm
+    import statsmodels.formula.api as smf
+
+    d = _panel(NO_A007 + COMPARISON)
+    d["tr"] = d["agency_id"].isin(NO_A007).astype(float)
+    d["settled"] = ((d["tr"] == 1) & (d["period"] == "after")).astype(float)
+    d["phase"] = ((d["tr"] == 1) & (d["period"] == "phase")).astype(float)
+    d["post"] = (d["period"] == "after").astype(float)
+
+    specs = [("group and period\nindicators only", "n_uof ~ tr + post + settled + phase"),
+             ("agency fixed\neffects", "n_uof ~ C(agency_id) + post + settled + phase"),
+             ("agency and month\nfixed effects",
+              "n_uof ~ C(agency_id) + C(year_month) + settled + phase")]
+    est, los, his, aics = [], [], [], []
+    for _, form in specs:
+        z = smf.glm(form, d, family=sm.families.Poisson(), offset=d["lo"]).fit()
+        lo, hi = z.conf_int().loc["settled"]
+        est.append(100 * (np.exp(z.params["settled"]) - 1))
+        los.append(100 * (np.exp(lo) - 1))
+        his.append(100 * (np.exp(hi) - 1))
+        aics.append(z.aic)
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13.2, 5.0))
+    xs = np.arange(len(specs))
+    a1.errorbar(xs, est, yerr=[np.array(est) - np.array(los), np.array(his) - np.array(est)],
+                fmt="none", ecolor=AQUA, elinewidth=2.8, capsize=0, zorder=3)
+    a1.scatter(xs, est, s=105, color=AQUA, zorder=5)
+    for x, e in zip(xs, est):
+        a1.text(x + 0.12, e, f"{e:+.1f}%", fontsize=10.5, va="center", color=INK)
+    a1.axhline(-12.0, color=INK, lw=2, ls="--", zorder=4)
+    a1.text(2.42, -11.3, "the truth", fontsize=9.5, color=INK, ha="right")
+    a1.set_xticks(xs)
+    a1.set_xticklabels([s[0] for s in specs], fontsize=9)
+    a1.set_xlim(-0.4, 2.55)
+    a1.set_ylim(-20, -4)
+    a1.set_ylabel("estimated change in the use of force rate")
+    style(a1)
+    title(a1, "Three specifications, one answer",
+          "The point estimate moves by 0.1 points and the interval barely at all.")
+
+    a2.bar(xs, aics, color=[INK3, INK3, AQUA], width=0.5, zorder=3)
+    for x, v in zip(xs, aics):
+        a2.text(x, v + 22, f"{v:,.0f}", ha="center", fontsize=11, color=INK, weight="bold")
+    a2.set_xticks(xs)
+    a2.set_xticklabels([s[0] for s in specs], fontsize=9)
+    a2.set_ylim(4400, 5400)
+    a2.set_ylabel("AIC, lower is better")
+    style(a2)
+    title(a2, "But they are not equally good models",
+          "Month effects fit far better without moving the estimate. Both facts matter.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_06_did_as_regression.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_07():
+    """Module 7. Every agency's pre program trend, with intervals."""
+    import statsmodels.api as sm
+    import statsmodels.formula.api as smf
+
+    pre = _panel()
+    pre = pre[pre["period"] == "before"]
+    rows = []
+    for a in sorted(F["agency_id"].unique()):
+        s = pre[pre["agency_id"] == a]
+        z = smf.glm("n_uof ~ yr", s, family=sm.families.Poisson(),
+                    offset=s["lo"]).fit()
+        lo, hi = z.conf_int().loc["yr"]
+        rows.append((SHORT[a], 100 * (np.exp(z.params["yr"]) - 1),
+                     100 * (np.exp(lo) - 1), 100 * (np.exp(hi) - 1), a in TREATED))
+    rows.sort(key=lambda r: r[1])
+
+    fig, ax = plt.subplots(figsize=(12.0, 5.6))
+    ys = np.arange(len(rows))[::-1]
+    for (nm, e, lo, hi, tr), yy in zip(rows, ys):
+        c = BLUE if tr else INK3
+        if nm.startswith("Summit"):
+            c = ORANGE
+        ax.plot([lo, hi], [yy, yy], color=c, lw=2.6, solid_capstyle="round", zorder=3)
+        ax.scatter([e], [yy], s=75, color=c, zorder=5)
+    ax.axvline(-4.46, color=AQUA, lw=2.2, zorder=2)
+    ax.text(-4.2, len(rows) - 0.4, " the comparison group's own trend, 4.5% a year",
+            fontsize=9, color=AQUA)
+    ax.axvline(0, color=INK3, lw=1, ls=":", zorder=2)
+    ax.set_yticks(ys)
+    ax.set_yticklabels([r[0] for r in rows], fontsize=9.5)
+    ax.set_xlim(-22, 34)
+    ax.set_ylim(-0.7, len(rows) - 0.1)
+    ax.set_xlabel("change in the use of force rate per year, before the program existed")
+    ax.text(-21.4, len(rows) - 1.05, "took the training", fontsize=9, color=BLUE)
+    ax.text(-21.4, len(rows) - 1.55, "also trained", fontsize=9, color=ORANGE)
+    ax.text(-21.4, len(rows) - 2.05, "did not", fontsize=9, color=INK3)
+    style(ax, ygrid=False)
+    ax.grid(axis="x", color=GRID, lw=0.8, zorder=0)
+    ax.set_axisbelow(True)
+    title(ax, "Every agency's trend before the program, one at a time",
+          "Only three intervals exclude zero. The per agency test is weak, and it still catches Summit County.")
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_07_parallel_trends.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_08():
+    """Module 8. Four responses to a failed parallel trends test."""
+    import statsmodels.api as sm
+    import statsmodels.formula.api as smf
+
+    d = _panel()
+    d["tr"] = d["agency_id"].isin(TREATED).astype(float)
+    d["settled"] = ((d["tr"] == 1) & (d["period"] == "after")).astype(float)
+    d["phase"] = ((d["tr"] == 1) & (d["period"] == "phase")).astype(float)
+    base = "n_uof ~ C(agency_id)+C(year_month)+settled+phase"
+    trends = "n_uof ~ C(agency_id)+C(year_month)+C(agency_id):yr+settled+phase"
+    opts = [("do nothing, keep Summit County", base, d, ORANGE),
+            ("drop Summit County", base, d[d["agency_id"] != "A007"], AQUA),
+            ("agency specific linear trends", trends, d, ORANGE),
+            ("both", trends, d[d["agency_id"] != "A007"], ORANGE)]
+
+    fig, ax = plt.subplots(figsize=(12.4, 5.0))
+    ys = np.arange(len(opts))[::-1]
+    for (lab, form, data, c), yy in zip(opts, ys):
+        z = smf.glm(form, data, family=sm.families.Poisson(), offset=data["lo"]).fit()
+        lo, hi = z.conf_int().loc["settled"]
+        e = 100 * (np.exp(z.params["settled"]) - 1)
+        lo, hi = 100 * (np.exp(lo) - 1), 100 * (np.exp(hi) - 1)
+        ax.plot([lo, hi], [yy, yy], color=c, lw=3.2, solid_capstyle="round", zorder=3)
+        ax.scatter([e], [yy], s=105, color=c, zorder=5)
+        ax.text(e - 1.6, yy + 0.26, f"{e:+.1f}%", ha="center", fontsize=10.5, color=INK,
+                weight="bold")
+        if lo < 0 < hi:
+            ax.text(hi + 0.9, yy, "interval includes zero", fontsize=8.5, color=ORANGE,
+                    va="center")
+    ax.axvline(-12.0, color=INK, lw=2, ls="--", zorder=6)
+    ax.text(-12.4, -0.72, "the truth ", fontsize=9.5, color=INK, ha="right")
+    ax.axvline(0, color=INK3, lw=1.2, zorder=2)
+    ax.set_yticks(ys)
+    ax.set_yticklabels([o[0] for o in opts], fontsize=9.5)
+    ax.set_xlim(-25, 17)
+    ax.set_ylim(-0.95, 3.55)
+    ax.set_xlabel("estimated change in the use of force rate")
+    style(ax, ygrid=False)
+    ax.grid(axis="x", color=GRID, lw=0.8, zorder=0)
+    ax.set_axisbelow(True)
+    title(ax, "Four responses to one failed assumption",
+          "The simple fix works. The sophisticated one doubles the interval and loses the effect.")
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_08_when_parallel_trends_fails.png", dpi=150)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
-    for fn in (fig_01, fig_02, fig_03, fig_04):
+    for fn in (fig_01, fig_02, fig_03, fig_04,
+               fig_05, fig_06, fig_07, fig_08):
         fn()
         print("built", fn.__name__)
