@@ -24,7 +24,7 @@ The only defence is to place every month in the context of the years around it, 
 
 ## The Example
 
-Riverbend Police Department.
+Stonewick Police Department.
 
 **One year on its own, 2023:**
 
@@ -40,11 +40,11 @@ June's 79 is the highest month of the year, and almost double January. On its ow
 |---|---|---|---|---|---|---|---|
 | **Per 100 arrests** | 4.02 | 3.68 | 3.40 | 3.29 | 2.96 | 2.77 | 2.56 |
 
-![Two panels. The left panel shows Riverbend's twelve monthly counts for 2023, with June circled at 79 as the highest month of the year. The right panel shows the same agency's use of force per 100 arrests from 2019 to 2025, falling in a near straight line from 4.02 to 2.56](Figures/fig_07_trend.png)
+![Two panels. The left panel shows Stonewick's twelve monthly counts for 2023, with June circled at 79 as the highest month of the year. The right panel shows the same agency's use of force per 100 arrests from 2019 to 2025, falling in a near straight line from 4.02 to 2.56](Figures/fig_07_trend.png)
 
 The rate has fallen **every single year for six years**, from 4.02 to 2.56. That is a reduction of 36 percent, and there is not one year in which it reversed.
 
-June 2023 sits inside that. It is a high month in a year that was better than the one before it and worse than the one after it. Nothing about June 2023 interrupted the direction of travel, and a decision to abandon whatever Riverbend has been doing since 2019 would have been a decision to abandon the best sustained improvement in the dataset.
+June 2023 sits inside that. It is a high month in a year that was better than the one before it and worse than the one after it. Nothing about June 2023 interrupted the direction of travel, and a decision to abandon whatever Stonewick has been doing since 2019 would have been a decision to abandon the best sustained improvement in the dataset.
 
 ## What To Watch For
 
@@ -60,7 +60,7 @@ One month tells you what happened. Several years tell you what is happening. Onl
 ## Check Your Understanding
 
 <details>
-<summary><b>1.</b> Riverbend's June 2023 was 92 percent above its January. Does that show the agency deteriorating during 2023?</summary>
+<summary><b>1.</b> Stonewick's June 2023 was 92 percent above its January. Does that show the agency deteriorating during 2023?</summary>
 
 No, for two separate reasons. First, June is a summer month, and summer runs well above winter at almost every agency in the dataset, which is [Topic 8](Topic_08_Seasonality.md). Second, the full year ended at 48 in December, lower than it began. Within year movement and the multi year direction are different questions, and the January to June comparison answers neither of them cleanly.
 </details>

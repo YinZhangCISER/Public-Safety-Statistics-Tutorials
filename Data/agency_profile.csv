@@ -1,13 +1,13 @@
 agency_id,agency_name,agency_type,sworn_officers,population_served,region,pre_program_uof_per_100_arrests,deescalation_training,training_start_month,violent_crime_rate_per_1000,property_crime_rate_per_1000,budget_share_public_safety_pct,county_population,county_budget_millions,cfs_data_submitted
-A001,Riverbend Police Department,Municipal Police,412,210000,West,3.529,Yes,2023-07,4.11,20.46,25.9,681747,1193.8,Yes
-A002,Cedar Falls Police Department,Municipal Police,188,96000,West,4.024,Yes,2023-07,2.74,14.46,31.4,332317,551.0,Yes
-A003,Harbor Point Police Department,Municipal Police,95,48000,West,3.2,No,,2.35,15.1,35.4,202268,536.6,Yes
+A001,Stonewick Police Department,Municipal Police,412,210000,West,3.529,Yes,2023-07,4.11,20.46,25.9,681747,1193.8,Yes
+A002,Tarnbridge Police Department,Municipal Police,188,96000,West,4.024,Yes,2023-07,2.74,14.46,31.4,332317,551.0,Yes
+A003,Havenbrook Police Department,Municipal Police,95,48000,West,3.2,No,,2.35,15.1,35.4,202268,536.6,Yes
 A004,Millgate Police Department,Municipal Police,54,27000,East,3.588,Yes,2023-07,1.25,12.96,23.9,81726,186.7,Yes
-A005,Northgate Police Department,Municipal Police,31,15500,East,2.093,No,,3.05,13.88,23.6,66623,196.3,Yes
-A006,Elkhorn Police Department,Municipal Police,8,3900,East,2.316,No,,2.65,10.83,24.3,13721,39.1,Partial
+A005,Kelsmoor Police Department,Municipal Police,31,15500,East,2.093,No,,3.05,13.88,23.6,66623,196.3,Yes
+A006,Orrindale Police Department,Municipal Police,8,3900,East,2.316,No,,2.65,10.83,24.3,13721,39.1,Partial
 A007,Summit County Sheriff's Office,County Sheriff,268,175000,West,3.118,Yes,2023-07,3.56,19.94,23.6,721384,1570.9,Yes
 A008,Lakeshore County Sheriff's Office,County Sheriff,141,92000,West,2.485,No,,3.29,14.06,21.4,293899,899.5,Yes
 A009,Prairie County Sheriff's Office,County Sheriff,38,21000,East,2.588,No,,2.42,14.77,24.3,78520,195.4,Partial
 A010,Pinecrest State University Police,Campus Police,46,29000,West,3.618,Yes,2023-07,2.12,13.68,23.2,79728,219.2,Yes
-A011,Two Rivers Tribal Police,Tribal Police,18,7400,East,2.167,No,,2.61,13.05,21.7,24153,53.4,Yes
-A012,Grandview Police Department,Municipal Police,902,480000,West,2.671,No,,6.36,33.9,29.9,1154604,2187.1,Yes
+A011,Dunmoor Tribal Police,Tribal Police,18,7400,East,2.167,No,,2.61,13.05,21.7,24153,53.4,Yes
+A012,Ashfell Police Department,Municipal Police,902,480000,West,2.671,No,,6.36,33.9,29.9,1154604,2187.1,Yes

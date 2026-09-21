@@ -38,9 +38,9 @@ In the raw row, October to November is 14 down to 4, a fall of 71 percent. In th
 
 Notice also that the first two cells are empty. A three month average cannot be computed until three months exist.
 
-**Removing the season: Grandview, twelve month moving average.**
+**Removing the season: Ashfell, twelve month moving average.**
 
-![Two panels. The left panel shows Lakeshore County's 2023 raw monthly counts in grey with a three month moving average drawn over it in blue, which flattens the October to November drop. The right panel shows Grandview's full monthly series in grey with a twelve month moving average in blue, a smooth line that falls steadily and shows no summer peaks at all](Figures/fig_13_smoothing.png)
+![Two panels. The left panel shows Lakeshore County's 2023 raw monthly counts in grey with a three month moving average drawn over it in blue, which flattens the October to November drop. The right panel shows Ashfell's full monthly series in grey with a twelve month moving average in blue, a smooth line that falls steadily and shows no summer peaks at all](Figures/fig_13_smoothing.png)
 
 The grey line on the right is the raw series, with its July spike every year. The blue line is the twelve month average, and it has no spikes at all, because every window it computes contains one July and one January. What remains is the seven year decline, visible without having to squint past the seasonal pattern.
 
@@ -50,7 +50,7 @@ The grey line on the right is the raw series, with its July spike every year. Th
 - **The last points are unreliable.** Near the end of the series the window may be incomplete, or may include provisional months. Many charts simply stop the smoothed line early, and that is the honest choice.
 - **Missing months break it.** Prairie County has no data for March, April and May 2022, so no three month average can be computed for any window containing them. Software that silently skips the gap and averages February with June produces a number that is not a three month average of anything. See [Topic 6](Topic_06_Missing_Time_Points_And_Reporting_Gaps.md).
 - **Choose the window to match the question, then say which you used.** "Incidents are down" means something different with a three month window than with a twelve month one.
-- **Smoothing hides genuine spikes too.** Cedar Falls in June 2021 is a real event that a moving average will flatten into something unremarkable. Always show the raw line as well.
+- **Smoothing hides genuine spikes too.** Tarnbridge in June 2021 is a real event that a moving average will flatten into something unremarkable. Always show the raw line as well.
 
 ## 💡 The Insight
 

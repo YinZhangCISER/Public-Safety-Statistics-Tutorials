@@ -37,7 +37,7 @@ None of this requires mathematics. It requires refusing to react until the list 
 
 ## A Worked Example
 
-![Cedar Falls Police Department monthly use of force incidents from 2019 to 2026, with numbered callouts marking that the axis starts at zero, the ordinary range of roughly 15 to 45 a month, the documented outlier of 176 in June 2021, the yearly average drifting downward, and the final two months shown in orange as incomplete](Figures/fig_20_reading_a_chart.png)
+![Tarnbridge Police Department monthly use of force incidents from 2019 to 2026, with numbered callouts marking that the axis starts at zero, the ordinary range of roughly 15 to 45 a month, the documented outlier of 176 in June 2021, the yearly average drifting downward, and the final two months shown in orange as incomplete](Figures/fig_20_reading_a_chart.png)
 
 Working the list against this chart:
 
@@ -47,19 +47,19 @@ Working the list against this chart:
 
 **3. Trend.** Yes, downward. The yearly average falls from 31.7 incidents a month in 2019 to 21.0 in 2025, a reduction of about a third.
 
-**4. Seasonality.** Not visible here, and this is worth dwelling on. Averaged across all seven years, July runs about 40 percent above this agency's annual average. But Cedar Falls records only about 25 incidents a month, so in any single year the noise is larger than the seasonal signal and the peaks do not line up to the eye. **Absence from the chart is not absence from the data.** Checking seasonality properly means averaging the same month across years, as in [Topic 8](Topic_08_Seasonality.md), not looking harder at this picture.
+**4. Seasonality.** Not visible here, and this is worth dwelling on. Averaged across all seven years, July runs about 40 percent above this agency's annual average. But Tarnbridge records only about 25 incidents a month, so in any single year the noise is larger than the seasonal signal and the peaks do not line up to the eye. **Absence from the chart is not absence from the data.** Checking seasonality properly means averaging the same month across years, as in [Topic 8](Topic_08_Seasonality.md), not looking harder at this picture.
 
 **5. Outliers.** One, and it is unmissable: June 2021, 176 incidents against a typical month of 31, caused by a documented week of civil unrest. Every average that includes it needs a footnote. See [Topic 11](Topic_11_Outliers_And_Spikes.md).
 
-**6. Missing periods.** None. Cedar Falls submitted every month. Another agency in this dataset did not, so this question has to be asked rather than assumed.
+**6. Missing periods.** None. Tarnbridge submitted every month. Another agency in this dataset did not, so this question has to be asked rather than assumed.
 
-**7. Other series.** Only one is shown, which is the chart's main weakness. Nothing here can distinguish something Cedar Falls did from something that happened across the state. The comparison agencies from [Topic 14](Topic_14_Comparing_Multiple_Time_Series.md) belong on this chart.
+**7. Other series.** Only one is shown, which is the chart's main weakness. Nothing here can distinguish something Tarnbridge did from something that happened across the state. The comparison agencies from [Topic 14](Topic_14_Comparing_Multiple_Time_Series.md) belong on this chart.
 
-**8. Count or rate.** Count. The decline could partly reflect fewer arrests rather than less force per arrest. On the rate, Cedar Falls ran at 3.34 per 100 arrests in 2023, the highest of the twelve agencies, even though its count was only third. See [Topic 5](Topic_05_Counts_And_Rates.md). **The count chart and the rate chart tell different stories about this agency, and the count chart is the flattering one.**
+**8. Count or rate.** Count. The decline could partly reflect fewer arrests rather than less force per arrest. On the rate, Tarnbridge ran at 3.34 per 100 arrests in 2023, the highest of the twelve agencies, even though its count was only third. See [Topic 5](Topic_05_Counts_And_Rates.md). **The count chart and the rate chart tell different stories about this agency, and the count chart is the flattering one.**
 
 **9. Same period last year.** Available for every month and not shown. A year over year column would be the single most useful addition.
 
-**10. Lag.** Yes. Cedar Falls adopted the de escalation training in July 2023. Anything in the second half of 2023 should be read with the four month phase in from [Topic 15](Topic_15_Lagged_Effects.md) in mind.
+**10. Lag.** Yes. Tarnbridge adopted the de escalation training in July 2023. Anything in the second half of 2023 should be read with the four month phase in from [Topic 15](Topic_15_Lagged_Effects.md) in mind.
 
 **11. Bigger than usual.** For most of the series, no. The month to month movement of roughly 15 to 45 is what this agency normally does. June 2021 is the one exception.
 
@@ -81,7 +81,7 @@ Good analysis is not about knowing more methods. It is about asking the same que
 ## Check Your Understanding
 
 <details>
-<summary><b>1.</b> Which question in the list would most often have caught the Harbor Point reclassification from Topic 19?</summary>
+<summary><b>1.</b> Which question in the list would most often have caught the Havenbrook reclassification from Topic 19?</summary>
 
 Question 12, and specifically its instruction to check the total. The public order category jumped 54 percent while total calls rose 3 percent, which is the signature of calls being relabelled rather than added. Question 5 might also have flagged it, since the jump was sudden and landed on a clean administrative date, but the total is what settles it.
 </details>
@@ -93,7 +93,7 @@ Question 2, because the truncated axis exaggerates every movement. Question 7, b
 </details>
 
 <details>
-<summary><b>3.</b> Why is question 4 answered "not visible here" for Cedar Falls rather than "no"?</summary>
+<summary><b>3.</b> Why is question 4 answered "not visible here" for Tarnbridge rather than "no"?</summary>
 
 Because those are different claims. "No" would mean the agency has no seasonal pattern, which is false: averaged over seven years its July runs about 40 percent above the annual average. "Not visible here" means this particular chart cannot show it, because at roughly 25 incidents a month the random variation is larger than the seasonal effect in any single year. Answering "no" would lead someone to schedule summer staffing as though July were an ordinary month.
 </details>

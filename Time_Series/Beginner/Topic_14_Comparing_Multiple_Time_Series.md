@@ -24,32 +24,32 @@ This is the beginner form of an idea that the rest of this repository is built o
 
 ## The Example
 
-Cedar Falls recorded 176 use of force incidents in June 2021, against a typical month of 31. Was June 2021 a difficult month everywhere?
+Tarnbridge recorded 176 use of force incidents in June 2021, against a typical month of 31. Was June 2021 a difficult month everywhere?
 
 Agencies differ enormously in size, so raw counts cannot be compared directly. Each agency below is measured **against its own typical month in 2021**, so a value of 1.0 means an entirely ordinary month for that agency.
 
-![Two panels. The left panel shows three agencies through 2021, each divided by its own typical month, with Cedar Falls spiking to 5.7 in June while Grandview and Lakeshore County stay between 0.6 and 1.7 all year. The right panel shows all twelve agencies ranked by their June 2021 value, with Cedar Falls at 5.7 far ahead and every other agency between 0.0 and 2.0](Figures/fig_14_comparison_group.png)
+![Two panels. The left panel shows three agencies through 2021, each divided by its own typical month, with Tarnbridge spiking to 5.7 in June while Ashfell and Lakeshore County stay between 0.6 and 1.7 all year. The right panel shows all twelve agencies ranked by their June 2021 value, with Tarnbridge at 5.7 far ahead and every other agency between 0.0 and 2.0](Figures/fig_14_comparison_group.png)
 
 | Agency | June 2021, as times its own typical month |
 |---|---|
-| **Cedar Falls** | **5.7** |
-| Northgate | 2.0 |
-| Harbor Point | 1.8 |
-| Grandview | 1.6 |
-| Riverbend | 1.5 |
+| **Tarnbridge** | **5.7** |
+| Kelsmoor | 2.0 |
+| Havenbrook | 1.8 |
+| Ashfell | 1.6 |
+| Stonewick | 1.5 |
 | Prairie County | 1.2 |
 | Pinecrest State University | 1.0 |
 | Lakeshore County | 1.0 |
 | Summit County | 1.0 |
 | Millgate | 0.9 |
-| Two Rivers Tribal | 0.0 |
-| Elkhorn | 0.0 |
+| Dunmoor Tribal | 0.0 |
+| Orrindale | 0.0 |
 
 Eleven agencies had a June somewhere between an unusually quiet one and a mildly busy one. The values above 1.0 are mostly [seasonality](Topic_08_Seasonality.md), since June is a summer month everywhere. The two zeros are small agencies that happened to record nothing, which is [noise](Topic_10_Noise_And_Irregular_Fluctuations.md), not an achievement.
 
-Cedar Falls is at 5.7. Nothing else is close.
+Tarnbridge is at 5.7. Nothing else is close.
 
-**That single comparison answers the question.** June 2021 was not a hard month across the state. Whatever happened, happened in Cedar Falls. No further investigation of weather, state policy, or regional conditions is needed, and an investigation of Cedar Falls is warranted. Without the other eleven agencies, neither of those conclusions would have been available.
+**That single comparison answers the question.** June 2021 was not a hard month across the state. Whatever happened, happened in Tarnbridge. No further investigation of weather, state policy, or regional conditions is needed, and an investigation of Tarnbridge is warranted. Without the other eleven agencies, neither of those conclusions would have been available.
 
 ## What To Watch For
 
@@ -66,15 +66,15 @@ A comparison group turns "our numbers changed" into "our numbers changed and nob
 ## Check Your Understanding
 
 <details>
-<summary><b>1.</b> Suppose every agency in the table had come in between 4 and 6 times its own typical June. What would that tell you about Cedar Falls?</summary>
+<summary><b>1.</b> Suppose every agency in the table had come in between 4 and 6 times its own typical June. What would that tell you about Tarnbridge?</summary>
 
-That Cedar Falls needed no special explanation at all. A statewide spike of that size points to something shared: a regional event, a change in state reporting rules, a widespread disturbance. The investigation would move from Cedar Falls to the thing all twelve agencies had in common. The same Cedar Falls number means opposite things depending on what the others did.
+That Tarnbridge needed no special explanation at all. A statewide spike of that size points to something shared: a regional event, a change in state reporting rules, a widespread disturbance. The investigation would move from Tarnbridge to the thing all twelve agencies had in common. The same Tarnbridge number means opposite things depending on what the others did.
 </details>
 
 <details>
-<summary><b>2.</b> Northgate came in at 2.0, double its typical June. Should that be investigated too?</summary>
+<summary><b>2.</b> Kelsmoor came in at 2.0, double its typical June. Should that be investigated too?</summary>
 
-Probably not on its own. Northgate is a 31 officer department whose typical month is around 2 or 3 incidents, so doubling means going from roughly 2 to roughly 5. That is well inside ordinary variation for numbers that small, and June is a summer month. Compare it to Cedar Falls, where 5.7 times a typical month means going from about 31 to 176. The multiple is only half the story; the size of the base is the other half.
+Probably not on its own. Kelsmoor is a 31 officer department whose typical month is around 2 or 3 incidents, so doubling means going from roughly 2 to roughly 5. That is well inside ordinary variation for numbers that small, and June is a summer month. Compare it to Tarnbridge, where 5.7 times a typical month means going from about 31 to 176. The multiple is only half the story; the size of the base is the other half.
 </details>
 
 <details>

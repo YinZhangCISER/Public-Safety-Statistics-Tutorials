@@ -34,7 +34,7 @@ The rolling total is the one worth dwelling on. Every twelve month window contai
 
 ## Worked Example
 
-Grandview Police Department.
+Ashfell Police Department.
 
 ![Three panels. The first shows the monthly count in grey with a much steadier rolling twelve month average in blue. The second shows year over year percentage change as bars above and below zero. The third indexes four agencies of very different sizes to their own 2019 average, putting them all on one readable axis](Figures/fig_m09_presentations.png)
 

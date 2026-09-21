@@ -88,7 +88,7 @@ def fig_01():
     ax.set_ylim(0, 185)
     ax.set_ylabel("use of force incidents")
     style(ax)
-    title(ax, "Grandview Police Department, 2023",
+    title(ax, "Ashfell Police Department, 2023",
           "1,136 incidents for the year. The timing is the part the total hides.")
     fig.tight_layout()
     fig.savefig(HERE / "fig_01_what_is_a_time_series.png", dpi=150)
@@ -226,7 +226,7 @@ def fig_05():
     fig, (a1, a2) = plt.subplots(1, 2, figsize=(12.5, 5.2))
 
     bc = d.sort_values("uof")
-    colors = [ORANGE if s == "Cedar Falls" else BLUE for s in bc["short"]]
+    colors = [ORANGE if s == "Tarnbridge" else BLUE for s in bc["short"]]
     a1.barh(bc["short"], bc["uof"], color=colors, height=0.68, zorder=3)
     for y, v in enumerate(bc["uof"]):
         a1.text(v + 18, y, f"{v:,}", va="center", fontsize=9, color=INK2)
@@ -235,10 +235,10 @@ def fig_05():
     style(a1, ygrid=False)
     a1.grid(axis="x", color=GRID, lw=0.8)
     a1.set_axisbelow(True)
-    title(a1, "By count", "Grandview has by far the most. Cedar Falls is third.")
+    title(a1, "By count", "Ashfell has by far the most. Tarnbridge is third.")
 
     rc = d.sort_values("rate")
-    colors = [ORANGE if s == "Cedar Falls" else BLUE for s in rc["short"]]
+    colors = [ORANGE if s == "Tarnbridge" else BLUE for s in rc["short"]]
     a2.barh(rc["short"], rc["rate"], color=colors, height=0.68, zorder=3)
     for y, v in enumerate(rc["rate"]):
         a2.text(v + 0.05, y, f"{v:.2f}", va="center", fontsize=9, color=INK2)
@@ -247,7 +247,7 @@ def fig_05():
     style(a2, ygrid=False)
     a2.grid(axis="x", color=GRID, lw=0.8)
     a2.set_axisbelow(True)
-    title(a2, "By rate", "Cedar Falls is the highest in the state. Grandview is below average.")
+    title(a2, "By rate", "Tarnbridge is the highest in the state. Ashfell is below average.")
 
     fig.tight_layout()
     fig.savefig(HERE / "fig_05_counts_and_rates.png", dpi=150)
@@ -297,7 +297,7 @@ def fig_06():
     a3.set_ylabel("use of force incidents")
     style(a3)
     title(a3, "A zero is not a gap",
-          "Elkhorn, 2023. Four months reported a true zero.")
+          "Orrindale, 2023. Four months reported a true zero.")
     a3.tick_params(labelsize=8.5)
     for lab in a3.get_xticklabels()[1::2]:
         lab.set_visible(False)
@@ -320,7 +320,7 @@ def fig_07():
                 fontsize=9, color=INK, ha="center")
     a1.set_ylim(0, 110); a1.set_ylabel("use of force incidents")
     style(a1)
-    title(a1, "One year on its own", "Riverbend, 2023. June looks like the story.")
+    title(a1, "One year on its own", "Stonewick, 2023. June looks like the story.")
     a1.tick_params(labelsize=8.5)
     for lab in a1.get_xticklabels()[1::2]:
         lab.set_visible(False)
@@ -376,7 +376,7 @@ def fig_08():
     a2.legend(fontsize=8.5, frameon=False, loc="upper right")
     a2.set_ylim(0, 205); a2.set_ylabel("use of force incidents")
     style(a2)
-    title(a2, "Grandview, July against January",
+    title(a2, "Ashfell, July against January",
           "July wins in all seven years. That is what predictable means.")
 
     c = pd.read_csv(DATA / "cfs_monthly_by_type.csv")
@@ -483,7 +483,7 @@ def fig_10():
     a3.set_ylim(-0.3, 6); a3.set_yticks(range(7))
     a3.set_ylabel("use of force incidents")
     style(a3)
-    title(a3, "Elkhorn, eight officers",
+    title(a3, "Orrindale, eight officers",
           "Small numbers make every month a headline.")
     a3.tick_params(labelsize=8.5)
     for lab in a3.get_xticklabels()[1::2]:
@@ -508,7 +508,7 @@ def fig_11():
     a1.text(11.4, np.median(v) + 6, "typical month: 31", ha="right", fontsize=8.5, color=INK2)
     a1.set_ylim(0, 195); a1.set_ylabel("use of force incidents")
     style(a1)
-    title(a1, "Cedar Falls, 2021", "One month is nearly six times the typical month.")
+    title(a1, "Tarnbridge, 2021", "One month is nearly six times the typical month.")
     a1.tick_params(labelsize=8.5)
     for lab in a1.get_xticklabels()[1::2]:
         lab.set_visible(False)
@@ -598,7 +598,7 @@ def fig_13():
     a2.set_ylim(0, 195); a2.set_ylabel("use of force incidents")
     a2.legend(fontsize=8.5, frameon=False, loc="lower left")
     style(a2)
-    title(a2, "Grandview, 2019 to 2026",
+    title(a2, "Ashfell, 2019 to 2026",
           "A twelve month average erases the summer entirely, leaving the trend.")
 
     fig.tight_layout()
@@ -610,7 +610,7 @@ def fig_13():
 def fig_14():
     fig, (a1, a2) = plt.subplots(1, 2, figsize=(12.8, 4.6))
 
-    trio = [("A002", "Cedar Falls", ORANGE), ("A012", "Grandview", BLUE),
+    trio = [("A002", "Tarnbridge", ORANGE), ("A012", "Ashfell", BLUE),
             ("A008", "Lakeshore County", AQUA)]
     for aid, lab, c in trio:
         d = m[(m["agency_id"] == aid) & (m["year"] == "2021")].sort_values("mon")
@@ -636,7 +636,7 @@ def fig_14():
                      float(d[d["mon"] == 6]["n_uof"].iloc[0]) / med))
     rows.sort(key=lambda r: r[1])
     names = [r[0] for r in rows]; vals = [r[1] for r in rows]
-    cols = [ORANGE if n == "Cedar Falls" else BLUE for n in names]
+    cols = [ORANGE if n == "Tarnbridge" else BLUE for n in names]
     a2.barh(names, vals, color=cols, height=0.68, zorder=3)
     for y, v in enumerate(vals):
         a2.text(v + 0.08, y, f"{v:.1f}", va="center", fontsize=9, color=INK2)
@@ -723,13 +723,13 @@ def fig_16():
             transform=a1.transAxes, fontsize=9, color=INK, va="top")
     a1.set_ylim(0, 205); a1.set_ylabel("use of force incidents")
     style(a1)
-    title(a1, "Grandview, 2023", "Neighbouring months stay close to each other.")
+    title(a1, "Ashfell, 2023", "Neighbouring months stay close to each other.")
     a1.tick_params(labelsize=8.5)
     for lab in a1.get_xticklabels()[1::2]:
         lab.set_visible(False)
 
-    for ax, aid, lab, lim in [(a2, "A012", "Grandview, 902 officers", 205),
-                              (a3, "A006", "Elkhorn, 8 officers", 6)]:
+    for ax, aid, lab, lim in [(a2, "A012", "Ashfell, 902 officers", 205),
+                              (a3, "A006", "Orrindale, 8 officers", 6)]:
         d = m[(m["agency_id"] == aid) & (m["provisional"] == 0)].sort_values("year_month")
         y = d["n_uof"].tolist()
         jit = 0.10 if aid == "A006" else 0.0
@@ -743,8 +743,8 @@ def fig_16():
         ax.set_xlim(0, lim); ax.set_ylim(0, lim)
         ax.set_xlabel("this month"); ax.set_ylabel("the month after")
         style(ax)
-    title(a2, "Grandview: memory", "Each dot is a pair of neighbouring months. They line up.")
-    title(a3, "Elkhorn: no memory", "The same picture for a tiny agency is a cloud.")
+    title(a2, "Ashfell: memory", "Each dot is a pair of neighbouring months. They line up.")
+    title(a3, "Orrindale: no memory", "The same picture for a tiny agency is a cloud.")
 
     fig.tight_layout()
     fig.savefig(HERE / "fig_16_autocorrelation.png", dpi=150)
@@ -793,7 +793,7 @@ def fig_18():
     a1.legend(fontsize=9, frameon=False, loc="upper left")
     a1.set_ylim(0, 185); a1.set_ylabel("use of force incidents")
     style(a1)
-    title(a1, "Grandview, the same months two years running",
+    title(a1, "Ashfell, the same months two years running",
           "Both years have the same shape. 2023 sits a little lower.")
     a1.tick_params(labelsize=8.5)
     for lab in a1.get_xticklabels()[1::2]:
@@ -845,7 +845,7 @@ def fig_19():
     a1.set_xticks([pd.Timestamp(f"{y}-01-01") for y in (2022, 2023, 2024)])
     a1.set_xticklabels(["2022", "2023", "2024"], fontsize=9)
     style(a1)
-    title(a1, "Harbor Point: a category jumps, the total does not",
+    title(a1, "Havenbrook: a category jumps, the total does not",
           "Public order calls rise 54 percent. Total calls rise 3 percent.")
 
     tot = m.groupby("year_month")[["total_cfs"]].sum().loc["2024-11":"2026-06"]
@@ -897,7 +897,7 @@ def fig_20():
     ax.set_ylim(0, 195)
     ax.set_ylabel("use of force incidents")
     style(ax)
-    title(ax, "Cedar Falls Police Department, every month from 2019 to 2026",
+    title(ax, "Tarnbridge Police Department, every month from 2019 to 2026",
           "Five of the twelve checklist questions can be answered from this one chart.")
     fig.tight_layout()
     fig.savefig(HERE / "fig_20_reading_a_chart.png", dpi=150)

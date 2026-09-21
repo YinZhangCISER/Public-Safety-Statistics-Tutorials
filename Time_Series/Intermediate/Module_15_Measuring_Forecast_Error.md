@@ -36,7 +36,7 @@ Then score at **several** origins rather than one, and check interval coverage.
 
 ### Why MAPE fails on public safety data
 
-**It cannot be computed when the actual is zero.** Elkhorn's 2025 ran 0, 1, 1, 0, 0, 1, 1, 0, 3, 1, 1, 0. Five months are zero.
+**It cannot be computed when the actual is zero.** Orrindale's 2025 ran 0, 1, 1, 0, 0, 1, 1, 0, 3, 1, 1, 0. Five months are zero.
 
 | Measure | Value |
 |---|---|
@@ -59,7 +59,7 @@ Every row is a miss of five incidents. A method that over forecasts quiet months
 
 ### One holdout is one number
 
-![Two panels. The left panel plots average error over the following twelve months at six different training cut off dates, for Holt Winters and for the seasonal naive baseline, with the usual holdout marked as the lowest point. The right panel shows Elkhorn's 2025 absolute errors alongside absolute percentage errors, five of which are marked undefined](Figures/fig_m15_measuring_error.png)
+![Two panels. The left panel plots average error over the following twelve months at six different training cut off dates, for Holt Winters and for the seasonal naive baseline, with the usual holdout marked as the lowest point. The right panel shows Orrindale's 2025 absolute errors alongside absolute percentage errors, five of which are marked undefined](Figures/fig_m15_measuring_error.png)
 
 | Training ends | Months of training | Holt Winters | Same month last year |
 |---|---|---|---|
@@ -88,7 +88,7 @@ Pooled across five origins, 95 percent intervals covered the truth in about **92
 > [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Intermediate/Notebooks/Module_15_Measuring_Forecast_Error.ipynb)
 > About 20 minutes.
 
-The notebook implements all four measures, demonstrates both MAPE failures, builds the rolling origin table, checks coverage, and ends with a reusable `rolling_origin` function plus an exercise on Cedar Falls.
+The notebook implements all four measures, demonstrates both MAPE failures, builds the rolling origin table, checks coverage, and ends with a reusable `rolling_origin` function plus an exercise on Tarnbridge.
 
 ## Pitfalls
 

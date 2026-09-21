@@ -36,9 +36,9 @@ The slope comes out per month, so multiply by 12 and convert back from logs. Thr
 
 ## Worked Example
 
-Grandview Police Department, use of force per 100 arrests, whole years 2019 to 2025. The dataset was built with a decline of about **4.9 percent a year**.
+Ashfell Police Department, use of force per 100 arrests, whole years 2019 to 2025. The dataset was built with a decline of about **4.9 percent a year**.
 
-![Two panels. The left panel shows Grandview's monthly rate in grey with a fitted exponential trend line in orange running from about 2.9 down to about 2.0. The right panel is a coefficient plot: four windows, each with a point estimate and a horizontal confidence interval, against a dashed vertical line marking the true trend](Figures/fig_m06_measuring_the_trend.png)
+![Two panels. The left panel shows Ashfell's monthly rate in grey with a fitted exponential trend line in orange running from about 2.9 down to about 2.0. The right panel is a coefficient plot: four windows, each with a point estimate and a horizontal confidence interval, against a dashed vertical line marking the true trend](Figures/fig_m06_measuring_the_trend.png)
 
 | Window | Estimate | 95 percent interval | Width |
 |---|---|---|---|
@@ -53,11 +53,11 @@ Every interval covers the truth. What differs is how much each one says.
 
 **Seven years with month effects narrows the interval to under three points.** Adding the month terms barely moves the estimate and cuts the interval by a third, because the seasonal swing stops being counted as error.
 
-**Even then, the honest statement is a range.** "Grandview's rate is falling by about 5 percent a year, somewhere between 4 and 7" is what the data supports. "Falling 5.06 percent a year" is not.
+**Even then, the honest statement is a range.** "Ashfell's rate is falling by about 5 percent a year, somewhere between 4 and 7" is what the data supports. "Falling 5.06 percent a year" is not.
 
 ### One slope assumes one story
 
-Riverbend adopted the de escalation training in July 2023. Fitting a single line across the whole period produces a number that describes neither half of it:
+Stonewick adopted the de escalation training in July 2023. Fitting a single line across the whole period produces a number that describes neither half of it:
 
 | Fit | Estimate | 95 percent interval | Months |
 |---|---|---|---|
@@ -73,7 +73,7 @@ The single line is an average of two different periods, weighted by how many mon
 > [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Intermediate/Notebooks/Module_06_Measuring_The_Trend.ipynb)
 > About 20 minutes.
 
-The notebook fits the log linear model, builds the window comparison, contrasts the regression with a simple compound growth rate, splits Riverbend at the programme date, and ends with an exercise recovering Summit County's built in decline of 12.2 percent a year.
+The notebook fits the log linear model, builds the window comparison, contrasts the regression with a simple compound growth rate, splits Stonewick at the programme date, and ends with an exercise recovering Summit County's built in decline of 12.2 percent a year.
 
 ## Pitfalls
 
@@ -102,7 +102,7 @@ Because the seasonal swing is predictable variation that the simpler model has n
 </details>
 
 <details>
-<summary><b>3.</b> Riverbend's single line says −6.65 percent a year with an interval that excludes zero. Is that a valid description of the agency?</summary>
+<summary><b>3.</b> Stonewick's single line says −6.65 percent a year with an interval that excludes zero. Is that a valid description of the agency?</summary>
 
 It is a valid description of the seven year window and a poor description of the agency, because the programme launched in the middle of it. The number is a weighted average of a pre programme decline of about 5.5 percent and a post programme decline of about 7.6 percent. Quoting −6.65 percent implies a steady process that never existed. Report the two periods, or model the break explicitly.
 </details>

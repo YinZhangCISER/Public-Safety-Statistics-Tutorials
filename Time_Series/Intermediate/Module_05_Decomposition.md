@@ -48,7 +48,7 @@ Four things it needs from you:
 
 ## Worked Example
 
-Grandview Police Department, 88 finished months.
+Ashfell Police Department, 88 finished months.
 
 ![Four stacked panels on the left showing the observed series, the trend falling from about 119 to about 90, the repeating seasonal factor, and the remainder scattered around 1.0. A panel on the right compares the seasonal factor of counts, arrests and the rate, showing counts and arrests peaking in August while the rate peaks in July](Figures/fig_m05_decomposition.png)
 
@@ -62,7 +62,7 @@ Grandview Police Department, 88 finished months.
 | Arrests | 0.93 | 0.84 | 0.94 | 1.02 | 0.97 | 1.09 | 1.09 | **1.18** | 1.09 | 0.99 | 0.98 | 0.95 | August |
 | Rate per 100 arrests | 0.80 | 0.81 | 0.87 | 0.98 | 1.15 | 1.11 | **1.34** | 1.27 | 1.07 | 0.99 | 0.92 | 0.88 | July |
 
-Grandview's **counts** peak in August. Its **rate** peaks in July. Both are correct, because a count carries two seasonal patterns at once: the rate has one and the denominator has another, and the count is the product.
+Ashfell's **counts** peak in August. Its **rate** peaks in July. Both are correct, because a count carries two seasonal patterns at once: the rate has one and the denominator has another, and the count is the product.
 
 So the choice is the same one [Module 3](Module_03_Choosing_A_Denominator.md) made. If the question is about **officer behaviour**, decompose the rate. If it is about **workload**, decompose the count. Reporting a seasonal pattern without saying which series it came from is not enough.
 
@@ -76,7 +76,7 @@ The dataset was built with a July peak in the use of force rate, amplitude 0.20.
 > [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Intermediate/Notebooks/Module_05_Decomposition.ipynb)
 > About 20 minutes.
 
-The notebook compares additive with multiplicative, runs STL, verifies that the three pieces multiply back to the original, builds the comparison table above, and ends with an exercise on what happens to Cedar Falls when `robust=True` is switched off.
+The notebook compares additive with multiplicative, runs STL, verifies that the three pieces multiply back to the original, builds the comparison table above, and ends with an exercise on what happens to Tarnbridge when `robust=True` is switched off.
 
 ## Pitfalls
 
@@ -93,7 +93,7 @@ The notebook compares additive with multiplicative, runs STL, verifies that the 
 ## Check Your Understanding
 
 <details>
-<summary><b>1.</b> Why does Grandview's count peak in August while its rate peaks in July?</summary>
+<summary><b>1.</b> Why does Ashfell's count peak in August while its rate peaks in July?</summary>
 
 Because the count is the rate multiplied by the number of arrests, and both have their own seasonal shape. The rate is highest in July at 1.34. Arrests are highest in August at 1.18. Multiplying the two pushes the product's peak into August. Neither series is wrong; they answer different questions, and a report that says "use of force peaks in August" is describing workload while one that says "July" is describing how contacts are handled.
 </details>

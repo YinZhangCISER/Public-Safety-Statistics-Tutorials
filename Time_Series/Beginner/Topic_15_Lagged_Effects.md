@@ -34,7 +34,7 @@ In July 2023, five agencies in this dataset adopted a de escalation training pro
 | First 3 months, July to September 2023 | 3.26 | 2.78 | trained are **17.2 percent** higher |
 | Fully in place, November 2023 onward | 2.33 | 2.15 | trained are **8.3 percent** higher |
 
-*Rates are use of force per 100 arrests. June 2021 in Cedar Falls is excluded throughout, for the reason given in [Topic 11](Topic_11_Outliers_And_Spikes.md).*
+*Rates are use of force per 100 arrests. June 2021 in Tarnbridge is excluded throughout, for the reason given in [Topic 11](Topic_11_Outliers_And_Spikes.md).*
 
 **Three months in, there is essentially nothing.** The gap moved from 20.9 percent to 17.2 percent, a change small enough to be ordinary month to month variation. A report written in the autumn of 2023 would have been accurate in saying that the trained agencies were no better off, and it would have been used to argue for ending the program.
 

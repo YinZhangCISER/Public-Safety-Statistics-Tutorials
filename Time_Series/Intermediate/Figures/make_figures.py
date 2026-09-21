@@ -133,7 +133,7 @@ def fig_02():
     a1.legend(fontsize=8.5, frameon=False, loc="upper right")
     a1.set_ylim(-0.3, 6); a1.set_ylabel("use of force incidents")
     style(a1)
-    title(a1, "Elkhorn: 40 months have no incident at all",
+    title(a1, "Orrindale: 40 months have no incident at all",
           "A group by never creates a row for a month with nothing in it.")
 
     d = monthly[monthly["agency_id"] == "A009"]
@@ -179,8 +179,8 @@ def fig_03():
     for name, row in ranks.iterrows():
         ax.plot(xs, row.values, color=INK3, lw=1.2, alpha=0.45, zorder=2)
         ax.scatter(xs, row.values, s=26, color=INK3, alpha=0.45, zorder=3)
-    for name, c in [("Pinecrest State University", ORANGE), ("Elkhorn", BLUE),
-                    ("Grandview", AQUA)]:
+    for name, c in [("Pinecrest State University", ORANGE), ("Orrindale", BLUE),
+                    ("Ashfell", AQUA)]:
         row = ranks.loc[name]
         ax.plot(xs, row.values, color=c, lw=2.6, zorder=4)
         ax.scatter(xs, row.values, s=60, color=c, zorder=5)
@@ -252,8 +252,8 @@ def fig_04():
     a1.plot(xs, 1 / np.sqrt(xs), color=ORANGE, lw=2, zorder=3,
             label="what pure counting noise alone would give")
     a1.scatter(v["mean"], v["cv"], s=54, color=BLUE, zorder=4, label="each agency")
-    offsets = {"Elkhorn": (10, 6), "Two Rivers Tribal": (10, -16),
-               "Grandview": (-10, 14), "Riverbend": (-12, -20)}
+    offsets = {"Orrindale": (10, 6), "Dunmoor Tribal": (10, -16),
+               "Ashfell": (-10, 14), "Stonewick": (-12, -20)}
     for _, r in v.iterrows():
         if r["name"] in offsets:
             a1.annotate(r["name"], (r["mean"], r["cv"]), textcoords="offset points",
@@ -285,14 +285,14 @@ def fig_04():
     out = (g23["rate"] - state).abs() > 1.96 * g23["se"]
     a2.scatter(g23.loc[~out, "arr"], g23.loc[~out, "rate"], s=54, color=BLUE, zorder=4)
     a2.scatter(g23.loc[out, "arr"], g23.loc[out, "rate"], s=64, color=ORANGE, zorder=5)
-    off2 = {"Elkhorn": (9, 7), "Two Rivers Tribal": (9, -15),
-            "Cedar Falls": (10, 4), "Grandview": (-12, -18),
+    off2 = {"Orrindale": (9, 7), "Dunmoor Tribal": (9, -15),
+            "Tarnbridge": (10, 4), "Ashfell": (-12, -18),
             "Lakeshore County": (10, -4)}
     for _, r in g23.iterrows():
         if r["short"] in off2:
             a2.annotate(r["short"], (r["arr"], r["rate"]), textcoords="offset points",
                         xytext=off2[r["short"]], fontsize=9, color=INK,
-                        ha="right" if r["short"] == "Grandview" else "left")
+                        ha="right" if r["short"] == "Ashfell" else "left")
     a2.set_xscale("log")
     a2.set_xlabel("arrests in 2023, the size of the denominator")
     a2.set_ylabel("use of force per 100 arrests")
@@ -343,7 +343,7 @@ def fig_05():
         if i < 3:
             ax.set_xticklabels([])
         style(ax)
-    fig.text(0.012, 0.965, "Grandview, monthly use of force, split into three pieces",
+    fig.text(0.012, 0.965, "Ashfell, monthly use of force, split into three pieces",
              fontsize=11, color=INK)
     fig.text(0.012, 0.932, "Multiply the three lower panels together and the top panel comes back.",
              fontsize=9, color=INK2)
@@ -390,7 +390,7 @@ def fig_06():
     a1.set_ylim(0, 5.2)
     a1.legend(fontsize=8.5, frameon=False, loc="upper right")
     style(a1)
-    title(a1, "Grandview, 2019 to 2025",
+    title(a1, "Ashfell, 2019 to 2025",
           "A straight line on the log scale is a constant percentage per year.")
 
     def slope(d, formula="np.log(rate) ~ t"):
@@ -447,7 +447,7 @@ def fig_07():
     a1.set_ylabel("use of force incidents")
     a1.legend(fontsize=8.5, frameon=False, loc="upper right")
     style(a1)
-    title(a1, "Grandview, 2019 to 2026",
+    title(a1, "Ashfell, 2019 to 2026",
           "The adjusted line keeps the level and the trend, and drops the calendar.")
 
     raw = 100 * (s / s.shift(1) - 1)
@@ -500,7 +500,7 @@ def fig_08():
     a1.set_ylabel("use of force incidents")
     style(a1)
     title(a1, "One fixed limit for the whole period",
-          "Cedar Falls. The limit ignores the season and the trend.")
+          "Tarnbridge. The limit ignores the season and the trend.")
 
     st = STL(np.log(s), period=12, robust=True).fit()
     expected = np.exp(st.trend + st.seasonal)
@@ -720,8 +720,8 @@ def fig_12():
                edgecolors=SURFACE, linewidths=1.2, zorder=4, label="did not adopt the training")
     a1.scatter(xy[treated_mask, 0], xy[treated_mask, 1], s=120, color=ORANGE,
                edgecolors=SURFACE, linewidths=1.2, zorder=4, label="adopted the training")
-    nudge = {"Northgate": (0, 12), "Millgate": (0, -19), "Cedar Falls": (0, -19),
-             "Harbor Point": (0, 12), "Grandview": (0, 12), "Riverbend": (0, -19),
+    nudge = {"Kelsmoor": (0, 12), "Millgate": (0, -19), "Tarnbridge": (0, -19),
+             "Havenbrook": (0, 12), "Ashfell": (0, 12), "Stonewick": (0, -19),
              "Summit County": (0, -19), "Lakeshore County": (0, 12)}
     for i, nm in enumerate(names):
         a1.annotate(nm, (xy[i, 0], xy[i, 1]), textcoords="offset points",
@@ -733,7 +733,7 @@ def fig_12():
     a1.legend(fontsize=8.5, frameon=False, loc="upper left")
     a1.spines[["top", "right", "left", "bottom"]].set_visible(False)
     title(a1, "Who is like whom, and who adopted the programme",
-          "Lines join each agency to its single nearest peer. Riverbend's nearest two both adopted it.")
+          "Lines join each agency to its single nearest peer. Stonewick's nearest two both adopted it.")
 
     # ---- the benchmark series, and what contamination costs
     clean = monthly[monthly["provisional"] == 0].copy()
@@ -756,7 +756,7 @@ def fig_12():
     all_untreated = [x for x in p["agency_id"] if x not in TREATED]
     riv = bench(["A001"])
 
-    a2.plot(riv.index, riv.values, color=ORANGE, lw=2.4, zorder=5, label="Riverbend")
+    a2.plot(riv.index, riv.values, color=ORANGE, lw=2.4, zorder=5, label="Stonewick")
     a2.plot(bench(near3).index, bench(near3).values, color=INK3, lw=2, zorder=3,
             label="three nearest peers, two of them also trained")
     a2.plot(bench(untreated3).index, bench(untreated3).values, color=BLUE, lw=2, zorder=4,
@@ -796,7 +796,7 @@ def fig_12():
     for yy, (lab, _) in zip(ys, rows):
         a3.text(-16.6, yy + 0.33, lab.replace("\n", " "), va="bottom", ha="left",
                 fontsize=8.5, color=INK2)
-    a3.set_xlabel("estimated effect on Riverbend, percent")
+    a3.set_xlabel("estimated effect on Stonewick, percent")
     style(a3, ygrid=False)
     a3.grid(axis="x", color=GRID, lw=0.8); a3.set_axisbelow(True)
     title(a3, "What the wrong comparison group costs",
@@ -856,7 +856,7 @@ def fig_13():
     a1.set_ylabel("use of force incidents")
     a1.legend(fontsize=8, frameon=False, loc="lower left")
     style(a1)
-    title(a1, "Grandview: train to the end of 2024, forecast 2025",
+    title(a1, "Ashfell: train to the end of 2024, forecast 2025",
           "Three of the six baselines, against what actually happened.")
 
     errs = sorted(((k, _mae(test.values, v)) for k, v in fc.items()), key=lambda r: r[1])
@@ -992,7 +992,7 @@ def fig_15():
     a2.set_ylim(0, 3.1)
     a2.legend(fontsize=8, frameon=False, loc="upper left")
     style(a2)
-    title(a2, "Elkhorn, 2025: why a percentage error fails",
+    title(a2, "Orrindale, 2025: why a percentage error fails",
           "Five months are zero, so the percentage cannot be computed at all.")
 
     fig.tight_layout()

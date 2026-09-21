@@ -40,7 +40,7 @@ Then score every baseline on the test period, and only then start modelling.
 
 ## Worked Example
 
-Grandview Police Department. Train on 72 months through December 2024, forecast the twelve months of 2025.
+Ashfell Police Department. Train on 72 months through December 2024, forecast the twelve months of 2025.
 
 ![Two panels. The left panel shows the series through 2024 in grey, the held back 2025 in black, and three baseline forecasts overlaid. The right panel ranks all six baselines by average error, with seasonal naive plus drift best at 15.6 and the mean of all history worst at 25.2](Figures/fig_m13_baselines.png)
 
@@ -57,11 +57,11 @@ Grandview Police Department. Train on 72 months through December 2024, forecast 
 
 **The mean of all history is worst**, because it ignores both the season and the trend and is therefore wrong in a different direction every month. **Last value is poor** too: December is a quiet month, and repeating it across a year predicts a permanent winter.
 
-So any model proposed for Grandview has to come in under **15.6**, on data it has not seen, by a margin large enough to be worth maintaining.
+So any model proposed for Ashfell has to come in under **15.6**, on data it has not seen, by a margin large enough to be worth maintaining.
 
 ### The ranking is not universal
 
-Run the same six baselines on Elkhorn, the eight officer department, and the order **reverses**:
+Run the same six baselines on Orrindale, the eight officer department, and the order **reverses**:
 
 | Baseline | Average error |
 |---|---|
@@ -71,7 +71,7 @@ Run the same six baselines on Elkhorn, the eight officer department, and the ord
 | Rolling twelve month mean | 0.69 |
 | **Same month last year** | **0.92** |
 
-The flat baselines win and the seasonal one comes last. Elkhorn has no seasonal shape large enough to see through the noise, so reaching back twelve months just imports an extra month of randomness. Every baseline is within half an incident of every other, on a series averaging 0.81 a month.
+The flat baselines win and the seasonal one comes last. Orrindale has no seasonal shape large enough to see through the noise, so reaching back twelve months just imports an extra month of randomness. Every baseline is within half an incident of every other, on a series averaging 0.81 a month.
 
 **Knowing a series is unforecastable is a result.** It saves building something that would be maintained for years while adding nothing.
 
@@ -81,7 +81,7 @@ The flat baselines win and the seasonal one comes last. Elkhorn has no seasonal 
 > [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Intermediate/Notebooks/Module_13_Baseline_Forecasts.ipynb)
 > About 15 minutes.
 
-The notebook builds all six, ranks them, works out what margin a model would have to achieve, and ends with a reusable `baseline_table` function plus the Elkhorn exercise.
+The notebook builds all six, ranks them, works out what margin a model would have to achieve, and ends with a reusable `baseline_table` function plus the Orrindale exercise.
 
 ## Pitfalls
 
@@ -103,15 +103,15 @@ Because it lets the model see the future. With randomly chosen test months, the 
 </details>
 
 <details>
-<summary><b>2.</b> A new model achieves an average error of 14.8 on Grandview's 2025. Is it worth deploying?</summary>
+<summary><b>2.</b> A new model achieves an average error of 14.8 on Ashfell's 2025. Is it worth deploying?</summary>
 
 Probably not. The best baseline is 15.6, so the model buys about a 5 percent improvement in exchange for code that has to be maintained, documented, explained and re estimated. Against that, "whatever happened this month last year" needs no maintenance and can be described in one sentence. A margin worth taking on is usually 20 percent or more, and it should hold at several origins rather than one, which is [Module 15](Module_15_Measuring_Forecast_Error.md).
 </details>
 
 <details>
-<summary><b>3.</b> Why does the baseline ranking reverse between Grandview and Elkhorn?</summary>
+<summary><b>3.</b> Why does the baseline ranking reverse between Ashfell and Orrindale?</summary>
 
-Because seasonal naive is only useful when there is a seasonal pattern large enough to exceed the noise. Grandview's July runs about 45 percent above its annual average on a base of 100 incidents, which easily clears the noise. Elkhorn averages 0.81 incidents a month, so any seasonal signal is buried, and using last July's number imports the randomness of a single small month for no gain. The lesson generalises: the right baseline depends on the series, so compute all of them.
+Because seasonal naive is only useful when there is a seasonal pattern large enough to exceed the noise. Ashfell's July runs about 45 percent above its annual average on a base of 100 incidents, which easily clears the noise. Orrindale averages 0.81 incidents a month, so any seasonal signal is buried, and using last July's number imports the randomness of a single small month for no gain. The lesson generalises: the right baseline depends on the series, so compute all of them.
 </details>
 
 ## Key Takeaway

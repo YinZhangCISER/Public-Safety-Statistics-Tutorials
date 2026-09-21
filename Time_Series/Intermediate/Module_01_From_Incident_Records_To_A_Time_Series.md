@@ -41,7 +41,7 @@ One practical note on the time key. The `YYYY-MM` format used throughout this da
 
 ## Worked Example
 
-The use of force file holds **22,233 records**. Filtering to Grandview Police Department in 2023 leaves **1,136**. Grouping those by month gives twelve numbers:
+The use of force file holds **22,233 records**. Filtering to Ashfell Police Department in 2023 leaves **1,136**. Grouping those by month gives twelve numbers:
 
 | Month | Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|

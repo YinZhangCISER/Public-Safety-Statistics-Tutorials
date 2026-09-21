@@ -36,7 +36,7 @@ Lakeshore County Sheriff's Office, 2023:
 
 October to November is 14 down to 4. A 71 percent drop in a single month. That is the kind of number that ends up in a briefing as evidence that something worked.
 
-![Three panels. The left panel shows Lakeshore County's 2023 monthly counts bouncing between 4 and 14 with October at 14 and November at 4 labelled. The middle panel shows the same agency's yearly rate from 2019 to 2025 hovering close to a flat average of 2.36. The right panel shows Elkhorn's 2023 counts, which run between 0 and 4, with orange dots marking months that reported zero](Figures/fig_10_noise.png)
+![Three panels. The left panel shows Lakeshore County's 2023 monthly counts bouncing between 4 and 14 with October at 14 and November at 4 labelled. The middle panel shows the same agency's yearly rate from 2019 to 2025 hovering close to a flat average of 2.36. The right panel shows Orrindale's 2023 counts, which run between 0 and 4, with orange dots marking months that reported zero](Figures/fig_10_noise.png)
 
 Nothing worked. Look at the whole year: the series goes 8, 7, 9, 13, 10, 14, 13, 8, 7, 14, 4, 5. It has been bouncing between roughly 4 and 14 all year with no direction whatsoever. October at 14 is the top of the ordinary range and November at 4 is the bottom of it. Landing on both in consecutive months is unremarkable.
 
@@ -48,7 +48,7 @@ Now widen the view. Lakeshore's use of force per 100 arrests, by year:
 
 Seven years, average 2.36, and the whole range is 1.93 to 2.84. There is no trend here at all. This agency has been doing the same thing, at the same level, for seven years. Every monthly movement in 2023 was noise around a line that has not moved.
 
-**Small agencies are almost entirely noise.** Elkhorn Police Department has eight officers. Its 2023: 0, 2, 1, 0, 2, 0, 4, 0, 2, 1, 1, 1. June was 0 and July was 4. Expressed as a percentage that is an infinite increase. Expressed in incidents it is four. There is no version of Elkhorn's monthly numbers that can support a claim about anything.
+**Small agencies are almost entirely noise.** Orrindale Police Department has eight officers. Its 2023: 0, 2, 1, 0, 2, 0, 4, 0, 2, 1, 1, 1. June was 0 and July was 4. Expressed as a percentage that is an infinite increase. Expressed in incidents it is four. There is no version of Orrindale's monthly numbers that can support a claim about anything.
 
 ## What To Watch For
 
@@ -76,9 +76,9 @@ The most valuable sentence an analyst can say is "this is within the normal rang
 </details>
 
 <details>
-<summary><b>2.</b> Elkhorn reported 0 incidents in June and 4 in July 2023. A report describes this as a sharp deterioration. What is wrong?</summary>
+<summary><b>2.</b> Orrindale reported 0 incidents in June and 4 in July 2023. A report describes this as a sharp deterioration. What is wrong?</summary>
 
-The numbers are too small to describe anything. Elkhorn averages under one incident a month, so the difference between a quiet month and a busy one is a handful of events, any of which could have fallen on either side of the month boundary. A percentage calculated from a base of zero is meaningless. For an agency this size the only honest unit of analysis is a year or several years, not a month.
+The numbers are too small to describe anything. Orrindale averages under one incident a month, so the difference between a quiet month and a busy one is a handful of events, any of which could have fallen on either side of the month boundary. A percentage calculated from a base of zero is meaningless. For an agency this size the only honest unit of analysis is a year or several years, not a month.
 </details>
 
 <details>

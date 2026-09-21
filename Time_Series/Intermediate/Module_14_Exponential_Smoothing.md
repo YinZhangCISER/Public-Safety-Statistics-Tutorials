@@ -8,7 +8,7 @@
 
 ## The Question
 
-[Module 13](Module_13_Baseline_Forecasts.md) set the bar at 15.6 incidents a month for Grandview. This module clears it with the simplest method that deserves to be called a model, and one that can still be explained in a meeting.
+[Module 13](Module_13_Baseline_Forecasts.md) set the bar at 15.6 incidents a month for Ashfell. This module clears it with the simplest method that deserves to be called a model, and one that can still be explained in a meeting.
 
 ## The Idea in Plain Language
 
@@ -35,7 +35,7 @@ Then **look at the parameters it chose**. They are the most informative output t
 
 ## Worked Example
 
-Grandview, trained through December 2024, forecasting 2025.
+Ashfell, trained through December 2024, forecasting 2025.
 
 ![Two panels. The left panel shows the series with the Holt Winters forecast, its interval, and the seasonal naive baseline for comparison. The right panel shows a series that steps from 50 to 80, with three smoothing curves at alpha 0.1, 0.35 and 0.8 responding at very different speeds](Figures/fig_m14_exponential_smoothing.png)
 
@@ -50,13 +50,13 @@ A **40 percent** improvement over the free answer. That is the sort of margin th
 
 ### The parameters are the finding
 
-Fitted on Grandview, the optimiser chose
+Fitted on Ashfell, the optimiser chose
 
 > alpha **0.000**, beta **0.000**, gamma **0.000**
 
 All three at zero, and that is a result rather than a failure. A smoothing parameter of zero means the model looked at the data and concluded that recent months carry **no extra information** about the level, the trend or the seasonal shape. Everything is estimated once, from the whole training period, and never revised. In effect it has fitted a straight trend with a fixed set of monthly factors.
 
-For Grandview that is believable: the level drifts smoothly and the seasonal pattern is stable, so a month that came in high is noise rather than news.
+For Ashfell that is believable: the level drifts smoothly and the seasonal pattern is stable, so a month that came in high is noise rather than news.
 
 **It also explains the improvement.** Seasonal naive estimates the seasonal pattern from **one** year. This model estimates it from **six**. The gain comes from using more data, not from being adaptive.
 
@@ -70,7 +70,7 @@ A series whose level genuinely shifts would produce a large alpha instead. The p
 | Additive trend, multiplicative season | 9.77 |
 | No trend, additive season | 9.84 |
 
-Within a fifth of an incident of each other here, so the choice barely matters for this agency. Do not read that as general: it holds because Grandview's level fell only about a quarter over the training period. Fit both and compare, every time. Taking logs first is a third option, and it keeps the forecast from going negative, which matters for small agencies.
+Within a fifth of an incident of each other here, so the choice barely matters for this agency. Do not read that as general: it holds because Ashfell's level fell only about a quarter over the training period. Fit both and compare, every time. Taking logs first is a third option, and it keeps the forecast from going negative, which matters for small agencies.
 
 ### The interval, and whether it holds
 
@@ -84,7 +84,7 @@ Checked against 2025, **11 of 12** months fell inside the nominal 95 percent int
 > [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Intermediate/Notebooks/Module_14_Exponential_Smoothing.ipynb)
 > About 20 minutes.
 
-The notebook fits the model, reads out the parameters, compares three variants, checks interval coverage, and ends with an exercise on what the Cedar Falls unrest month does to the estimated June seasonal component.
+The notebook fits the model, reads out the parameters, compares three variants, checks interval coverage, and ends with an exercise on what the Tarnbridge unrest month does to the estimated June seasonal component.
 
 ## Pitfalls
 

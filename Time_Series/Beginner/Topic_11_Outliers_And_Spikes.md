@@ -25,7 +25,7 @@ Neither is honest. The answer is to do both, visibly.
 
 ## The Example
 
-Cedar Falls Police Department, 2021:
+Tarnbridge Police Department, 2021:
 
 | Month | Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -33,9 +33,9 @@ Cedar Falls Police Department, 2021:
 
 Every other month in the year sits between 17 and 45. June recorded 176, nearly six times the typical month of 31. A week of civil unrest is documented for that month.
 
-![Two panels. The left panel shows Cedar Falls monthly counts for 2021, flat between 17 and 45 except for June at 176, which is marked in orange against a dashed line at the typical month of 31. The right panel shows the agency's average monthly incidents for each year from 2019 to 2025, computed twice, with and without June 2021. The two bars are identical in every year except 2021, where they read 43.0 and 30.9](Figures/fig_11_outliers.png)
+![Two panels. The left panel shows Tarnbridge monthly counts for 2021, flat between 17 and 45 except for June at 176, which is marked in orange against a dashed line at the typical month of 31. The right panel shows the agency's average monthly incidents for each year from 2019 to 2025, computed twice, with and without June 2021. The two bars are identical in every year except 2021, where they read 43.0 and 30.9](Figures/fig_11_outliers.png)
 
-**With June included,** Cedar Falls averaged 43.0 incidents a month in 2021. **With June set aside,** it averaged 30.9.
+**With June included,** Tarnbridge averaged 43.0 incidents a month in 2021. **With June set aside,** it averaged 30.9.
 
 Now look at the agency's other years:
 
@@ -44,13 +44,13 @@ Now look at the agency's other years:
 | **Average a month, June 2021 included** | 31.7 | 33.1 | **43.0** | 28.7 | 28.6 | 23.6 | 21.0 |
 | **Average a month, June 2021 set aside** | 31.7 | 33.1 | **30.9** | 28.7 | 28.6 | 23.6 | 21.0 |
 
-The two rows are identical everywhere except one cell. With that one month in, 2021 looks like a year in which Cedar Falls suddenly got much worse and then recovered. With it set aside, 2021 fits smoothly into a steady multi year decline. **The second story is the true one about how Cedar Falls operates. The first is the true one about what happened in Cedar Falls in 2021.** Both are facts and they answer different questions.
+The two rows are identical everywhere except one cell. With that one month in, 2021 looks like a year in which Tarnbridge suddenly got much worse and then recovered. With it set aside, 2021 fits smoothly into a steady multi year decline. **The second story is the true one about how Tarnbridge operates. The first is the true one about what happened in Tarnbridge in 2021.** Both are facts and they answer different questions.
 
 ## What To Watch For
 
 - **Report both numbers.** "43.0 incidents a month, or 30.9 excluding the civil unrest in June" takes one extra clause and removes all the ambiguity.
 - **Never remove a point silently.** If a value is excluded, say which one, say why, and say what the number would have been with it in.
-- **Use the median as a cross check.** The median of Cedar Falls in 2021 is 31, essentially unchanged by June, because the middle value does not care how extreme the extreme is. A large gap between the mean and the median is a reliable signal that an outlier is present.
+- **Use the median as a cross check.** The median of Tarnbridge in 2021 is 31, essentially unchanged by June, because the middle value does not care how extreme the extreme is. A large gap between the mean and the median is a reliable signal that an outlier is present.
 - **Ask the three way question.** When a spike appears: is this the new normal, which would be a trend; does it happen every year at this time, which would be seasonality; or was it one event, which would be an outlier. See [Topic 7](Topic_07_Trend.md) and [Topic 8](Topic_08_Seasonality.md).
 - **A spike can also be a data problem.** A batch of backlogged records entered in one month produces exactly this shape with nothing having happened at all. [Topic 19](Topic_19_Data_Quality_And_Pitfalls.md).
 
@@ -61,19 +61,19 @@ An outlier is not a number to be deleted or defended. It is a separate fact, and
 ## Check Your Understanding
 
 <details>
-<summary><b>1.</b> A news report says Cedar Falls use of force rose 30 percent in 2021 compared to 2020. Is that accurate?</summary>
+<summary><b>1.</b> A news report says Tarnbridge use of force rose 30 percent in 2021 compared to 2020. Is that accurate?</summary>
 
 Arithmetically yes: 33.1 to 43.0 is a rise of about 30 percent. As a description of the agency it is badly misleading, because the entire rise and more is one documented week of civil unrest. Excluding that month, 2021 is 30.9, which is *lower* than 2020. An honest account gives both figures and names the event.
 </details>
 
 <details>
-<summary><b>2.</b> Cedar Falls in 2021 had a mean of 43.0 and a median of 31. What does the gap between those two numbers tell you before you have looked at any chart?</summary>
+<summary><b>2.</b> Tarnbridge in 2021 had a mean of 43.0 and a median of 31. What does the gap between those two numbers tell you before you have looked at any chart?</summary>
 
 That at least one value is far above the rest. The mean is pulled by every value in proportion to its size, so one very large number moves it a long way. The median only depends on the middle of the sorted list, so an extreme value moves it barely at all. Whenever the mean sits well above the median, look for a spike. This works as a screening check across hundreds of agencies at once.
 </details>
 
 <details>
-<summary><b>3.</b> Should June 2021 be excluded when fitting a long term trend for Cedar Falls?</summary>
+<summary><b>3.</b> Should June 2021 be excluded when fitting a long term trend for Tarnbridge?</summary>
 
 Usually yes, and it must be stated. The purpose of a trend is to describe the underlying direction, and a single week of civil unrest is not part of that direction. But the exclusion belongs in the notes, along with the trend computed both ways if the two differ much. If a reader can only see one version, they cannot judge whether the choice changed the conclusion.
 </details>

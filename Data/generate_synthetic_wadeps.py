@@ -42,24 +42,28 @@ END_MONTH = "2026-06"
 # 1. Agencies
 # ---------------------------------------------------------------------------
 # Twelve fictional agencies spanning the range of sizes and agency types
-# found in Washington State. "uof_base" is the baseline probability that an
+# found in Washington State. The names were checked in September 2026 against
+# the Washington Association of Sheriffs and Police Chiefs list of general
+# authority agencies, against Washington city and town names, and by web
+# search, and none of them matches a real agency or a real Washington place.
+# See the note in DATA_DICTIONARY.md. "uof_base" is the baseline probability that an
 # arrest involves a reportable use of force, before trend, season, program
 # effect and random variation are applied.
 
 AGENCIES = [
     # agency_id, name, type, sworn, population, uof_base, annual_trend, region
-    ("A001", "Riverbend Police Department",        "Municipal Police", 412, 210000, 0.038, -0.050, "West"),
-    ("A002", "Cedar Falls Police Department",      "Municipal Police", 188,  96000, 0.041, -0.050, "West"),
-    ("A003", "Harbor Point Police Department",     "Municipal Police",  95,  48000, 0.029, -0.050, "West"),
+    ("A001", "Stonewick Police Department"      ,        "Municipal Police", 412, 210000, 0.038, -0.050, "West"),
+    ("A002", "Tarnbridge Police Department"     ,      "Municipal Police", 188,  96000, 0.041, -0.050, "West"),
+    ("A003", "Havenbrook Police Department"     ,     "Municipal Police",  95,  48000, 0.029, -0.050, "West"),
     ("A004", "Millgate Police Department",         "Municipal Police",  54,  27000, 0.040, -0.050, "East"),
-    ("A005", "Northgate Police Department",        "Municipal Police",  31,  15500, 0.027, -0.050, "East"),
-    ("A006", "Elkhorn Police Department",          "Municipal Police",   8,   3900, 0.026, -0.050, "East"),
+    ("A005", "Kelsmoor Police Department"       ,        "Municipal Police",  31,  15500, 0.027, -0.050, "East"),
+    ("A006", "Orrindale Police Department"      ,          "Municipal Police",   8,   3900, 0.026, -0.050, "East"),
     ("A007", "Summit County Sheriff's Office",     "County Sheriff",   268, 175000, 0.037, -0.130, "West"),
     ("A008", "Lakeshore County Sheriff's Office",  "County Sheriff",   141,  92000, 0.028, -0.050, "West"),
     ("A009", "Prairie County Sheriff's Office",    "County Sheriff",    38,  21000, 0.025, -0.050, "East"),
     ("A010", "Pinecrest State University Police",  "Campus Police",     46,  29000, 0.039, -0.050, "West"),
-    ("A011", "Two Rivers Tribal Police",           "Tribal Police",     18,   7400, 0.030, -0.050, "East"),
-    ("A012", "Grandview Police Department",        "Municipal Police", 902, 480000, 0.030, -0.050, "West"),
+    ("A011", "Dunmoor Tribal Police"            ,           "Tribal Police",     18,   7400, 0.030, -0.050, "East"),
+    ("A012", "Ashfell Police Department"        ,        "Municipal Police", 902, 480000, 0.030, -0.050, "West"),
 ]
 
 # The agency whose use of force rate was already falling faster than
@@ -76,7 +80,7 @@ PROGRAM_START = "2023-07"
 PROGRAM_TRUE_EFFECT = 0.12          # 12 percent reduction once fully in place
 PROGRAM_PHASE_IN = [0.00, 0.25, 0.58, 0.83, 1.00]   # months 0 to 4 after start
 
-# Documented one time event: civil unrest in Cedar Falls.
+# Documented one time event: civil unrest in Tarnbridge.
 OUTLIER_AGENCY, OUTLIER_MONTH = "A002", "2021-06"
 OUTLIER_UOF_MULTIPLIER = 4.0
 OUTLIER_CFS_MULTIPLIER = 2.5

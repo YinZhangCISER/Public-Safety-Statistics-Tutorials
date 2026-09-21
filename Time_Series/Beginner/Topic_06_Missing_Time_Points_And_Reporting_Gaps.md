@@ -35,7 +35,7 @@ Prairie County Sheriff's Office, calls for service. Here is what the file actual
 
 March, April and May are not zero. They are not blank. **The rows do not exist.** The agency was migrating to a new records management system and never submitted them.
 
-![Three panels. The left panel draws a continuous line straight across the missing months, so nothing looks wrong. The middle panel leaves the line broken with the three months shaded and labelled as never submitted. The right panel shows Elkhorn's 2023 counts as bars, with orange dots marking the four months that reported a genuine zero](Figures/fig_06_missing_and_zero.png)
+![Three panels. The left panel draws a continuous line straight across the missing months, so nothing looks wrong. The middle panel leaves the line broken with the three months shaded and labelled as never submitted. The right panel shows Orrindale's 2023 counts as bars, with orange dots marking the four months that reported a genuine zero](Figures/fig_06_missing_and_zero.png)
 
 **Left: the line runs straight through.** This is what happens by default. The chart shows a smooth rise from February to June. Nobody looking at it would know that three fifths of that rise is invented.
 
@@ -49,14 +49,14 @@ March, April and May are not zero. They are not blank. **The rows do not exist.*
 
 The straight line picks one of these silently. It picks the most comforting one.
 
-**Right: a zero is not a gap.** Elkhorn Police Department has eight officers. In 2023 it reported 0, 2, 1, 0, 2, 0, 4, 0, 2, 1, 1, 1. Four of those months are genuine zeros, marked with orange dots. Elkhorn reported, and the honest answer was none. Those months belong in every average. Prairie County's three months do not.
+**Right: a zero is not a gap.** Orrindale Police Department has eight officers. In 2023 it reported 0, 2, 1, 0, 2, 0, 4, 0, 2, 1, 1, 1. Four of those months are genuine zeros, marked with orange dots. Orrindale reported, and the honest answer was none. Those months belong in every average. Prairie County's three months do not.
 
 ## What To Watch For
 
 - **Ask whether the gap is random.** A missing month caused by one employee's vacation is very different from one caused by an event that also changed what the data would have shown.
 - **Never let a tool fill a gap without saying so.** If a number was estimated, it should be labelled as estimated everywhere it appears.
 - **A zero must be stored as a zero.** If an agency's reporting system writes blanks instead of zeros for quiet months, its averages will come out too high, because the quiet months are dropped rather than counted.
-- **The last month or two are usually incomplete.** Grandview recorded 43,408 calls in April 2026, then 32,513 in May and 21,758 in June. Nothing happened in Grandview. Those records are still being entered. Data this recent is called **provisional** and should be flagged, not plotted as though it were final. [Topic 19](Topic_19_Data_Quality_And_Pitfalls.md) returns to this.
+- **The last month or two are usually incomplete.** Ashfell recorded 43,408 calls in April 2026, then 32,513 in May and 21,758 in June. Nothing happened in Ashfell. Those records are still being entered. Data this recent is called **provisional** and should be flagged, not plotted as though it were final. [Topic 19](Topic_19_Data_Quality_And_Pitfalls.md) returns to this.
 
 ## 💡 The Insight
 

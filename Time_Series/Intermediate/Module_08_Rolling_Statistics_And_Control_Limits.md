@@ -42,7 +42,7 @@ Note the word **ordinary** in step 3. Known events must be left out when measuri
 
 ## Worked Example
 
-Cedar Falls Police Department, which has one documented week of civil unrest in June 2021.
+Tarnbridge Police Department, which has one documented week of civil unrest in June 2021.
 
 ### Step 1: a fixed limit, and why it fails
 
@@ -58,7 +58,7 @@ Two false alarms out of three. The limit does not know that summer exists, so it
 
 ### Steps 2 and 3: a limit that moves, widened for real spread
 
-![Two panels of Cedar Falls monthly counts. The left panel has one flat shaded band across the whole period, with ordinary summer months marked in orange as false alarms. The right panel has a band that rises and falls with the trend and the season, and only the June 2021 spike and two marginal months sit outside it](Figures/fig_m08_control_limits.png)
+![Two panels of Tarnbridge monthly counts. The left panel has one flat shaded band across the whole period, with ordinary summer months marked in orange as false alarms. The right panel has a band that rises and falls with the trend and the season, and only the June 2021 spike and two marginal months sit outside it](Figures/fig_m08_control_limits.png)
 
 With the centre line moving, July 2019 drops off the list. Measuring dispersion on the ordinary months gives **φ = 1.59**, so the counts vary about 60 percent more than the square root rule alone allows, and the limits widen accordingly.
 
@@ -82,9 +82,9 @@ One extraordinary month, left in the spread calculation, disables the instrument
 
 ### Small agencies cannot support a monthly chart
 
-Elkhorn averages **0.81** incidents a month, so its upper limit sits at **3.5**. Across 88 months exactly **one** reaches it, which is roughly what chance alone produces at three sigma.
+Orrindale averages **0.81** incidents a month, so its upper limit sits at **3.5**. Across 88 months exactly **one** reaches it, which is roughly what chance alone produces at three sigma.
 
-There is no useful monthly chart here. The fix is to change the time unit until the counts can say something: pooled to years, Elkhorn runs 8, 10, 9, 13, 14, 4, 9, against an upper limit of about 19, and nothing flags. That is Beginner [Topic 4](../Beginner/Topic_04_Time_Units_Frequency_And_Aggregation.md) applied to a new purpose.
+There is no useful monthly chart here. The fix is to change the time unit until the counts can say something: pooled to years, Orrindale runs 8, 10, 9, 13, 14, 4, 9, against an upper limit of about 19, and nothing flags. That is Beginner [Topic 4](../Beginner/Topic_04_Time_Units_Frequency_And_Aggregation.md) applied to a new purpose.
 
 ## Do It Yourself
 
@@ -92,7 +92,7 @@ There is no useful monthly chart here. The fix is to change the time unit until 
 > [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Intermediate/Notebooks/Module_08_Rolling_Statistics_And_Control_Limits.ipynb)
 > About 20 minutes.
 
-The notebook walks all three steps, shows what a rolling mean does to an event, demonstrates the dispersion trap directly, pools Elkhorn to years, and ends with a reusable `control_chart` function. The exercise runs it on Harbor Point and asks whether a use of force chart notices a reclassification of calls for service.
+The notebook walks all three steps, shows what a rolling mean does to an event, demonstrates the dispersion trap directly, pools Orrindale to years, and ends with a reusable `control_chart` function. The exercise runs it on Havenbrook and asks whether a use of force chart notices a reclassification of calls for service.
 
 ## Pitfalls
 
@@ -109,13 +109,13 @@ The notebook walks all three steps, shows what a rolling mean does to an event, 
 ## Check Your Understanding
 
 <details>
-<summary><b>1.</b> The rolling 12 month mean for Cedar Falls jumps after June 2021 and stays elevated for a year. Why is that a problem for detection?</summary>
+<summary><b>1.</b> The rolling 12 month mean for Tarnbridge jumps after June 2021 and stays elevated for a year. Why is that a problem for detection?</summary>
 
 Because a rolling window carries an event for as long as the window is. The mean moves only after the event has entered it, and then it stays moved until the event drops out twelve months later. By the time the rolling mean has responded, the event is old news, and while it remains in the window the elevated mean makes subsequent months look normal by comparison. Rolling windows are for smoothing and description, not for detection.
 </details>
 
 <details>
-<summary><b>2.</b> Cedar Falls' dispersion is 1.59 when the unrest month is excluded and 8.74 when it is not. What is the practical consequence of using the second number?</summary>
+<summary><b>2.</b> Tarnbridge' dispersion is 1.59 when the unrest month is excluded and 8.74 when it is not. What is the practical consequence of using the second number?</summary>
 
 The limits widen by about a factor of two and a third, and the chart stops detecting anything except that one event. The month that broke the instrument becomes the only thing the instrument can see. This is why documented events must be removed before measuring routine spread. It is also an argument for keeping a written record of known events, since the exclusion has to be justified rather than chosen because it improves the result.
 </details>

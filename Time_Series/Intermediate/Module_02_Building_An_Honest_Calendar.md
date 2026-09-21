@@ -44,7 +44,7 @@ Finally, drop the periods that are still being entered.
 
 ## Worked Example
 
-**Elkhorn Police Department** has eight sworn officers. Grouping its incident records returns **50 months**. The calendar has **90**.
+**Orrindale Police Department** has eight sworn officers. Grouping its incident records returns **50 months**. The calendar has **90**.
 
 | | Months | Mean incidents |
 |---|---|---|
@@ -53,7 +53,7 @@ Finally, drop the periods that are still being entered.
 
 The naive mean is **80 percent too high**, because it averages over the busy months and silently discards forty quiet ones. For a small agency this is the single largest source of error in any summary statistic.
 
-![Two panels. The left panel shows Elkhorn with two lines: the grouped event file, which has 50 points and never touches zero, and the same data reindexed to the calendar, which has 90 points and drops to zero repeatedly. The right panel shows Prairie County with green dots marking reported zeros and an orange band marking the three months that were never submitted](Figures/fig_m02_honest_calendar.png)
+![Two panels. The left panel shows Orrindale with two lines: the grouped event file, which has 50 points and never touches zero, and the same data reindexed to the calendar, which has 90 points and drops to zero repeatedly. The right panel shows Prairie County with green dots marking reported zeros and an orange band marking the three months that were never submitted](Figures/fig_m02_honest_calendar.png)
 
 **Prairie County Sheriff's Office** shows why `fillna(0)` is not a default. Eleven of its months are absent from the incident file. Only **three** of those are the records system migration in the spring of 2022. The other **eight** are months in which the agency reported and recorded no use of force.
 
@@ -91,7 +91,7 @@ The notebook works both agencies through, builds the comparison table above, and
 ## Check Your Understanding
 
 <details>
-<summary><b>1.</b> Why is the naive mean for Elkhorn too high rather than too low?</summary>
+<summary><b>1.</b> Why is the naive mean for Orrindale too high rather than too low?</summary>
 
 Because the months that disappear are exactly the quiet ones. A month with zero incidents produces no rows, so the group by has nothing to make a row from. The months that survive are the ones where something happened, which are by definition the busier months. Averaging over only those overstates the typical month. The smaller the agency, the more of its months vanish and the worse the error gets.
 </details>

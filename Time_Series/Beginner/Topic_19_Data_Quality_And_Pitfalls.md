@@ -22,7 +22,7 @@ The good news is that most artifacts have a signature. Once you know what to loo
 
 ## The Example
 
-Harbor Point Police Department reclassified some of its dispatch codes in January 2023. Calls that used to be labelled `Other` began to be labelled `Public Order Offense`. No new calls, no change in what officers did, only a change in the label.
+Havenbrook Police Department reclassified some of its dispatch codes in January 2023. Calls that used to be labelled `Other` began to be labelled `Public Order Offense`. No new calls, no change in what officers did, only a change in the label.
 
 | | 2022 monthly average | 2023 monthly average | Change |
 |---|---|---|---|
@@ -30,7 +30,7 @@ Harbor Point Police Department reclassified some of its dispatch codes in Januar
 | Calls labelled Other | 1,122 | 834 | **down 26 percent** |
 | **All calls for service** | **4,527** | **4,649** | **up 3 percent** |
 
-![Two panels. The left panel shows Harbor Point's public order calls and total calls, each divided by its own 2022 average, from mid 2021 to mid 2024. Public order calls jump above 1.4 at the start of 2023 and stay there, while the total line stays flat around 1.0 throughout. The right panel shows total statewide calls for service by month, with the final two months shown in orange at roughly three quarters and one half of the normal level](Figures/fig_19_data_quality.png)
+![Two panels. The left panel shows Havenbrook's public order calls and total calls, each divided by its own 2022 average, from mid 2021 to mid 2024. Public order calls jump above 1.4 at the start of 2023 and stay there, while the total line stays flat around 1.0 throughout. The right panel shows total statewide calls for service by month, with the final two months shown in orange at roughly three quarters and one half of the normal level](Figures/fig_19_data_quality.png)
 
 **A briefing built on the first row alone would report a public order crisis.** Up 54 percent, sustained, starting on a clean date.
 
@@ -65,7 +65,7 @@ Before asking what caused a change in the data, ask whether anything changed in 
 ## Check Your Understanding
 
 <details>
-<summary><b>1.</b> Harbor Point's public order calls rose 54 percent while its total calls rose 3 percent. Why does the second number settle the question?</summary>
+<summary><b>1.</b> Havenbrook's public order calls rose 54 percent while its total calls rose 3 percent. Why does the second number settle the question?</summary>
 
 Because calls have to come from somewhere. A genuine increase of 352 public order calls a month would push the total up by roughly the same amount, which would be about 8 percent. The total barely moved, so those calls were not new; they were relabelled from another category. The `Other` category falling by 288 a month confirms it.
 </details>

@@ -34,7 +34,7 @@ The factors belong to **that agency, that series and that estimation window**. T
 
 ## Worked Example
 
-Grandview Police Department.
+Ashfell Police Department.
 
 ![Two panels. The left panel shows the reported monthly series in grey and the seasonally adjusted series in blue from 2019 to 2026; the adjusted line is visibly flatter but still moves. The right panel shows month on month percentage change for 2023 as paired bars, reported against adjusted](Figures/fig_m07_seasonal_adjustment.png)
 
@@ -62,14 +62,14 @@ That is the correct behaviour and it is worth saying explicitly: **adjustment is
 
 | Seasonal factor | Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Grandview | 0.78 | **0.71** | 0.86 | 0.94 | 1.10 | 1.30 | 1.44 | 1.45 | 1.11 | 0.99 | 0.86 | 0.80 |
+| Ashfell | 0.78 | **0.71** | 0.86 | 0.94 | 1.10 | 1.30 | 1.44 | 1.45 | 1.11 | 0.99 | 0.86 | 0.80 |
 | Pinecrest State University | 1.11 | 1.15 | 1.07 | 1.05 | 0.73 | **0.55** | 0.57 | 0.90 | 1.44 | 1.36 | 1.14 | 0.93 |
 
-Grandview's quietest month is February. Pinecrest's is June, when the students leave. Applying a single statewide factor would inflate Pinecrest's summer and deflate its autumn, manufacturing a pattern that is not there.
+Ashfell's quietest month is February. Pinecrest's is June, when the students leave. Applying a single statewide factor would inflate Pinecrest's summer and deflate its autumn, manufacturing a pattern that is not there.
 
 ### The factors themselves get revised
 
-Estimate Grandview's 2024 factors using data through 2024, then again using data through 2026, and they differ. The largest revisions are in the later months, nearest the end of the shorter series, because loess has data on only one side of them.
+Estimate Ashfell's 2024 factors using data through 2024, then again using data through 2026, and they differ. The largest revisions are in the later months, nearest the end of the shorter series, because loess has data on only one side of them.
 
 An adjusted figure published in January 2025 was therefore provisional in a second sense, beyond the reporting lag of [Module 2](Module_02_Building_An_Honest_Calendar.md): **the adjustment itself was not final.**
 
@@ -79,7 +79,7 @@ An adjusted figure published in January 2025 was therefore provisional in a seco
 > [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Intermediate/Notebooks/Module_07_Seasonal_Adjustment.ipynb)
 > About 15 minutes.
 
-The notebook builds the factors, adjusts the series, reproduces both tables, compares Grandview against Pinecrest, demonstrates the revision problem directly, and ends with an exercise on what adjustment does to the Cedar Falls unrest month.
+The notebook builds the factors, adjusts the series, reproduces both tables, compares Ashfell against Pinecrest, demonstrates the revision problem directly, and ends with an exercise on what adjustment does to the Tarnbridge unrest month.
 
 ## When you may write "seasonally adjusted"
 

@@ -26,7 +26,7 @@ The frequency is not a technical detail chosen by whoever built the report. It d
 
 ## The Example
 
-The same Grandview Police Department data, at three frequencies.
+The same Ashfell Police Department data, at three frequencies.
 
 **Daily, July 2023:**
 
@@ -76,7 +76,7 @@ Monthly at minimum, and weekly would be better given how short the window is. A 
 </details>
 
 <details>
-<summary><b>2.</b> Grandview averaged about 5 incidents a day in July 2023. On the 16th there were 10. Is that a crisis day?</summary>
+<summary><b>2.</b> Ashfell averaged about 5 incidents a day in July 2023. On the 16th there were 10. Is that a crisis day?</summary>
 
 Almost certainly not. Daily counts for this agency run anywhere from 2 to 10 across an ordinary month. Ten is the high end of normal, not a departure from it. The way to check is to ask how often days like it occur, not how far it sits above the average. [Topic 10](Topic_10_Noise_And_Irregular_Fluctuations.md) and [Topic 11](Topic_11_Outliers_And_Spikes.md) take this up.
 </details>

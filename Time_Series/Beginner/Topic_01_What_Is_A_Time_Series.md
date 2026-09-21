@@ -24,13 +24,13 @@ This is not a small difference. Budgets, staffing, and training calendars all ge
 
 ## The Example
 
-Grandview Police Department, 2023. These are the monthly counts behind that annual total of 1,136.
+Ashfell Police Department, 2023. These are the monthly counts behind that annual total of 1,136.
 
 | Month | Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | **Incidents** | 50 | 64 | 86 | 108 | 85 | 128 | **157** | 144 | 89 | 84 | 63 | 78 |
 
-![Grandview Police Department monthly use of force incidents in 2023, rising from 50 in January to 157 in July and falling to 78 in December, with the annual monthly average of 95 marked as a flat dashed line](Figures/fig_01_what_is_a_time_series.png)
+![Ashfell Police Department monthly use of force incidents in 2023, rising from 50 in January to 157 in July and falling to 78 in December, with the annual monthly average of 95 marked as a flat dashed line](Figures/fig_01_what_is_a_time_series.png)
 
 The dashed line is the one number answer: 95 incidents a month. Notice that the department is almost never at 95. It spends the first part of the year well below it and the middle of the year well above it. The average describes a month that never actually happened.
 
@@ -55,7 +55,7 @@ It is a fair summary of Precinct A and a badly misleading one for Precinct B. Pr
 </details>
 
 <details>
-<summary><b>2.</b> Grandview averaged 95 incidents a month. In how many months was the count actually within five of 95?</summary>
+<summary><b>2.</b> Ashfell averaged 95 incidents a month. In how many months was the count actually within five of 95?</summary>
 
 Looking at the twelve values, only September at 89 comes close. Every other month is at least ten away, and most are much further. The average is a real number, but it is not a typical month. That gap between "the average" and "what actually happens" is what the time series makes visible.
 </details>

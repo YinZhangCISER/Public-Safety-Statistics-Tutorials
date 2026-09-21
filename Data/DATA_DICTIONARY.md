@@ -130,6 +130,25 @@ Marginal distributions of the subject, officer, resistance, force, contact and l
 
 ---
 
+## A note on the agency names
+
+Every agency name in this dataset is invented, and the names were checked so that none of them can be mistaken for a real organisation.
+
+In **September 2026** each of the twelve names was checked against:
+
+- the Washington Association of Sheriffs and Police Chiefs list of general authority law enforcement agencies,
+- the list of Washington State cities, towns and recognised places,
+- the published lists of Washington tribal police departments,
+- and a general web search for an agency or a place of that name.
+
+None of the twelve matches a real law enforcement agency, in Washington or elsewhere, and none matches a Washington place name.
+
+**An earlier draft of this dataset did not pass that check.** Seven names were replaced in September 2026: one matched a real Washington police department, three matched real Washington place names, one matched a real police department in another state, one closely resembled a Washington neighbourhood, and one was changed as a precaution because it could have been read as naming a tribe. No number in the dataset changed; only the name column did.
+
+The tribal agency in this dataset, **Dunmoor Tribal Police**, does not correspond to any tribe, real or proposed. It exists so that the agency type appears in the data, because tribal police are part of the real WADEPS population and the peer group work in the tutorials would be misleading without them.
+
+**If any name here does resemble a real organisation, that is an error and not an intention.** Please write to yin.zhang@wsu.edu and it will be changed.
+
 ## Two calibration choices worth knowing
 
 **Use of force is more common here than reportable force is in reality.** Incidents run at roughly 3 percent of arrests, which matches the rate used throughout the Beginner series and leaves mid sized agencies with enough monthly events to analyze. WADEPS defines *reportable* force more narrowly, and real counts are far rarer. What changes when counts are that rare is the subject of Advanced Module 9.

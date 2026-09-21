@@ -40,7 +40,7 @@ The use of force rate carries a cosine seasonal factor peaking in **July** with 
 
 ## 4. One documented outlier month
 
-**A002, Cedar Falls Police Department, June 2021.** A week of civil unrest multiplied that month's use of force by **4.0** and its public order calls for service by **2.5**. The month sits roughly eight standard deviations above the agency's own median.
+**A002, Tarnbridge Police Department, June 2021.** A week of civil unrest multiplied that month's use of force by **4.0** and its public order calls for service by **2.5**. The month sits roughly eight standard deviations above the agency's own median.
 
 *Why it is there:* so that averages computed with and without it tell different stories, and so that a model fitted without handling it produces visibly bad residuals.
 
@@ -56,7 +56,7 @@ The use of force rate carries a cosine seasonal factor peaking in **July** with 
 
 ## 6. A classification definition change
 
-**A003, Harbor Point Police Department**, beginning **January 2023**, began routing 30 percent of the calls it used to label `Other` into `Public Order Offense`. The share of public order calls jumps by about 55 percent, the `Other` share drops by about 29 percent, and **total call volume does not change at all**.
+**A003, Havenbrook Police Department**, beginning **January 2023**, began routing 30 percent of the calls it used to label `Other` into `Public Order Offense`. The share of public order calls jumps by about 55 percent, the `Other` share drops by about 29 percent, and **total call volume does not change at all**.
 
 *Why it is there:* so that a category level series shows a dramatic break with no real world cause, and so that checking the total is shown to be the diagnostic that catches it.
 
@@ -97,7 +97,7 @@ A **de escalation training program** started in **July 2023** at five agencies: 
 
 ## 10. Two agencies too small to analyze alone
 
-**A006, Elkhorn Police Department** has 8 sworn officers and averages well under one use of force incident per month, with a large share of months at zero. **A011, Two Rivers Tribal Police** has 18. Their monthly rates swing wildly for no reason other than sampling noise.
+**A006, Orrindale Police Department** has 8 sworn officers and averages well under one use of force incident per month, with a large share of months at zero. **A011, Dunmoor Tribal Police** has 18. Their monthly rates swing wildly for no reason other than sampling noise.
 
 *Why it is there:* so that "this agency's rate tripled" can be shown to mean "it went from one incident to three", and so that rare event methods have something to be necessary for.
 

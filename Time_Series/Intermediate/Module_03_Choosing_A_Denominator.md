@@ -45,15 +45,15 @@ The twelve agencies in 2023, ranked four ways.
 
 | Agency | per 100 arrests | rank | per 1,000 residents | rank |
 |---|---|---|---|---|
-| Cedar Falls | 3.34 | 1 | 3.57 | 2 |
-| Riverbend | 2.96 | 2 | 3.27 | 3 |
+| Tarnbridge | 3.34 | 1 | 3.57 | 2 |
+| Stonewick | 2.96 | 2 | 3.27 | 3 |
 | Millgate | 2.94 | 3 | 3.04 | 4 |
-| **Elkhorn** | 2.89 | **4** | 3.59 | **1** |
+| **Orrindale** | 2.89 | **4** | 3.59 | **1** |
 | **Pinecrest State University** | 2.83 | **5** | 1.31 | **11** |
-| Two Rivers Tribal | 2.81 | 6 | 1.76 | 8 |
-| Harbor Point | 2.79 | 7 | 2.85 | 6 |
-| Northgate | 2.70 | 8 | 2.97 | 5 |
-| Grandview | 2.32 | 9 | 2.37 | 7 |
+| Dunmoor Tribal | 2.81 | 6 | 1.76 | 8 |
+| Havenbrook | 2.79 | 7 | 2.85 | 6 |
+| Kelsmoor | 2.70 | 8 | 2.97 | 5 |
+| Ashfell | 2.32 | 9 | 2.37 | 7 |
 | Prairie County | 2.24 | 10 | 1.62 | 9 |
 | Summit County | 2.23 | 11 | 1.33 | 10 |
 | Lakeshore County | 1.93 | 12 | 1.22 | 12 |
@@ -62,7 +62,7 @@ Most agencies move a place or two. Two move a long way, and for instructive reas
 
 **Pinecrest State University falls from fifth to eleventh.** Its 29,000 residents are students, most of whom leave in June, and the campus also serves visitors who are in nobody's population count. The denominator does not mean the same thing for a campus force that it means for a city. Ranking a campus agency per resident is close to meaningless.
 
-**Elkhorn rises from fourth to first.** It is an eight officer department with 3,900 residents and fourteen incidents in the entire year. A small denominator and a tiny numerator produce a rate that looks alarming and carries almost no information. Whether that number can support a ranking at all is [Module 4](Module_04_Why_Small_Agencies_Look_Volatile.md).
+**Orrindale rises from fourth to first.** It is an eight officer department with 3,900 residents and fourteen incidents in the entire year. A small denominator and a tiny numerator produce a rate that looks alarming and carries almost no information. Whether that number can support a ranking at all is [Module 4](Module_04_Why_Small_Agencies_Look_Volatile.md).
 
 **The coverage trap.** Prairie County submitted only nine months of 2022. Its 2022 **rate** is fine, because incidents and arrests are both short by the same three months and the ratio is unaffected. Its 2022 **count** is not comparable to any other agency's. Rates tolerate coverage gaps; counts do not.
 
@@ -76,23 +76,23 @@ That is not a subtlety. Across this dataset arrests grew between about 1.2 and 1
 
 | Agency | Incident count | Arrests | Rate per 100 arrests |
 |---|---|---|---|
-| **Two Rivers Tribal** | **+2.35%** | +1.13% | **−0.21%** |
-| Elkhorn | −0.96% | +1.30% | −2.61% |
+| **Dunmoor Tribal** | **+2.35%** | +1.13% | **−0.21%** |
+| Orrindale | −0.96% | +1.30% | −2.61% |
 | Lakeshore County | −1.99% | +1.35% | −3.39% |
-| **Harbor Point** | **−3.30%** | +1.89% | **−5.28%** |
-| Grandview | −3.77% | +1.33% | −5.06% |
-| Riverbend | −5.12% | +1.60% | −6.65% |
+| **Havenbrook** | **−3.30%** | +1.89% | **−5.28%** |
+| Ashfell | −3.77% | +1.33% | −5.06% |
+| Stonewick | −5.12% | +1.60% | −6.65% |
 | Summit County | −12.43% | +1.47% | −13.99% |
 
-*All figures are log linear trends per year over 2019 to 2025, with the documented Cedar Falls unrest month excluded.*
+*All figures are log linear trends per year over 2019 to 2025, with the documented Tarnbridge unrest month excluded.*
 
 ![Two panels. The left panel is the bump chart of four denominators. The right panel plots, for each agency, its incident count trend and its rate trend as two dots joined by a line, showing that the two always disagree and always in the same direction](Figures/fig_m03_denominators.png)
 
 Two rows are worth reading carefully.
 
-**Two Rivers Tribal recorded more incidents each year, and its rate was flat.** The count rose 2.4 percent a year while arrests rose 1.1 percent, leaving the rate essentially unchanged. A report built on counts would say this agency is deteriorating. A report built on rates would say nothing happened. Both are arithmetically correct and they lead to opposite decisions.
+**Dunmoor Tribal recorded more incidents each year, and its rate was flat.** The count rose 2.4 percent a year while arrests rose 1.1 percent, leaving the rate essentially unchanged. A report built on counts would say this agency is deteriorating. A report built on rates would say nothing happened. Both are arithmetically correct and they lead to opposite decisions.
 
-**Harbor Point's rate improved faster than its incidents fell.** The count dropped 3.3 percent a year but the rate dropped 5.3 percent, so **more than a third of the apparent improvement is arrests going up, not incidents coming down.**
+**Havenbrook's rate improved faster than its incidents fell.** The count dropped 3.3 percent a year but the rate dropped 5.3 percent, so **more than a third of the apparent improvement is arrests going up, not incidents coming down.**
 
 The rule that follows is short. **Whenever you report a trend in a rate, report the denominator's trend beside it.** Otherwise a reader cannot tell whether the numerator moved, the denominator moved, or both, and those are three different findings.
 

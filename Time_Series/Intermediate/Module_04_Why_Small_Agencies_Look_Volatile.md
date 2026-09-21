@@ -44,18 +44,18 @@ where `p` is the pooled rate expressed as a proportion. Agencies more than about
 
 | Agency | Average a month | Variability | Counting alone would give | Extra |
 |---|---|---|---|---|
-| Two Rivers Tribal | 0.80 | 1.08 | 1.12 | **0.00** |
-| Elkhorn | 0.81 | 1.08 | 1.11 | **0.00** |
-| Northgate | 2.78 | 0.75 | 0.60 | 0.15 |
+| Dunmoor Tribal | 0.80 | 1.08 | 1.12 | **0.00** |
+| Orrindale | 0.81 | 1.08 | 1.11 | **0.00** |
+| Kelsmoor | 2.78 | 0.75 | 0.60 | 0.15 |
 | Prairie County | 2.84 | 0.72 | 0.59 | 0.13 |
 | Millgate | 7.55 | 0.43 | 0.36 | 0.07 |
 | Lakeshore County | 10.83 | 0.37 | 0.30 | 0.07 |
 | Summit County | 22.33 | 0.40 | 0.21 | 0.19 |
-| Cedar Falls | 27.84 | 0.32 | 0.19 | 0.13 |
-| Riverbend | 57.65 | 0.29 | 0.13 | 0.15 |
-| Grandview | 99.84 | 0.29 | 0.10 | **0.19** |
+| Tarnbridge | 27.84 | 0.32 | 0.19 | 0.13 |
+| Stonewick | 57.65 | 0.29 | 0.13 | 0.15 |
+| Ashfell | 99.84 | 0.29 | 0.10 | **0.19** |
 
-Read the last column. For the two smallest agencies it is essentially zero: **their monthly variation is entirely counting noise, and there is nothing in it to interpret.** For Grandview the observed variability is about three times what counting alone would produce, and that excess is the seasonal pattern and the trend. A large agency's monthly movements are worth reading. A small agency's are not.
+Read the last column. For the two smallest agencies it is essentially zero: **their monthly variation is entirely counting noise, and there is nothing in it to interpret.** For Ashfell the observed variability is about three times what counting alone would produce, and that excess is the seasonal pattern and the trend. A large agency's monthly movements are worth reading. A small agency's are not.
 
 **Step two.** The funnel plot, 2023, against a statewide rate of **2.57 per 100 arrests**:
 
@@ -63,22 +63,22 @@ Read the last column. For the two smallest agencies it is essentially zero: **th
 
 | Agency | Arrests | Rate | Verdict |
 |---|---|---|---|
-| Two Rivers Tribal | 462 | 2.81 | within range |
-| **Elkhorn** | 484 | **2.89** | **within range** |
+| Dunmoor Tribal | 462 | 2.81 | within range |
+| **Orrindale** | 484 | **2.89** | **within range** |
 | Pinecrest State University | 1,343 | 2.83 | within range |
 | Prairie County | 1,516 | 2.24 | within range |
-| Northgate | 1,706 | 2.70 | within range |
+| Kelsmoor | 1,706 | 2.70 | within range |
 | Millgate | 2,792 | 2.94 | within range |
-| Harbor Point | 4,904 | 2.79 | within range |
+| Havenbrook | 4,904 | 2.79 | within range |
 | Lakeshore County | 5,801 | 1.93 | **below** |
-| Cedar Falls | 10,271 | 3.34 | **above** |
+| Tarnbridge | 10,271 | 3.34 | **above** |
 | Summit County | 10,385 | 2.23 | **below** |
-| Riverbend | 23,190 | 2.96 | **above** |
-| **Grandview** | 49,035 | **2.32** | **below** |
+| Stonewick | 23,190 | 2.96 | **above** |
+| **Ashfell** | 49,035 | **2.32** | **below** |
 
-This is the result worth pausing on. In the raw ranking **Elkhorn sits fourth** at 2.89, above eight larger agencies. The funnel puts it **within range**: with 484 arrests you cannot distinguish 2.89 from 2.57.
+This is the result worth pausing on. In the raw ranking **Orrindale sits fourth** at 2.89, above eight larger agencies. The funnel puts it **within range**: with 484 arrests you cannot distinguish 2.89 from 2.57.
 
-Meanwhile **Grandview sits only ninth** in the raw ranking, and the funnel flags it as genuinely **below**, because with 49,035 arrests a gap of a quarter of a point can be established. **The agencies the funnel picks out are the large ones, which is the opposite of what a league table does.**
+Meanwhile **Ashfell sits only ninth** in the raw ranking, and the funnel flags it as genuinely **below**, because with 49,035 arrests a gap of a quarter of a point can be established. **The agencies the funnel picks out are the large ones, which is the opposite of what a league table does.**
 
 **One caution.** Pool seven years instead of one and the band narrows until **eleven of the twelve** agencies fall outside it. That is not a finding about policing; it follows from having 765,000 arrests. Once a sample is large enough, every difference becomes detectable, and the question changes from *can these be told apart* to *is the difference big enough to act on*. Always report the size of the gap next to the verdict.
 
@@ -104,15 +104,15 @@ The notebook builds both tables, draws both plots, and ends with a reusable `fun
 ## Check Your Understanding
 
 <details>
-<summary><b>1.</b> Elkhorn has the fourth highest rate in 2023 and the funnel says "within range". Does that mean Elkhorn is fine?</summary>
+<summary><b>1.</b> Orrindale has the fourth highest rate in 2023 and the funnel says "within range". Does that mean Orrindale is fine?</summary>
 
-No. It means the data cannot tell. With 484 arrests and 14 incidents, Elkhorn's true rate could plausibly be anywhere from well below the state average to well above it, and one year of data cannot narrow it further. "Within range" is a statement about the evidence, not about the agency. If Elkhorn genuinely needs examining, the route is to pool several years or to compare it against other very small agencies, not to read more into a single year.
+No. It means the data cannot tell. With 484 arrests and 14 incidents, Orrindale's true rate could plausibly be anywhere from well below the state average to well above it, and one year of data cannot narrow it further. "Within range" is a statement about the evidence, not about the agency. If Orrindale genuinely needs examining, the route is to pool several years or to compare it against other very small agencies, not to read more into a single year.
 </details>
 
 <details>
-<summary><b>2.</b> Grandview's variability is 0.29 and counting alone would give 0.10. What is the other 0.19?</summary>
+<summary><b>2.</b> Ashfell's variability is 0.29 and counting alone would give 0.10. What is the other 0.19?</summary>
 
-Real structure. Grandview is large enough that sampling noise contributes little, so almost everything you see in its monthly series is something: the July peak, the winter trough, and the multi year decline. That is exactly why a large agency's monthly chart repays attention and a small agency's does not. The same calculation tells you which kind of agency you are looking at before you start interpreting anything.
+Real structure. Ashfell is large enough that sampling noise contributes little, so almost everything you see in its monthly series is something: the July peak, the winter trough, and the multi year decline. That is exactly why a large agency's monthly chart repays attention and a small agency's does not. The same calculation tells you which kind of agency you are looking at before you start interpreting anything.
 </details>
 
 <details>

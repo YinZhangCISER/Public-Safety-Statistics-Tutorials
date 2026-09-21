@@ -30,7 +30,7 @@ Then judge against a noise band of about ±1.96/√n, and remember you are looki
 
 ## Worked Example
 
-Grandview Police Department, three series: calls for service, arrests, and use of force. The noise band is **±0.21**.
+Ashfell Police Department, three series: calls for service, arrests, and use of force. The noise band is **±0.21**.
 
 ### Straight off the raw series
 
@@ -73,7 +73,7 @@ Each link is real and moderate; the two together are weak. Every step adds its o
 > [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Intermediate/Notebooks/Module_11_Lead_And_Lag.ipynb)
 > About 20 minutes.
 
-The notebook builds the cross correlation from scratch, reproduces both panels, traces the chain, and ends with an exercise running the same analysis on Cedar Falls, where the identical built in relationship turns out to be undetectable.
+The notebook builds the cross correlation from scratch, reproduces both panels, traces the chain, and ends with an exercise running the same analysis on Tarnbridge, where the identical built in relationship turns out to be undetectable.
 
 ## Pitfalls
 

@@ -24,7 +24,7 @@ Year over year answers the question a chief, a mayor, or a resident actually has
 
 ## The Example
 
-Grandview Police Department, 2022 against 2023:
+Ashfell Police Department, 2022 against 2023:
 
 | Month | Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -33,7 +33,7 @@ Grandview Police Department, 2022 against 2023:
 | **Against last month** | | +28% | +34% | +26% | −21% | **+51%** | +23% | −8% | −38% | −6% | −25% | +24% |
 | **Against the same month last year** | −36% | −18% | −16% | +4% | −5% | **+3%** | +1% | −3% | −32% | −7% | −31% | +28% |
 
-![Two panels. The left panel plots Grandview's 2022 and 2023 monthly counts on the same axes, showing two lines with almost identical shape, with 2023 sitting slightly lower for most of the year. The right panel shows, for each month of 2023, two bars: the change against the previous month and the change against the same month a year earlier](Figures/fig_18_year_over_year.png)
+![Two panels. The left panel plots Ashfell's 2022 and 2023 monthly counts on the same axes, showing two lines with almost identical shape, with 2023 sitting slightly lower for most of the year. The right panel shows, for each month of 2023, two bars: the change against the previous month and the change against the same month a year earlier](Figures/fig_18_year_over_year.png)
 
 **June is the clearest case.** Against May, June is **up 51 percent**, which reads as an emergency. Against June of the previous year, it is **up 3 percent**, which is no change at all. The 51 percent is the arrival of summer. It happened in 2022 as well, and it will happen again.
 
@@ -43,9 +43,9 @@ Grandview Police Department, 2022 against 2023:
 
 ## What To Watch For
 
-- **Year over year does not remove the trend, and should not.** Grandview is improving, so most months come out negative. That is the finding.
+- **Year over year does not remove the trend, and should not.** Ashfell is improving, so most months come out negative. That is the finding.
 - **A single year over year figure can still be noise.** September 2023 is down 32 percent and December is up 28 percent. Those are two months in a small window. [Topic 10](Topic_10_Noise_And_Irregular_Fluctuations.md) still applies.
-- **It needs the base month to be normal.** Comparing to a month that contained a one off event produces a meaningless percentage. Cedar Falls in June 2022 would look like a triumph against June 2021 purely because of the civil unrest. See [Topic 11](Topic_11_Outliers_And_Spikes.md).
+- **It needs the base month to be normal.** Comparing to a month that contained a one off event produces a meaningless percentage. Tarnbridge in June 2022 would look like a triumph against June 2021 purely because of the civil unrest. See [Topic 11](Topic_11_Outliers_And_Spikes.md).
 - **Watch for changes between the two years.** A new records system, a new boundary, a reclassification: any of these can make the two periods incomparable no matter how well the months line up. See [Topic 19](Topic_19_Data_Quality_And_Pitfalls.md).
 - **The most recent month may be provisional.** Comparing an incomplete month to a complete one guarantees a false improvement.
 
@@ -56,7 +56,7 @@ Month over month measures the calendar. Year over year measures the agency. Only
 ## Check Your Understanding
 
 <details>
-<summary><b>1.</b> Grandview's June 2023 was up 51 percent on May and up 3 percent on June 2022. Which number belongs in the monthly report, and what should it say?</summary>
+<summary><b>1.</b> Ashfell's June 2023 was up 51 percent on May and up 3 percent on June 2022. Which number belongs in the monthly report, and what should it say?</summary>
 
 Both, with the year over year figure leading. Something like: "June recorded 128 incidents, in line with last June's 124. The rise from May is the usual seasonal increase." Suppressing the 51 percent is not the answer, because someone will compute it anyway. Putting it next to the 3 percent explains it before it can be misread.
 </details>

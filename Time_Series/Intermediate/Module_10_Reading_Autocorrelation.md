@@ -37,7 +37,7 @@ Then the order of operations, which matters more than any of the numbers:
 
 ## Worked Example
 
-Grandview Police Department, use of force per 100 arrests, whole years.
+Ashfell Police Department, use of force per 100 arrests, whole years.
 
 ### On the raw series, the ACF is the calendar
 
@@ -81,7 +81,7 @@ So the rule is not "autocorrelation inflates your confidence". It is **"ignoring
 > [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Intermediate/Notebooks/Module_10_Reading_Autocorrelation.ipynb)
 > About 20 minutes.
 
-The notebook builds both ACFs, runs Ljung Box, compares ordinary against robust standard errors, and ends with an exercise on Cedar Falls that shows an autocorrelation test and an outlier check finding completely different things.
+The notebook builds both ACFs, runs Ljung Box, compares ordinary against robust standard errors, and ends with an exercise on Tarnbridge that shows an autocorrelation test and an outlier check finding completely different things.
 
 ## Pitfalls
 

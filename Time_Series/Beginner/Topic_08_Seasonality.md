@@ -30,7 +30,7 @@ Seasonality also cuts the other way. A drop in November is not an achievement. I
 
 July runs about 26 percent above the annual average. February runs about 19 percent below it. So a July that is 50 percent higher than the preceding February is a completely ordinary July.
 
-**Is it reliable?** Grandview Police Department, January against July, every year:
+**Is it reliable?** Ashfell Police Department, January against July, every year:
 
 | Year | 2019 | 2020 | 2021 | 2022 | 2023 | 2024 | 2025 |
 |---|---|---|---|---|---|---|---|
@@ -39,7 +39,7 @@ July runs about 26 percent above the annual average. February runs about 19 perc
 
 July is higher in **seven years out of seven**. That is what predictable means. It is not a claim that July is always the single highest month, and it is not a claim about the size of the gap. It is a claim that the direction is dependable enough to plan around.
 
-![Three panels. The left panel shows every agency pooled, with each month as a share of the annual average, June and July highlighted at about 1.25. The middle panel shows Grandview's January and July side by side for each of seven years, with July higher in all seven. The right panel shows the campus agency Pinecrest, whose calls peak in September and October and collapse in June and July](Figures/fig_08_seasonality.png)
+![Three panels. The left panel shows every agency pooled, with each month as a share of the annual average, June and July highlighted at about 1.25. The middle panel shows Ashfell's January and July side by side for each of seven years, with July higher in all seven. The right panel shows the campus agency Pinecrest, whose calls peak in September and October and collapse in June and July](Figures/fig_08_seasonality.png)
 
 **Not every agency has the same season.** Pinecrest State University Police serves a campus, and its calendar is the academic year, not the weather:
 
@@ -69,7 +69,7 @@ Probably not. The pooled pattern has February at 0.81 and July at 1.26 of the an
 </details>
 
 <details>
-<summary><b>2.</b> Grandview recorded 109 incidents in July 2024, its lowest July in the seven years. Its January 2024 was 82. Is 2024 a good year or a bad one?</summary>
+<summary><b>2.</b> Ashfell recorded 109 incidents in July 2024, its lowest July in the seven years. Its January 2024 was 82. Is 2024 a good year or a bad one?</summary>
 
 A good one, and the two numbers say so in different ways. Against its own January, July 2024 looks like the usual summer rise. Against the other six Julys, which run from 120 to 167, it is the lowest by a clear margin. Comparing like months is what reveals that. Comparing July to January only tells you that summer happened.
 </details>

@@ -24,13 +24,13 @@ The defence is simple and mechanical. Before accepting any percentage, ask what 
 
 ## The Example
 
-Grandview Police Department. One dataset, three windows, three headlines. Every number below is correct.
+Ashfell Police Department. One dataset, three windows, three headlines. Every number below is correct.
 
 | Month | Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | **2023 incidents** | 50 | 64 | 86 | 108 | 85 | 128 | 157 | 144 | 89 | 84 | 63 | 78 |
 
-![Three panels drawn from the same Grandview data. The first shows January to June 2023 rising from 50 to 128. The second shows June to December 2023 falling from 128 to 78. The third shows yearly totals from 2019 to 2025 declining from 1,405 to 1,058](Figures/fig_12_windows.png)
+![Three panels drawn from the same Ashfell data. The first shows January to June 2023 rising from 50 to 128. The second shows June to December 2023 falling from 128 to 78. The third shows yearly totals from 2019 to 2025 declining from 1,405 to 1,058](Figures/fig_12_windows.png)
 
 **Window one, January to June 2023: up 156 percent.** From 50 to 128 in six months. Written up in June, this is a department losing its grip, and it would be entirely reasonable to demand an explanation.
 
@@ -42,7 +42,7 @@ Grandview Police Department. One dataset, three windows, three headlines. Every 
 |---|---|---|---|---|---|---|---|
 | **Incidents** | 1,405 | 1,274 | 1,224 | 1,254 | 1,136 | 1,131 | 1,058 |
 
-Neither of the first two things happened. Grandview did not lose control in the first half of 2023 and did not turn itself around in the second half. It went through the same summer it goes through every year, on a level that has been drifting down slowly for seven years. Windows one and two are both entirely composed of [seasonality](Topic_08_Seasonality.md).
+Neither of the first two things happened. Ashfell did not lose control in the first half of 2023 and did not turn itself around in the second half. It went through the same summer it goes through every year, on a level that has been drifting down slowly for seven years. Windows one and two are both entirely composed of [seasonality](Topic_08_Seasonality.md).
 
 ## What To Watch For
 
@@ -50,7 +50,7 @@ Neither of the first two things happened. Grandview did not lose control in the 
 - **Beware windows that begin at a low point or end at a high one.** Starting at January and ending at June guarantees a rise for almost every agency in this dataset. That is the calendar, not the department.
 - **Compare a window to the same window in previous years.** January to June 2023 rose 156 percent. What did January to June 2022 do? That comparison is meaningful. The raw percentage is not.
 - **Short windows favour whoever is currently in charge.** A new commander who arrives in June will preside over the seasonal decline no matter what they do.
-- **Long term change is slow and unglamorous.** Grandview's real achievement is about 4 percent a year for seven years. It will never produce a headline, and it is far more valuable than anything in windows one or two.
+- **Long term change is slow and unglamorous.** Ashfell's real achievement is about 4 percent a year for seven years. It will never produce a headline, and it is far more valuable than anything in windows one or two.
 
 ## 💡 The Insight
 
@@ -61,17 +61,17 @@ Zoom in and you see the calendar. Zoom out and you see the agency. Almost every 
 <details>
 <summary><b>1.</b> A commander takes over in July 2023 and reports in December that incidents fell 39 percent under their leadership. What would you ask for?</summary>
 
-The same six months in the previous three years. Grandview falls from its July peak to December every single year, so a decline over exactly that window is the normal state of affairs. The meaningful question is whether the fall was larger than usual, which means comparing July to December 2023 against July to December 2022 and 2021. The raw 39 percent, on its own, is a claim about the calendar.
+The same six months in the previous three years. Ashfell falls from its July peak to December every single year, so a decline over exactly that window is the normal state of affairs. The meaningful question is whether the fall was larger than usual, which means comparing July to December 2023 against July to December 2022 and 2021. The raw 39 percent, on its own, is a claim about the calendar.
 </details>
 
 <details>
-<summary><b>2.</b> Which is the better measure of whether Grandview is improving: the 39 percent fall in the second half of 2023, or the 25 percent fall across seven years?</summary>
+<summary><b>2.</b> Which is the better measure of whether Ashfell is improving: the 39 percent fall in the second half of 2023, or the 25 percent fall across seven years?</summary>
 
 The seven years, even though the number is smaller. The 39 percent is a within year movement that reverses itself every January, so it says nothing about the level the agency operates at. The 25 percent is a change in that level, sustained across seven consecutive years. Size is not strength. A smaller change that persists is much stronger evidence than a bigger one that repeats annually.
 </details>
 
 <details>
-<summary><b>3.</b> Would January to June 2024 also show a large rise for Grandview?</summary>
+<summary><b>3.</b> Would January to June 2024 also show a large rise for Ashfell?</summary>
 
 Almost certainly, and it would tell you nothing new. The rise from winter to summer is structural in this data. Any report built on a January to June window will find it every year, in every year the agency exists, regardless of what anyone does. A window that produces the same answer no matter what happened is not measuring anything.
 </details>
