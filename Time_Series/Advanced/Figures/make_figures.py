@@ -384,7 +384,327 @@ def fig_03():
     plt.close(fig)
 
 
+CAL = pd.period_range("2019-01", "2026-04", freq="M").to_timestamp()
+
+
+def series(aid, col="n_uof"):
+    """Reindexed to a complete calendar, so the gap shows as missing."""
+    d = FINAL[FINAL["agency_id"] == aid].sort_values("year_month")
+    s = pd.Series(d[col].values, dtype=float,
+                  index=pd.PeriodIndex(d["year_month"], freq="M").to_timestamp())
+    s = s.reindex(CAL)
+    s.index.freq = "MS"
+    return s
+
+
+# ------------------------------------------------ 4. ARIMA end to end
+def fig_04():
+    from statsmodels.tsa.statespace.sarimax import SARIMAX
+    from statsmodels.tsa.stattools import acf, pacf
+    from statsmodels.stats.diagnostic import acorr_ljungbox
+
+    s = np.log(series("A004"))                 # Millgate, the weakest season
+    train, test = s.loc[:"2024-12"], s.loc["2025-01":"2025-12"]
+    d1 = train.diff().dropna()
+
+    fig, axes = plt.subplots(2, 2, figsize=(13.4, 8.2))
+    (a1, a2), (a3, a4) = axes
+
+    a1.plot(np.exp(s).index, np.exp(s).values, color=BLUE, lw=1.5, zorder=3)
+    a1.set_ylabel("use of force incidents")
+    a1.set_ylim(0, 22)
+    style(a1)
+    title(a1, "Millgate, the least seasonal agency",
+          "ADF rejects a unit root and KPSS rejects stationarity: the conflict case.")
+
+    band = 1.96 / np.sqrt(len(d1))
+    a_v, p_v = acf(d1, nlags=14, fft=False), pacf(d1, nlags=14)
+    x = np.arange(1, 15)
+    a2.bar(x - 0.2, a_v[1:15], width=0.38, color=BLUE, zorder=3, label="ACF")
+    a2.bar(x + 0.2, p_v[1:15], width=0.38, color=AQUA, zorder=3, label="PACF")
+    a2.axhspan(-band, band, color=INK3, alpha=0.13, zorder=1)
+    a2.axhline(0, color=INK2, lw=1, zorder=4)
+    a2.annotate("one big spike in the ACF,\na decaying PACF: a moving\naverage term of order one",
+                (1, a_v[1]), textcoords="offset points", xytext=(28, -14),
+                fontsize=8.5, color=INK,
+                arrowprops=dict(arrowstyle="->", lw=0.9, color=INK2))
+    a2.set_ylim(-0.75, 0.45)
+    a2.set_xlabel("lag, in months")
+    a2.legend(fontsize=8.5, frameon=False, loc="lower right")
+    style(a2)
+    title(a2, "After one difference, the order is readable",
+          "This is what identification means: the picture names the model.")
+
+    orders = [(0, 0, 0), (1, 0, 0), (2, 0, 0), (1, 0, 1), (1, 1, 0), (1, 1, 1), (0, 1, 1)]
+    rows = []
+    for o in orders:
+        r = SARIMAX(train, order=o, seasonal_order=(0, 0, 0, 0),
+                    trend="c" if o[1] == 0 else "n",
+                    enforce_stationarity=False, enforce_invertibility=False).fit(disp=False)
+        rows.append({"order": str(o), "AIC": r.aic,
+                     "MAE": float(np.mean(np.abs(np.exp(test.values)
+                                                 - np.exp(r.forecast(12).values))))})
+    sel = pd.DataFrame(rows)
+
+    a3.scatter(sel["AIC"], sel["MAE"], s=64, color=BLUE, zorder=4)
+    nudge = {"(1, 0, 1)": (7, -13), "(0, 0, 0)": (7, 4), "(2, 0, 0)": (-7, 6),
+             "(1, 1, 0)": (-8, 4)}
+    for _, r in sel.iterrows():
+        off = nudge.get(r["order"], (7, 4))
+        a3.annotate(r["order"], (r["AIC"], r["MAE"]), textcoords="offset points",
+                    xytext=off, fontsize=8.5, color=INK,
+                    ha="right" if off[0] < 0 else "left")
+    best_aic = sel.loc[sel["AIC"].idxmin()]
+    best_mae = sel.loc[sel["MAE"].idxmin()]
+    a3.scatter([best_aic["AIC"]], [best_aic["MAE"]], s=150, facecolors="none",
+               edgecolors=ORANGE, linewidths=2, zorder=5)
+    a3.scatter([best_mae["AIC"]], [best_mae["MAE"]], s=150, facecolors="none",
+               edgecolors=AQUA, linewidths=2, zorder=5)
+    a3.axhline(4.08, color=INK3, lw=1.3, ls=(0, (5, 3)), zorder=2)
+    a3.text(100.2, 4.14, "the seasonal naive baseline", ha="left", fontsize=8.5, color=INK2)
+    a3.set_xlabel("AIC, lower is better")
+    a3.set_ylabel("forecast error in 2025, incidents a month")
+    a3.set_ylim(2.0, 4.6)
+    style(a3)
+    title(a3, "The best fit is not the best forecast",
+          "Orange ring: lowest AIC. Green ring: lowest forecast error.")
+
+    ash = np.log(series("A012")).loc[:"2024-12"]
+    checks = []
+    for lab, o, so in [("ARIMA(1,1,1)", (1, 1, 1), (0, 0, 0, 0)),
+                       ("ARIMA(2,1,2)", (2, 1, 2), (0, 0, 0, 0)),
+                       ("SARIMA(0,1,1)(0,1,1)", (0, 1, 1), (0, 1, 1, 12))]:
+        r = SARIMAX(ash, order=o, seasonal_order=so, enforce_stationarity=False,
+                    enforce_invertibility=False).fit(disp=False)
+        res = r.resid[13:]
+        checks.append((lab,
+                       acorr_ljungbox(res, lags=[12], return_df=True)["lb_pvalue"].iloc[0],
+                       acorr_ljungbox(res, lags=[24], return_df=True)["lb_pvalue"].iloc[0]))
+    ys = np.arange(len(checks))
+    a4.barh(ys - 0.19, [c[1] for c in checks], height=0.36, color=BLUE, zorder=3,
+            label="Ljung Box at lag 12")
+    a4.barh(ys + 0.19, [c[2] for c in checks], height=0.36, color=AQUA, zorder=3,
+            label="Ljung Box at lag 24")
+    a4.axvline(0.05, color=ORANGE, lw=1.6, ls=(0, (5, 3)), zorder=5)
+    a4.text(0.07, -0.62, "below this the model is not finished", fontsize=8.5, color=ORANGE)
+    a4.set_yticks(ys); a4.set_yticklabels([c[0] for c in checks], fontsize=9)
+    a4.set_ylim(-0.9, len(checks) - 0.4)
+    a4.set_xlim(0, 1)
+    a4.set_xlabel("p value")
+    a4.legend(fontsize=8.5, frameon=False, loc="lower right")
+    style(a4, ygrid=False)
+    a4.grid(axis="x", color=GRID, lw=0.8); a4.set_axisbelow(True)
+    title(a4, "Ashfell: what a missing seasonal term looks like",
+          "No amount of non seasonal complexity rescues it.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_a04_arima.png", dpi=150)
+    plt.close(fig)
+
+
+# ---------------------------------------------------------- 5. SARIMA
+def fig_05():
+    from statsmodels.tsa.statespace.sarimax import SARIMAX
+    from statsmodels.tsa.stattools import acf, pacf
+    from statsmodels.stats.diagnostic import acorr_ljungbox
+
+    s = np.log(series("A012"))
+    train = s.loc[:"2024-12"]
+    D12 = train.diff(12).dropna()
+
+    fig, (a1, a2, a3) = plt.subplots(1, 3, figsize=(14.4, 4.9))
+
+    band = 1.96 / np.sqrt(len(D12))
+    a_v, p_v = acf(D12, nlags=26, fft=False), pacf(D12, nlags=26)
+    x = np.arange(1, 27)
+    a1.bar(x - 0.2, a_v[1:27], width=0.38, color=BLUE, zorder=3, label="ACF")
+    a1.bar(x + 0.2, p_v[1:27], width=0.38, color=AQUA, zorder=3, label="PACF")
+    a1.axhspan(-band, band, color=INK3, alpha=0.13, zorder=1)
+    a1.axhline(0, color=INK2, lw=1, zorder=4)
+    for lag in (12, 24):
+        a1.axvline(lag, color=ORANGE, lw=1, ls=(0, (3, 3)), zorder=2)
+    a1.text(12.4, 0.30, "lag 12", fontsize=8.5, color=ORANGE)
+    a1.set_xlabel("lag, in months")
+    a1.set_ylim(-0.55, 0.4)
+    a1.legend(fontsize=8.5, frameon=False, loc="lower right")
+    style(a1)
+    title(a1, "Look at the seasonal lags, not just the first few",
+          "Ashfell after one seasonal difference. Something is left at 12.")
+
+    cands = [((0, 1, 1), (0, 1, 1, 12)), ((1, 1, 1), (0, 1, 1, 12)),
+             ((0, 1, 1), (1, 1, 1, 12)), ((0, 1, 1), (2, 1, 0, 12)),
+             ((0, 1, 1), (0, 1, 2, 12)), ((0, 1, 1), (1, 1, 0, 12))]
+    rows = []
+    for o, so in cands:
+        r = SARIMAX(train, order=o, seasonal_order=so, enforce_stationarity=False,
+                    enforce_invertibility=False).fit(disp=False)
+        res = r.resid[13:]
+        rows.append({"order": f"{o}\n{so[:3]} at 12", "AIC": r.aic,
+                     "p": acorr_ljungbox(res, lags=[24], return_df=True)["lb_pvalue"].iloc[0],
+                     "k": len(r.params)})
+    sel = pd.DataFrame(rows).sort_values("AIC")
+
+    ys = np.arange(len(sel))
+    cols = [AQUA if i == 0 else BLUE for i in range(len(sel))]
+    a2.barh(ys, sel["AIC"], color=cols, height=0.6, zorder=3)
+    for y, (_, r) in zip(ys, sel.iterrows()):
+        mark = "" if r["p"] > 0.05 else "   fails Ljung Box"
+        a2.text(r["AIC"] - 0.4, y, f"{r['AIC']:.1f}{mark}", va="center", ha="right",
+                fontsize=8.5, color=INK)
+    a2.set_yticks(ys); a2.set_yticklabels(sel["order"], fontsize=8)
+    a2.invert_yaxis()
+    a2.set_xlim(-15.5, 1)
+    a2.set_xlabel("AIC, lower is better")
+    style(a2, ygrid=False)
+    a2.grid(axis="x", color=GRID, lw=0.8); a2.set_axisbelow(True)
+    title(a2, "Six seasonal orders", "The simplest one wins on fit and on diagnostics.")
+
+    labels = ["chosen by reading\nthe ACF and PACF", "chosen by\nauto_arima"]
+    aics = [-12.2, -8.5]
+    a3.bar(labels, aics, color=[AQUA, ORANGE], width=0.5, zorder=3)
+    for i, v in enumerate(aics):
+        a3.text(i, v - 0.6, f"{v}", ha="center", fontsize=11, color=INK, weight="bold")
+    a3.axhline(0, color=INK2, lw=1, zorder=4)
+    a3.set_ylim(-16, 2)
+    a3.set_ylabel("AIC, lower is better")
+    a3.tick_params(labelsize=9)
+    style(a3)
+    title(a3, "Automatic selection is not always better",
+          "A stepwise search settled for a worse model than the manual read.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_a05_sarima.png", dpi=150)
+    plt.close(fig)
+
+
+# ------------------------------------------ 6. regression with ARMA errors
+def fig_06():
+    from statsmodels.tsa.statespace.sarimax import SARIMAX
+    from statsmodels.tsa.stattools import acf
+    from statsmodels.stats.diagnostic import acorr_ljungbox
+    import statsmodels.formula.api as smf
+
+    g = FINAL[(FINAL["agency_id"] == "A001") & (FINAL["year_month"] <= "2025-12")].sort_values("year_month")
+    y = pd.Series(np.log(g["n_uof"].values),
+                  index=pd.PeriodIndex(g["year_month"], freq="M").to_timestamp())
+    y.index.freq = "MS"
+    X = pd.DataFrame({"log_arrests": np.log(g["n_arrests"].values),
+                      "programme": (g["year_month"] >= "2023-11").astype(float).values},
+                     index=y.index)
+
+    ols = smf.ols("y ~ log_arrests + programme", data=X.assign(y=y.values)).fit()
+    arma = SARIMAX(y, exog=X, order=(0, 0, 1), seasonal_order=(0, 1, 1, 12)).fit(disp=False)
+
+    fig, (a1, a2, a3) = plt.subplots(1, 3, figsize=(14.4, 4.9))
+
+    band = 1.96 / np.sqrt(len(y))
+    for ax, res, name, p in [(a1, ols.resid, "ordinary least squares",
+                              acorr_ljungbox(ols.resid, lags=[12], return_df=True)["lb_pvalue"].iloc[0]),
+                             (a2, arma.resid[13:], "regression with ARMA errors",
+                              acorr_ljungbox(arma.resid[13:], lags=[12], return_df=True)["lb_pvalue"].iloc[0])]:
+        a_v = acf(res, nlags=24, fft=False)
+        ax.bar(range(1, 25), a_v[1:],
+               color=[ORANGE if abs(v) > band else BLUE for v in a_v[1:]],
+               width=0.6, zorder=3)
+        ax.axhspan(-band, band, color=INK3, alpha=0.13, zorder=1)
+        ax.axhline(0, color=INK2, lw=1, zorder=4)
+        ax.set_ylim(-0.6, 0.6)
+        ax.set_xlabel("lag, in months")
+        ax.set_ylabel("residual autocorrelation")
+        style(ax)
+        title(ax, name, f"Ljung Box at lag 12 gives p = {p:.4f}")
+
+    ests = [("ordinary least squares", ols, ORANGE),
+            ("regression with ARMA errors", arma, BLUE)]
+    ys = np.arange(len(ests))
+    for yv, (lab, mod, c) in zip(ys, ests):
+        b = mod.params["programme"]
+        lo, hi = mod.conf_int().loc["programme"]
+        pc = lambda v: 100 * (np.exp(v) - 1)
+        a3.plot([pc(lo), pc(hi)], [yv, yv], color=c, lw=3, solid_capstyle="round", zorder=3)
+        a3.plot([pc(b)], [yv], marker="o", ms=10, color=c, zorder=4)
+        a3.text(pc(hi) + 1.2, yv, f"{pc(b):+.1f}%", va="center", fontsize=9.5, color=INK)
+        a3.text(-34, yv + 0.30, f"{lab}, exposure coefficient {mod.params['log_arrests']:+.2f}",
+                va="bottom", ha="left", fontsize=8.5, color=INK2)
+    a3.axvline(-12.0, color=INK, lw=1.6, ls=(0, (5, 3)), zorder=5)
+    a3.text(-12.5, -0.75, "the true effect", ha="right", va="bottom", fontsize=8.5, color=INK)
+    a3.axvline(0, color=INK2, lw=1, zorder=2)
+    a3.set_yticks([])
+    a3.set_ylim(-1.05, len(ests) - 0.35)
+    a3.set_xlim(-35, 14)
+    a3.set_xlabel("estimated programme effect, percent")
+    style(a3, ygrid=False)
+    a3.grid(axis="x", color=GRID, lw=0.8); a3.set_axisbelow(True)
+    title(a3, "Same data, same regressors, different errors",
+          "Ignoring the correlation gives a confident answer that is twice the truth.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_a06_arma_errors.png", dpi=150)
+    plt.close(fig)
+
+
+# --------------------------------------------- 7. state space and gaps
+def fig_07():
+    from statsmodels.tsa.statespace.sarimax import SARIMAX
+    from statsmodels.tsa.holtwinters import ExponentialSmoothing
+    from statsmodels.tsa.seasonal import STL
+
+    p = series("A009")                      # Prairie County, three months missing
+    lp = np.log(p + 0.5)
+    lp.index.freq = "MS"
+    gap = lp.index[lp.isna()]
+
+    ss = SARIMAX(lp, order=(0, 1, 1), seasonal_order=(0, 1, 1, 12)).fit(disp=False)
+    ss_fit = np.exp(ss.get_prediction().predicted_mean) - 0.5
+
+    hw = ExponentialSmoothing(lp, trend="add", seasonal="add", seasonal_periods=12,
+                              initialization_method="estimated").fit()
+    hw_fit = pd.Series(np.exp(np.asarray(hw.fittedvalues)) - 0.5, index=lp.index)
+
+    stl = STL(lp, period=12, robust=True).fit()
+    stl_trend = pd.Series(np.asarray(stl.trend), index=lp.index)
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13.4, 4.9))
+
+    a1.axvspan(gap[0], gap[-1], color=ORANGE, alpha=0.18, zorder=1)
+    a1.plot(p.index, p.values, color=INK3, lw=1.5, zorder=3, label="what was reported")
+    a1.plot(ss_fit.index, ss_fit.values, color=BLUE, lw=2, zorder=4,
+            label="state space, fitted through the gap")
+    a1.scatter(gap, ss_fit.loc[gap], s=60, color=BLUE, zorder=6)
+    a1.text(gap[-1], 9.6, "  three months\n  never submitted", fontsize=8.5,
+            color=INK2, va="top")
+    a1.set_ylim(-0.3, 10.5)
+    a1.set_ylabel("use of force incidents")
+    a1.legend(fontsize=8.5, frameon=False, loc="upper left")
+    style(a1)
+    title(a1, "Prairie County: the Kalman filter simply skips them",
+          "It estimates the missing months instead of refusing to run.")
+
+    usable = {
+        "state space\n(SARIMAX)": 100 * (1 - float(np.isnan(np.asarray(ss_fit)).mean())),
+        "Holt Winters": 100 * (1 - float(np.isnan(np.asarray(hw_fit)).mean())),
+        "STL": 100 * (1 - float(np.isnan(np.asarray(stl_trend)).mean())),
+    }
+    cols = [AQUA if v > 99 else ORANGE for v in usable.values()]
+    a2.bar(list(usable), list(usable.values()), color=cols, width=0.55, zorder=3)
+    for i, (k, v) in enumerate(usable.items()):
+        note = "" if v > 99 else "  fails silently"
+        a2.text(i, v + 2.5, f"{v:.0f}%{note}", ha="center", fontsize=10, color=INK,
+                weight="bold")
+    a2.set_ylim(0, 118)
+    a2.set_yticks([0, 25, 50, 75, 100])
+    a2.set_ylabel("percent of months with a usable fitted value")
+    a2.tick_params(labelsize=9)
+    style(a2)
+    title(a2, "The same gapped series, three methods",
+          "Two return no error and no usable output.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_a07_state_space.png", dpi=150)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
-    for fn in (fig_01, fig_02, fig_03):
+    for fn in (fig_01, fig_02, fig_03, fig_04, fig_05, fig_06, fig_07):
         fn()
         print("built", fn.__name__)

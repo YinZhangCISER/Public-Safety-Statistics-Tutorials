@@ -8,7 +8,7 @@ For agency data analysts, graduate students outside statistics, and early career
 
 Notation is used freely, proofs are not. The emphasis throughout is on **what a model assumes, how you check the assumption, and what it costs you when the assumption fails.**
 
-> **Publication status:** Part I, Modules 1 through 3, is published. Modules 4 through 14 are in development and their titles below are not yet links.
+> **Publication status:** Parts I and II, Modules 1 through 7, are published. Modules 8 through 14 are in development and their titles below are not yet links.
 
 ---
 
@@ -26,10 +26,10 @@ Three habits that every later module depends on.
 
 | # | Module | The question it answers |
 |---|---|---|
-| 4 | ARIMA End to End on One Agency | The full workflow, from identification to a defensible forecast |
-| 5 | SARIMA and Seasonal Orders | How to model a July peak rather than removing it |
-| 6 | Regression with ARMA Errors | Adding exposure, policy indicators, and external drivers |
-| 7 | State Space, Unobserved Components, and ETS | Handling a reporting gap that ARIMA cannot, and where Prophet fits |
+| 4 | [ARIMA End to End on One Agency](Module_04_ARIMA_End_To_End.md) | The full workflow, from identification to a defensible forecast |
+| 5 | [SARIMA and Seasonal Orders](Module_05_SARIMA.md) | How to model a July peak rather than removing it |
+| 6 | [Regression with ARMA Errors](Module_06_Regression_With_ARMA_Errors.md) | Adding exposure, policy indicators, and external drivers |
+| 7 | [State Space, Unobserved Components, and ETS](Module_07_State_Space_And_ETS.md) | Handling a reporting gap that ARIMA cannot, and where Prophet fits |
 
 ## Part III. Counts, Rare Events, and Many Agencies
 
