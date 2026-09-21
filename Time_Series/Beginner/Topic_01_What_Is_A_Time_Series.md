@@ -1,6 +1,6 @@
 # Topic 1: What Is a Time Series?
 
-> **Prepared by Yin Zhang**, Center for Interdisciplinary Statistical Education and Research (CISER), Washington State University
+> **Developed by Yin Zhang, PhD**, Assistant Professor, Department of Mathematics and Statistics, Washington State University
 
 **The question this module answers:** *A police department reports 1,136 use of force incidents for the year. What does that number actually tell you?*
 
@@ -71,6 +71,6 @@ Before accepting any public safety number, ask what it looked like month by mont
 | **Next** | [Topic 2: Time Series and Cross Sectional Data](Topic_02_Time_Series_And_Cross_Sectional_Data.md) |
 | **Used again in** | [Topic 4: Time Units, Frequency, and Aggregation](Topic_04_Time_Units_Frequency_And_Aggregation.md), [Topic 7: Trend](Topic_07_Trend.md) |
 
-*Prepared by Yin Zhang, Center for Interdisciplinary Statistical Education and Research (CISER), Washington State University. Version 1.0, September 2026. Questions, errors, or suggestions: yin.zhang@wsu.edu*
+*This module is part of a series developed for the Washington Data Exchange for Public Safety (WADEPS) through the Center for Interdisciplinary Statistical Education and Research (CISER) at Washington State University. Version 1.0, September 2026. Questions, errors, or suggestions: yin.zhang@wsu.edu*
 
 *All examples use synthetic data created for teaching. They do not represent any real jurisdiction, agency, officer, or incident. See [Data/DATA_DICTIONARY.md](../../Data/DATA_DICTIONARY.md).*

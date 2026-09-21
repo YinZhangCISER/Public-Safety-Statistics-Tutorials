@@ -2,7 +2,7 @@
 
 ### Fitting a model, checking it, and knowing when not to trust it
 
-*Prepared by Yin Zhang, Center for Interdisciplinary Statistical Education and Research (CISER), Washington State University.*
+*Developed by Yin Zhang, PhD, Assistant Professor, Data Analytics Program, Department of Mathematics and Statistics, Washington State University, for the Washington Data Exchange for Public Safety (WADEPS) through the Center for Interdisciplinary Statistical Education and Research (CISER).*
 
 For agency data analysts, graduate students outside statistics, and early career researchers. Sixteen modules with complete Python notebooks. Notation is used freely, proofs are not. The emphasis throughout is on what a model assumes, how you check the assumption, and what it costs you when the assumption fails.
 

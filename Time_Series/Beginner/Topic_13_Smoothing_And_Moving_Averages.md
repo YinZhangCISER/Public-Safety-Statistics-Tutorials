@@ -1,6 +1,6 @@
 # Topic 13: Smoothing and Moving Averages
 
-> **Prepared by Yin Zhang**, Center for Interdisciplinary Statistical Education and Research (CISER), Washington State University
+> **Developed by Yin Zhang, PhD**, Assistant Professor, Department of Mathematics and Statistics, Washington State University
 
 **The question this module answers:** *The monthly line jumps around so much that every meeting argues about the last point. Is there a way to see past it?*
 
@@ -89,6 +89,6 @@ Draw the smoothed line over the raw one, never instead of it, and say how long t
 | **Builds on** | [Topic 10: Noise and Irregular Fluctuation](Topic_10_Noise_And_Irregular_Fluctuations.md), [Topic 6: Missing Time Points and Reporting Gaps](Topic_06_Missing_Time_Points_And_Reporting_Gaps.md) |
 | **Used again in** | [Topic 17: Stationarity](Topic_17_Stationarity.md), [Topic 20: How to Read a Time Series Chart](Topic_20_How_To_Read_A_Chart_Checklist.md) |
 
-*Prepared by Yin Zhang, Center for Interdisciplinary Statistical Education and Research (CISER), Washington State University. Version 1.0, September 2026. Questions, errors, or suggestions: yin.zhang@wsu.edu*
+*This module is part of a series developed for the Washington Data Exchange for Public Safety (WADEPS) through the Center for Interdisciplinary Statistical Education and Research (CISER) at Washington State University. Version 1.0, September 2026. Questions, errors, or suggestions: yin.zhang@wsu.edu*
 
 *All examples use synthetic data created for teaching. They do not represent any real jurisdiction, agency, officer, or incident. See [Data/DATA_DICTIONARY.md](../../Data/DATA_DICTIONARY.md).*

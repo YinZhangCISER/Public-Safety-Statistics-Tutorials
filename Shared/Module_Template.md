@@ -1,6 +1,6 @@
 # Module Template and Style Guide
 
-*Prepared by Yin Zhang, Center for Interdisciplinary Statistical Education and Research (CISER), Washington State University.*
+*Developed by Yin Zhang, PhD, Assistant Professor, Data Analytics Program, Department of Mathematics and Statistics, Washington State University, for the Washington Data Exchange for Public Safety (WADEPS) through the Center for Interdisciplinary Statistical Education and Research (CISER).*
 
 Every module in this repository follows one of the three templates below. The templates exist so that a reader who finishes one module already knows how to read the next one, and so that anyone adding a module produces something that matches.
 
@@ -24,7 +24,7 @@ Every module in this repository follows one of the three templates below. The te
 
 **Cross references.** Link back to the module a concept came from and forward to the module that builds on it. Use relative paths so the links survive a move to another GitHub organization.
 
-**Attribution.** Every module opens with the byline block and closes with the footer block given below.
+**Attribution.** Every module opens with the byline block below and closes with the provenance note. The name and affiliation appear exactly once per module, at the top.
 
 **Punctuation.** Do not use the hyphen or dash as prose punctuation. Write "year over year", not the hyphenated form. Dashes are fine inside code, inside file names, and inside official WADEPS category labels, which are reproduced exactly as published.
 
@@ -35,10 +35,24 @@ Every module in this repository follows one of the three templates below. The te
 ```markdown
 # Topic NN: Title
 
-> **Prepared by Yin Zhang**, Center for Interdisciplinary Statistical Education and Research (CISER), Washington State University
+> **Developed by Yin Zhang, PhD**, Assistant Professor, Department of Mathematics and Statistics, Washington State University
 
 **The question this module answers:** *one sentence, phrased so that a resident, a reporter, a council member, and an officer would all recognize it as their own question.*
 ```
+
+The byline appears **once per module, at the top**. The foot of the module
+carries a provenance note instead, which does not repeat the name:
+
+```markdown
+*This module is part of a series developed for the Washington Data Exchange for
+Public Safety (WADEPS) through the Center for Interdisciplinary Statistical
+Education and Research (CISER) at Washington State University. Version 1.0,
+[Month Year]. Questions, errors, or suggestions: yin.zhang@wsu.edu*
+```
+
+> **Open item.** An ORCID iD will be added to the top byline of every module,
+> to CITATION.cff, and to the README once it is registered. Nothing carries a
+> placeholder in the meantime.
 
 ## Footer block, at the bottom of every module
 
@@ -52,7 +66,7 @@ Every module in this repository follows one of the three templates below. The te
 | **Builds on** | [links] |
 | **Used again in** | [links] |
 
-*Prepared by Yin Zhang, Center for Interdisciplinary Statistical Education and Research (CISER), Washington State University. Version 1.0, [Month Year]. Questions, errors, or suggestions: yin.zhang@wsu.edu*
+*This module is part of a series developed for the Washington Data Exchange for Public Safety (WADEPS) through the Center for Interdisciplinary Statistical Education and Research (CISER) at Washington State University. Version 1.0, [Month Year]. Questions, errors, or suggestions: yin.zhang@wsu.edu*
 
 *All examples use synthetic data created for teaching. They do not represent any real jurisdiction, agency, officer, or incident. See [Data/DATA_DICTIONARY.md](../../Data/DATA_DICTIONARY.md).*
 ```

@@ -2,7 +2,7 @@
 
 ### Building, measuring, and forecasting a series yourself
 
-*Prepared by Yin Zhang, Center for Interdisciplinary Statistical Education and Research (CISER), Washington State University.*
+*Developed by Yin Zhang, PhD, Assistant Professor, Data Analytics Program, Department of Mathematics and Statistics, Washington State University, for the Washington Data Exchange for Public Safety (WADEPS) through the Center for Interdisciplinary Statistical Education and Research (CISER).*
 
 For officers, agency staff, government analysts, and undergraduate students who can read a chart and a percentage and now want to produce one. Sixteen modules, each about ten minutes to read with a fifteen minute Jupyter notebook that runs in Google Colab with no setup.
 

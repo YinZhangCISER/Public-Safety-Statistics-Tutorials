@@ -2,7 +2,10 @@
 
 ### Time Series and Causal Inference, from no background to working analyst
 
-> Developed by **Yin Zhang** at the [Center for Interdisciplinary Statistical Education and Research (CISER)](https://ciser.wsu.edu), Washington State University, in support of the [Washington Data Exchange for Public Safety (WADEPS)](https://wadeps.org).
+> **Developed by Yin Zhang, PhD**
+> Assistant Professor, Data Analytics Program, Department of Mathematics and Statistics, Washington State University
+>
+> Developed for the [Washington Data Exchange for Public Safety (WADEPS)](https://wadeps.org) through the [Center for Interdisciplinary Statistical Education and Research (CISER)](https://ciser.wsu.edu) at Washington State University.
 > Contact: [yin.zhang@wsu.edu](mailto:yin.zhang@wsu.edu)
 
 ---
@@ -136,7 +139,7 @@ CISER is producing a companion series of foundational statistics videos led by s
 
 Written tutorials: **CC BY 4.0**. Code: **MIT**. Data: public domain. See [LICENSE_TEXT.md](LICENSE_TEXT.md) and [LICENSE](LICENSE).
 
-> Zhang, Y. (2026). *Public Safety Statistics Tutorials: Time Series and Causal Inference.* Center for Interdisciplinary Statistical Education and Research (CISER), Washington State University.
+> Zhang, Y. (2026). *Public Safety Statistics Tutorials: Time Series and Causal Inference.* Washington State University. Developed for the Washington Data Exchange for Public Safety (WADEPS).
 
 GitHub will generate a formatted citation from [CITATION.cff](CITATION.cff) in the sidebar.
 
@@ -146,8 +149,9 @@ GitHub will generate a formatted citation from [CITATION.cff](CITATION.cff) in t
 
 This is a living document. Corrections, disagreements, and requests for topics are all welcome.
 
-**Yin Zhang**
-Center for Interdisciplinary Statistical Education and Research (CISER)
+**Yin Zhang, PhD**
+Assistant Professor, Data Analytics Program
+Department of Mathematics and Statistics
 Washington State University
 [yin.zhang@wsu.edu](mailto:yin.zhang@wsu.edu)
 

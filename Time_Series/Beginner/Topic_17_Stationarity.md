@@ -1,6 +1,6 @@
 # Topic 17: Stationarity, the Stable Baseline
 
-> **Prepared by Yin Zhang**, Center for Interdisciplinary Statistical Education and Research (CISER), Washington State University
+> **Developed by Yin Zhang, PhD**, Assistant Professor, Department of Mathematics and Statistics, Washington State University
 
 **The question this module answers:** *When is an agency's past average a fair prediction of its future, and when is it worthless?*
 
@@ -82,6 +82,6 @@ Before using any historical average as an expectation, plot the years and ask wh
 | **Builds on** | [Topic 7: Trend](Topic_07_Trend.md), [Topic 9: Cycles and Seasonality](Topic_09_Cycles_And_Seasonality.md), [Topic 16: Autocorrelation](Topic_16_Autocorrelation.md) |
 | **Used again in** | [Topic 20: How to Read a Time Series Chart](Topic_20_How_To_Read_A_Chart_Checklist.md) |
 
-*Prepared by Yin Zhang, Center for Interdisciplinary Statistical Education and Research (CISER), Washington State University. Version 1.0, September 2026. Questions, errors, or suggestions: yin.zhang@wsu.edu*
+*This module is part of a series developed for the Washington Data Exchange for Public Safety (WADEPS) through the Center for Interdisciplinary Statistical Education and Research (CISER) at Washington State University. Version 1.0, September 2026. Questions, errors, or suggestions: yin.zhang@wsu.edu*
 
 *All examples use synthetic data created for teaching. They do not represent any real jurisdiction, agency, officer, or incident. See [Data/DATA_DICTIONARY.md](../../Data/DATA_DICTIONARY.md).*

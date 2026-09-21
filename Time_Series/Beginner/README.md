@@ -2,7 +2,7 @@
 
 ### Understanding time based data, with no statistics background
 
-*Prepared by Yin Zhang, Center for Interdisciplinary Statistical Education and Research (CISER), Washington State University.*
+*Developed by Yin Zhang, PhD, Assistant Professor, Data Analytics Program, Department of Mathematics and Statistics, Washington State University, for the Washington Data Exchange for Public Safety (WADEPS) through the Center for Interdisciplinary Statistical Education and Research (CISER).*
 
 **No statistics. No math. No code.** Twenty self contained modules, about five minutes each. All twenty are published. Read them in order for a complete foundation, or jump to the one that answers the question in front of you.
 

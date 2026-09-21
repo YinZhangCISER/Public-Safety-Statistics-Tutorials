@@ -21,8 +21,10 @@ number generator is seeded.
 
     python generate_synthetic_wadeps.py
 
-Prepared by Yin Zhang, Center for Interdisciplinary Statistical Education
-and Research (CISER), Washington State University.
+Developed by Yin Zhang, PhD, Assistant Professor, Data Analytics Program,
+Department of Mathematics and Statistics, Washington State University, for
+the Washington Data Exchange for Public Safety (WADEPS) through the Center
+for Interdisciplinary Statistical Education and Research (CISER).
 Contact: yin.zhang@wsu.edu
 """
 

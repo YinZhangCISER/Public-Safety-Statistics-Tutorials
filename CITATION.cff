@@ -6,10 +6,14 @@ authors:
   - family-names: Zhang
     given-names: Yin
     email: yin.zhang@wsu.edu
-    affiliation: "Center for Interdisciplinary Statistical Education and Research (CISER), Washington State University"
+    affiliation: "Data Analytics Program, Department of Mathematics and Statistics, Washington State University"
+    # orcid: "https://orcid.org/0000-0000-0000-0000"   # to be added
 abstract: >-
-  A tutorial series teaching time series analysis and causal inference to
-  public safety audiences, from readers with no statistics background through
+  Developed for the Washington Data Exchange for Public Safety (WADEPS)
+  through the Center for Interdisciplinary Statistical Education and Research
+  (CISER) at Washington State University. A tutorial series teaching time
+  series analysis and causal inference to public safety audiences, from
+  readers with no statistics background through
   agency data analysts and early career researchers. Every example uses a
   synthetic dataset modeled on the Washington Data Exchange for Public Safety
   (WADEPS), with known patterns built in so that each method can be checked
@@ -21,6 +25,7 @@ keywords:
   - causal inference
   - statistical education
   - WADEPS
+  - public safety data literacy
 license: CC-BY-4.0
 version: "1.0"
 date-released: "2026-09-20"

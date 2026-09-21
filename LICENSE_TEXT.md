@@ -14,8 +14,8 @@ indicate whether changes were made.
 ## How to credit
 
 > Zhang, Y. (2026). *Public Safety Statistics Tutorials: Time Series and
-> Causal Inference.* Center for Interdisciplinary Statistical Education and
-> Research (CISER), Washington State University.
+> Causal Inference.* Washington State University. Developed for the
+> Washington Data Exchange for Public Safety (WADEPS).
 
 The code in this repository is licensed separately under the MIT License.
 See [LICENSE](LICENSE).
