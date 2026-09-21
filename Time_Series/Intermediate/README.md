@@ -8,7 +8,7 @@ For officers, agency staff, government analysts, and undergraduate students who 
 
 Formulas appear, but every one of them is followed by the same statement in plain words.
 
-> **Publication status:** Part I, Modules 1 through 4, is published. Modules 5 through 16 are being written and their titles below are not yet links.
+> **Publication status:** Parts I and II, Modules 1 through 8, are published. Modules 9 through 16 are being written and their titles below are not yet links.
 
 ---
 
@@ -27,10 +27,10 @@ Formulas appear, but every one of them is followed by the same statement in plai
 
 | # | Module | The question it answers |
 |---|---|---|
-| 5 | Decomposition into Trend, Season, and Remainder | How do I split one line into the three things it is made of? |
-| 6 | Measuring the Trend | How much is it changing per year, and how sure am I? |
-| 7 | Seasonal Adjustment | When am I entitled to say "adjusted for season"? |
-| 8 | Rolling Statistics and Control Limits | Is this month outside the range this agency normally runs in? |
+| 5 | [Decomposition into Trend, Season and Remainder](Module_05_Decomposition.md) | How do I split one line into the three things it is made of? |
+| 6 | [Measuring the Trend](Module_06_Measuring_The_Trend.md) | How much is it changing per year, and how sure am I? |
+| 7 | [Seasonal Adjustment](Module_07_Seasonal_Adjustment.md) | When am I entitled to say "adjusted for season"? |
+| 8 | [Rolling Statistics and Control Limits](Module_08_Rolling_Statistics_And_Control_Limits.md) | Is this month outside the range this agency normally runs in? |
 
 ## Part III. Comparing and Relating
 

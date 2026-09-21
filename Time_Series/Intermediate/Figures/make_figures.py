@@ -273,7 +273,229 @@ def fig_04():
     plt.close(fig)
 
 
+# --------------------------------------------------- 5. decomposition
+def _series(aid, col="n_uof"):
+    d = monthly[(monthly["agency_id"] == aid) & (monthly["provisional"] == 0)].sort_values("year_month")
+    return pd.Series(d[col].values,
+                     index=pd.PeriodIndex(d["year_month"], freq="M").to_timestamp(),
+                     dtype=float)
+
+
+def _rate(aid):
+    d = monthly[(monthly["agency_id"] == aid) & (monthly["provisional"] == 0)].sort_values("year_month")
+    return pd.Series((100 * d["n_uof"] / d["n_arrests"]).values,
+                     index=pd.PeriodIndex(d["year_month"], freq="M").to_timestamp())
+
+
+def fig_05():
+    from statsmodels.tsa.seasonal import STL
+    s = _series("A012")
+    st = STL(np.log(s), period=12, robust=True).fit()
+
+    fig = plt.figure(figsize=(13.5, 6.4))
+    gs = fig.add_gridspec(4, 2, width_ratios=[1.55, 1], hspace=0.55, wspace=0.22)
+
+    parts = [("what was reported", s, BLUE),
+             ("trend", np.exp(st.trend), ORANGE),
+             ("season", np.exp(st.seasonal), AQUA),
+             ("what is left over", np.exp(st.resid), INK3)]
+    for i, (lab, v, c) in enumerate(parts):
+        ax = fig.add_subplot(gs[i, 0])
+        ax.plot(v.index, v.values, color=c, lw=1.5, zorder=3)
+        if i >= 2:
+            ax.axhline(1.0, color=INK3, lw=0.9, ls=(0, (4, 3)), zorder=2)
+        ax.set_ylabel(lab, fontsize=9)
+        ax.tick_params(labelsize=8)
+        if i < 3:
+            ax.set_xticklabels([])
+        style(ax)
+    fig.text(0.012, 0.965, "Grandview, monthly use of force, split into three pieces",
+             fontsize=11, color=INK)
+    fig.text(0.012, 0.932, "Multiply the three lower panels together and the top panel comes back.",
+             fontsize=9, color=INK2)
+
+    ax = fig.add_subplot(gs[:, 1])
+    for lab, v, c in [("counts", s, BLUE),
+                      ("arrests, the denominator", _series("A012", "n_arrests"), AQUA),
+                      ("rate per 100 arrests", _rate("A012"), ORANGE)]:
+        f = STL(np.log(v), period=12, robust=True).fit()
+        idx = np.exp(f.seasonal).groupby(v.index.month).mean()
+        ax.plot(MONTHS, idx.values, color=c, lw=2.2, marker="o", ms=4,
+                mfc=SURFACE, mew=1.2, zorder=3, label=lab)
+    ax.axhline(1.0, color=INK3, lw=1.0, ls=(0, (4, 3)), zorder=2)
+    ax.legend(fontsize=8.5, frameon=False, loc="upper left")
+    ax.set_ylim(0.6, 1.62)
+    ax.set_ylabel("seasonal factor")
+    ax.tick_params(labelsize=8.5)
+    for lab in ax.get_xticklabels()[1::2]:
+        lab.set_visible(False)
+    style(ax)
+    title(ax, "Which series you decompose changes the answer",
+          "Counts peak in August. The rate peaks in July.")
+    fig.savefig(HERE / "fig_m05_decomposition.png", dpi=150, bbox_inches="tight")
+    plt.close(fig)
+
+
+# ------------------------------------------------ 6. measuring a trend
+def fig_06():
+    import statsmodels.formula.api as smf
+    r = monthly[(monthly["agency_id"] == "A012") & (monthly["provisional"] == 0)].copy()
+    r["rate"] = 100 * r["n_uof"] / r["n_arrests"]
+    r["t"] = np.arange(len(r))
+    r["mon"] = r["year_month"].str[5:7].astype(int)
+    r["date"] = pd.PeriodIndex(r["year_month"], freq="M").to_timestamp()
+    whole = r[r["year_month"] <= "2025-12"]
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13, 4.8))
+
+    fit = smf.ols("np.log(rate) ~ t", data=whole).fit()
+    pred = np.exp(fit.predict(whole))
+    a1.plot(whole["date"], whole["rate"], color=INK3, lw=1.2, zorder=3, label="monthly rate")
+    a1.plot(whole["date"], pred, color=ORANGE, lw=2.6, zorder=4, label="fitted trend")
+    a1.set_ylabel("use of force per 100 arrests")
+    a1.set_ylim(0, 5.2)
+    a1.legend(fontsize=8.5, frameon=False, loc="upper right")
+    style(a1)
+    title(a1, "Grandview, 2019 to 2025",
+          "A straight line on the log scale is a constant percentage per year.")
+
+    def slope(d, formula="np.log(rate) ~ t"):
+        o = smf.ols(formula, data=d).fit()
+        lo, hi = o.conf_int().loc["t"]
+        a = lambda v: 100 * (np.exp(12 * v) - 1)
+        return a(o.params["t"]), a(lo), a(hi)
+
+    rows = [
+        ("2024 and 2025 only", slope(r[(r["year_month"] >= "2024-01") & (r["year_month"] <= "2025-12")])),
+        ("2021 through 2023", slope(r[(r["year_month"] >= "2021-01") & (r["year_month"] <= "2023-12")])),
+        ("2019 through 2025", slope(whole)),
+        ("2019 through 2025,\nwith month effects", slope(whole, "np.log(rate) ~ t + C(mon)")),
+    ]
+    ys = np.arange(len(rows))
+    for y, (lab, (est, lo, hi)) in zip(ys, rows):
+        c = ORANGE if "month effects" in lab else BLUE
+        a2.plot([lo, hi], [y, y], color=c, lw=2.6, solid_capstyle="round", zorder=3)
+        a2.plot([est], [y], marker="o", ms=9, color=c, zorder=4)
+        a2.text(hi + 0.7, y, f"{est:+.2f}%", va="center", fontsize=9, color=INK)
+    a2.axvline(100 * (np.exp(-0.05) - 1), color=INK, lw=1.4, ls=(0, (5, 3)), zorder=5)
+    a2.text(100 * (np.exp(-0.05) - 1) - 0.9, -0.45,
+            "the true trend\nbuilt into the data", ha="right", va="bottom",
+            fontsize=8.5, color=INK)
+    a2.set_yticks(ys)
+    a2.set_yticklabels([r[0] for r in rows], fontsize=9)
+    a2.set_ylim(-0.95, len(rows) - 0.25)
+    a2.set_xlim(-18, 20)
+    a2.set_xlabel("estimated change per year, percent")
+    style(a2, ygrid=False)
+    a2.grid(axis="x", color=GRID, lw=0.8)
+    a2.set_axisbelow(True)
+    title(a2, "The same agency, four windows",
+          "Every estimate covers the truth. Short windows say almost nothing.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_m06_measuring_the_trend.png", dpi=150)
+    plt.close(fig)
+
+
+# -------------------------------------------- 7. seasonal adjustment
+def fig_07():
+    from statsmodels.tsa.seasonal import STL
+    s = _series("A012")
+    st = STL(np.log(s), period=12, robust=True).fit()
+    factor = np.exp(st.seasonal)
+    adj = s / factor
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13, 4.6))
+
+    a1.plot(s.index, s.values, color=INK3, lw=1.2, zorder=3, label="as reported")
+    a1.plot(adj.index, adj.values, color=BLUE, lw=2, zorder=4, label="seasonally adjusted")
+    a1.set_ylim(0, 190)
+    a1.set_ylabel("use of force incidents")
+    a1.legend(fontsize=8.5, frameon=False, loc="upper right")
+    style(a1)
+    title(a1, "Grandview, 2019 to 2026",
+          "The adjusted line keeps the level and the trend, and drops the calendar.")
+
+    raw = 100 * (s / s.shift(1) - 1)
+    adjm = 100 * (adj / adj.shift(1) - 1)
+    x = np.arange(12)
+    a2.bar(x - 0.2, raw.loc["2023"].values, width=0.38, color=ORANGE,
+           zorder=3, label="as reported")
+    a2.bar(x + 0.2, adjm.loc["2023"].values, width=0.38, color=BLUE,
+           zorder=3, label="seasonally adjusted")
+    a2.axhline(0, color=INK2, lw=1.0, zorder=4)
+    a2.annotate("June: +51 percent becomes +21", (5.2, 51),
+                textcoords="offset points", xytext=(6, 10), fontsize=8.5, color=INK)
+    a2.set_xticks(x)
+    a2.set_xticklabels(MONTHS, fontsize=8.5)
+    for lab in a2.get_xticklabels()[1::2]:
+        lab.set_visible(False)
+    a2.set_ylim(-48, 72)
+    a2.set_ylabel("change on the previous month, percent")
+    a2.legend(fontsize=8.5, frameon=False, loc="lower left")
+    style(a2)
+    title(a2, "Month on month change in 2023",
+          "Adjustment removes the calendar, not the noise.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_m07_seasonal_adjustment.png", dpi=150)
+    plt.close(fig)
+
+
+# --------------------------------------------- 8. control limits
+def fig_08():
+    from statsmodels.tsa.seasonal import STL
+    s = _series("A002")
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13, 4.8))
+
+    base = s[s.index.year <= 2020].mean()
+    up = base + 3 * np.sqrt(base)
+    lo = max(base - 3 * np.sqrt(base), 0)
+    a1.axhspan(lo, up, color=BLUE, alpha=0.10, zorder=1)
+    a1.axhline(base, color=INK3, lw=1.3, ls=(0, (5, 3)), zorder=2)
+    a1.plot(s.index, s.values, color=BLUE, lw=1.4, zorder=3)
+    false_alarm = s[(s > up) & (s < 100)]
+    a1.scatter(false_alarm.index, false_alarm.values, s=60, color=ORANGE, zorder=5)
+    a1.scatter([pd.Timestamp("2021-06-01")], [s.loc["2021-06-01"]], s=70,
+               color=ORANGE, zorder=5)
+    for k, v in false_alarm.items():
+        a1.annotate("an ordinary summer", xy=(k, v), textcoords="offset points",
+                    xytext=(10, 14), fontsize=8.5, color=ORANGE,
+                    arrowprops=dict(arrowstyle="->", lw=0.9, color=ORANGE))
+    a1.set_ylim(0, 190)
+    a1.set_ylabel("use of force incidents")
+    style(a1)
+    title(a1, "One fixed limit for the whole period",
+          "Cedar Falls. The limit ignores the season and the trend.")
+
+    st = STL(np.log(s), period=12, robust=True).fit()
+    expected = np.exp(st.trend + st.seasonal)
+    keep = ~((s.index.year == 2021) & (s.index.month == 6))
+    phi = (((s - expected) ** 2 / expected)[keep]).sum() / (keep.sum() - 1)
+    hi = expected + 3 * np.sqrt(phi * expected)
+    lo2 = (expected - 3 * np.sqrt(phi * expected)).clip(lower=0)
+
+    a2.fill_between(s.index, lo2, hi, color=BLUE, alpha=0.13, zorder=1)
+    a2.plot(expected.index, expected.values, color=INK3, lw=1.3, ls=(0, (5, 3)), zorder=2)
+    a2.plot(s.index, s.values, color=BLUE, lw=1.4, zorder=3)
+    out = s[s > hi]
+    a2.scatter(out.index, out.values, s=64, color=ORANGE, zorder=5)
+    a2.annotate(f"June 2021: 176 against a limit of {hi.loc['2021-06-01']:.0f}",
+                xy=(pd.Timestamp("2021-06-01"), 176), textcoords="offset points",
+                xytext=(18, -6), fontsize=9, color=INK)
+    a2.set_ylim(0, 190)
+    a2.set_ylabel("use of force incidents")
+    style(a2)
+    title(a2, "A limit that moves with the trend and the season",
+          f"Widened for real spread, dispersion {phi:.2f}. Summer no longer trips it.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_m08_control_limits.png", dpi=150)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
-    for fn in (fig_01, fig_02, fig_03, fig_04):
+    for fn in (fig_01, fig_02, fig_03, fig_04,
+               fig_05, fig_06, fig_07, fig_08):
         fn()
         print("built", fn.__name__)
