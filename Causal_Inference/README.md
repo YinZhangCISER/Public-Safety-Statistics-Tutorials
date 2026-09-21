@@ -10,7 +10,7 @@ The same three levels, the same synthetic WADEPS dataset, and the same de escala
 |---|---|---|---|---|
 | [Beginner](Beginner/) | 20 | No statistics background at all | None | **Complete** |
 | [Intermediate](Intermediate/) | 16 | Some background, wants to do it | Jupyter notebooks, gentle | **Complete** |
-| [Advanced](Advanced/) | 16 | Fits models and reports results | Jupyter notebooks, complete | Planned |
+| [Advanced](Advanced/) | 16 | Fits models and reports results | Jupyter notebooks, complete | **4 of 16 published** |
 
 ---
 
