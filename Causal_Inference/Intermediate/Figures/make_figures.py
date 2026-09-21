@@ -764,9 +764,245 @@ def fig_12():
     plt.close(fig)
 
 
+
+def _frame(drop_a007=True):
+    d = F[F["agency_id"] != "A007"] if drop_a007 else F
+    d = d.copy()
+    d["lo"] = np.log(d["n_arrests"])
+    pi = pd.PeriodIndex(d["year_month"], freq="M")
+    d["yr"] = pi.year.values + (pi.month.values - 1) / 12.0
+    return d
+
+
+def _fit(d, treated_ids, outcome="n_uof", offset=None):
+    import statsmodels.api as sm
+    import statsmodels.formula.api as smf
+    d = d.copy()
+    d["settled"] = ((d["agency_id"].isin(treated_ids))
+                    & (d["period"] == "after")).astype(float)
+    d["phase"] = ((d["agency_id"].isin(treated_ids))
+                  & (d["period"] == "phase")).astype(float)
+    off = d["lo"] if offset is None else offset
+    z = smf.glm(f"{outcome} ~ C(agency_id)+C(year_month)+settled+phase", d,
+                family=sm.families.Poisson(), offset=off).fit()
+    lo, hi = z.conf_int().loc["settled"]
+    f_ = lambda b: 100 * (np.exp(b) - 1)
+    return f_(z.params["settled"]), f_(lo), f_(hi), z.bse["settled"]
+
+
+def fig_13():
+    """Module 13. Contamination, by agency size and by dose."""
+    d = _frame()
+    prof = profile.set_index("agency_id")
+    clean = _fit(d, NO_A007)[0]
+
+    order = sorted(COMPARISON, key=lambda a: -prof.loc[a, "sworn_officers"])
+    lost = [abs(_fit(d, NO_A007 + [a])[0] - clean) for a in order]
+    sizes = [prof.loc[a, "sworn_officers"] for a in order]
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13.4, 5.0))
+
+    a1.scatter(sizes, lost, s=110, color=ORANGE, zorder=5)
+    for s, l, a in zip(sizes, lost, order):
+        a1.annotate(SHORT[a], (s, l), fontsize=8.5, color=INK2,
+                    xytext=(8, -3), textcoords="offset points")
+    a1.set_xscale("log")
+    a1.set_xlabel("sworn officers at the contaminated agency (log scale)")
+    a1.set_ylabel("percentage points of the effect lost")
+    a1.set_xlim(6, 2400)
+    a1.set_ylim(-0.3, 5.0)
+    style(a1)
+    title(a1, "One comparison agency secretly trained",
+          "The damage tracks the agency's size, not its similarity.")
+
+    rng = np.random.default_rng(5)
+    fracs = [0.0, 0.25, 0.5, 1.0]
+    ests = []
+    for fr in fracs:
+        dd = d.copy()
+        mult = np.where((dd["agency_id"] == "A012") & (dd["period"] == "after"),
+                        0.88 ** fr, 1.0)
+        dd["y"] = rng.binomial(dd["n_uof"].values.astype(int), np.minimum(mult, 1.0))
+        ests.append(_fit(dd, NO_A007, outcome="y")[0])
+    a2.plot([100 * x for x in fracs], ests, color=ORANGE, lw=2.6, marker="o", ms=9,
+            zorder=5)
+    for x, e in zip([100 * x for x in fracs], ests):
+        a2.text(x, e + 0.55, f"{e:+.1f}%", ha="center", fontsize=10, color=INK,
+                weight="bold")
+    a2.axhline(-12.0, color=INK, lw=2, ls="--", zorder=4)
+    a2.text(100, -11.4, "the truth  ", fontsize=9.5, color=INK, ha="right")
+    a2.axhline(0, color=INK3, lw=1.2, zorder=3)
+    a2.set_xlabel("share of the program's effect that leaks to Ashfell")
+    a2.set_ylabel("estimated change in the use of force rate")
+    a2.set_xlim(-6, 108)
+    a2.set_ylim(-16, 3)
+    style(a2)
+    title(a2, "And it does not need to be all or nothing",
+          "A quarter of the effect leaking costs two points.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_13_spillover.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_14():
+    """Module 14. What the design could have detected."""
+    d = _frame()
+    mde = lambda se: 100 * (1 - np.exp(-2.80 * se))
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13.4, 5.0))
+
+    pts = [("8", "2024-06"), ("14", "2024-12"), ("20", "2025-06"),
+           ("26", "2025-12"), ("30", "2026-04")]
+    xs, ys = [], []
+    for lab, end in pts:
+        se = _fit(d[d["year_month"] <= end], NO_A007)[3]
+        xs.append(int(lab)); ys.append(mde(se))
+    a1.plot(xs, ys, color=BLUE, lw=2.6, marker="o", ms=9, zorder=5)
+    for x, y in zip(xs, ys):
+        dy = -0.62 if abs(y - 12.0) < 1.3 else 0.35
+        a1.text(x, y + dy, f"{y:.1f}%", ha="center", fontsize=10, color=INK,
+                weight="bold")
+    a1.axhline(12.0, color=ORANGE, lw=2.2, ls="--", zorder=4)
+    a1.text(30, 12.45, "the effect that was actually there  ", fontsize=9.5,
+            color=ORANGE, ha="right")
+    a1.set_xlabel("months of follow up")
+    a1.set_ylabel("smallest effect detectable at 80 percent power")
+    a1.set_xlim(5, 33)
+    a1.set_ylim(7, 16)
+    style(a1)
+    title(a1, "How long the study had to run",
+          "Below the dashed line the design can see a 12 percent effect.")
+
+    ks, ms = [], []
+    for k in [1, 2, 3, 4]:
+        se = _fit(d, NO_A007[:k])[3]
+        ks.append(k); ms.append(mde(se))
+    a2.bar(ks, ms, color=AQUA, width=0.5, zorder=3)
+    for k, v in zip(ks, ms):
+        a2.text(k, v + 0.2, f"{v:.1f}%", ha="center", fontsize=11, color=INK,
+                weight="bold")
+    a2.axhline(12.0, color=ORANGE, lw=2.2, ls="--", zorder=4)
+    a2.text(4.45, 12.4, "the real effect", fontsize=9.5, color=ORANGE, ha="right")
+    a2.set_xticks(ks)
+    a2.set_xlabel("number of agencies given the program")
+    a2.set_ylabel("smallest effect detectable at 80 percent power")
+    a2.set_xlim(0.4, 4.6)
+    a2.set_ylim(0, 14)
+    style(a2)
+    title(a2, "And how many agencies it needed",
+          "Quadrupling the treated group buys one point. The comparison group is the constraint.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_14_detectable_effect.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_15():
+    """Module 15. How wrong the assumption would have to be."""
+    import statsmodels.api as sm
+    import statsmodels.formula.api as smf
+
+    d = _frame()
+    d["tr"] = d["agency_id"].isin(NO_A007).astype(float)
+    d["yrc"] = d["yr"] - d["yr"].min()
+
+    deltas = np.arange(0.0, -6.5, -0.5)
+    est, los, his = [], [], []
+    for delta in deltas:
+        dd = d.copy()
+        dd["adj"] = np.log(dd["n_arrests"]) + np.log(1 + delta / 100) * dd["tr"] * dd["yrc"]
+        e, lo, hi, _ = _fit(dd, NO_A007, offset=dd["adj"])
+        est.append(e); los.append(lo); his.append(hi)
+
+    pre = d[d["period"] == "before"]
+    z = smf.glm("n_uof ~ C(agency_id) + yr + tr:yr", pre,
+                family=sm.families.Poisson(), offset=pre["lo"]).fit()
+    k = [x for x in z.params.index if "yr" in x and "tr" in x][0]
+    obs = 100 * (np.exp(z.params[k]) - 1)
+    olo, ohi = [100 * (np.exp(v) - 1) for v in z.conf_int().loc[k]]
+
+    fig, ax = plt.subplots(figsize=(12.2, 5.4))
+    ax.axvspan(ohi, olo, color=AQUA, alpha=0.13, zorder=1)
+    ax.fill_between(deltas, los, his, color=BLUE, alpha=0.16, zorder=2)
+    ax.plot(deltas, est, color=BLUE, lw=2.8, zorder=5)
+    ax.axhline(0, color=INK, lw=1.8, zorder=4)
+    ax.axvline(obs, color=AQUA, lw=2.4, zorder=5)
+    ax.text(obs - 0.12, -19.5, "what the pre period\nactually shows, 0.70%  ",
+            fontsize=9.5, color=AQUA, ha="right")
+    ax.text(-1.55, 13.2, "the shaded green band is the range\nthe pre period cannot rule out",
+            fontsize=9, color=AQUA, ha="center")
+    cross = np.interp(0, est, deltas)
+    ax.scatter([cross], [0], s=130, color=ORANGE, zorder=7)
+    ax.annotate(f"a hidden trend of {abs(cross):.1f}% a year\nwould wipe the estimate out",
+                xy=(cross, 0), xytext=(cross - 0.15, -13),
+                fontsize=9.5, color=ORANGE, ha="center",
+                arrowprops=dict(arrowstyle="->", color=ORANGE, lw=1.8))
+    ax.set_xlabel("size of an unmeasured trend difference favouring the treated agencies, percent a year")
+    ax.set_ylabel("estimated change in the use of force rate")
+    ax.set_xlim(0.6, -6.4)
+    ax.set_ylim(-22, 16)
+    style(ax)
+    title(ax, "How wrong the parallel trends assumption would have to be",
+          "The shaded band is what the pre period leaves open. It reaches most of the way.")
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_15_sensitivity.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_16():
+    """Module 16. Everything this series produced, and what survived."""
+    d = _frame()
+    dall = _frame(drop_a007=False)
+    tb = rate(F[F["agency_id"].isin(TREATED) & (F["period"] == "before")])
+    ta = rate(F[F["agency_id"].isin(TREATED) & (F["period"] == "after")])
+
+    rows = [
+        ("before and after, five trained agencies", 100 * (ta / tb - 1), ORANGE,
+         "no comparison group"),
+        ("difference in differences, all five", _fit(dall, TREATED)[0], ORANGE,
+         "one agency on its own pre trend"),
+        ("agency effects but no time term", None, ORANGE, "nothing absorbs the decline"),
+        ("difference in differences, checked", _fit(d, NO_A007)[0], AQUA,
+         "reported as the result"),
+    ]
+    import statsmodels.api as sm
+    import statsmodels.formula.api as smf
+    dd = d.copy()
+    dd["settled"] = ((dd["agency_id"].isin(NO_A007)) & (dd["period"] == "after")).astype(float)
+    dd["phase"] = ((dd["agency_id"].isin(NO_A007)) & (dd["period"] == "phase")).astype(float)
+    zb = smf.glm("n_uof ~ C(agency_id) + settled + phase", dd,
+                 family=sm.families.Poisson(), offset=dd["lo"]).fit()
+    rows[2] = (rows[2][0], 100 * (np.exp(zb.params["settled"]) - 1), ORANGE, rows[2][3])
+
+    fig, ax = plt.subplots(figsize=(12.8, 5.0))
+    ys = np.arange(len(rows))[::-1]
+    for (lab, e, c, note), yy in zip(rows, ys):
+        ax.barh(yy, e, color=c, height=0.36, zorder=3)
+        ax.text(e - 0.8, yy, f"{e:+.1f}%", ha="right", va="center", fontsize=11,
+                color=INK, weight="bold")
+        ax.text(1.4, yy, note, fontsize=9, color=INK2, va="center")
+    ax.axvline(-12.0, color=INK, lw=2, ls="--", zorder=5)
+    ax.text(-12.4, -0.74, "the truth ", fontsize=9.5, color=INK, ha="right")
+    ax.set_yticks(ys)
+    ax.set_yticklabels([r[0] for r in rows], fontsize=9.5)
+    ax.set_xlim(-36, 26)
+    ax.set_ylim(-0.95, 3.6)
+    ax.set_xlabel("estimated change in the use of force rate")
+    style(ax, ygrid=False)
+    ax.grid(axis="x", color=GRID, lw=0.8, zorder=0)
+    ax.set_axisbelow(True)
+    title(ax, "Every estimate this series produced of one 12 percent effect",
+          "All computed correctly. The bottom row is the one the checks let you report.")
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_16_writing_up.png", dpi=150)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     for fn in (fig_01, fig_02, fig_03, fig_04,
                fig_05, fig_06, fig_07, fig_08,
-               fig_09, fig_10, fig_11, fig_12):
+               fig_09, fig_10, fig_11, fig_12,
+               fig_13, fig_14, fig_15, fig_16):
         fn()
         print("built", fn.__name__)
