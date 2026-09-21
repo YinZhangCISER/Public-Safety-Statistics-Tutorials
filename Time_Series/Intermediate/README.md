@@ -8,7 +8,7 @@ For officers, agency staff, government analysts, and undergraduate students who 
 
 Formulas appear, but every one of them is followed by the same statement in plain words.
 
-> **Publication status:** Parts I and II, Modules 1 through 8, are published. Modules 9 through 16 are being written and their titles below are not yet links.
+> **Publication status:** Parts I, II and III, Modules 1 through 12, are published. Modules 13 through 16 are being written and their titles below are not yet links.
 
 ---
 
@@ -36,10 +36,10 @@ Formulas appear, but every one of them is followed by the same statement in plai
 
 | # | Module | The question it answers |
 |---|---|---|
-| 9 | Year over Year, Rolling Totals, and Indexing | Which comparison should go in the monthly report? |
-| 10 | Reading ACF and PACF as Pictures | How much memory does this series have? |
-| 11 | Lead and Lag Between Two Series | Does call volume move before use of force does? |
-| 12 | Comparing Agencies Fairly | Who are this agency's real peers, and how do I show it? |
+| 9 | [Year over Year, Rolling Totals and Indexing](Module_09_Year_Over_Year_And_Indexing.md) | Which comparison should go in the monthly report? |
+| 10 | [Reading ACF and PACF as Pictures](Module_10_Reading_Autocorrelation.md) | How much memory does this series have? |
+| 11 | [Lead and Lag Between Two Series](Module_11_Lead_And_Lag.md) | Does call volume move before use of force does? |
+| 12 | [Comparing Agencies Fairly](Module_12_Comparing_Agencies_Fairly.md) | Who are this agency's real peers, and how do I show it? |
 
 ## Part IV. Forecasting and Change Detection
 

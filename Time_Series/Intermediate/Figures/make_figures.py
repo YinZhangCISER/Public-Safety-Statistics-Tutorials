@@ -494,8 +494,260 @@ def fig_08():
     plt.close(fig)
 
 
+# ----------------------------------------- 9. three ways to present
+def fig_09():
+    s = _series("A012")
+    fig, (a1, a2, a3) = plt.subplots(1, 3, figsize=(14, 4.4))
+
+    a1.plot(s.index, s.values, color=INK3, lw=1.1, zorder=3, label="monthly count")
+    a1.plot(s.index, s.rolling(12).mean(), color=BLUE, lw=2.4, zorder=4,
+            label="rolling twelve month average")
+    a1.set_ylim(0, 190)
+    a1.set_ylabel("use of force incidents")
+    a1.legend(fontsize=8.5, frameon=False, loc="upper right")
+    style(a1)
+    title(a1, "Rolling twelve month total",
+          "Seasonally neutral by construction, and it updates every month.")
+
+    yoy = 100 * (s / s.shift(12) - 1)
+    cols = [ORANGE if v > 0 else BLUE for v in yoy.dropna().values]
+    a2.bar(yoy.dropna().index, yoy.dropna().values, width=22, color=cols, zorder=3)
+    a2.axhline(0, color=INK2, lw=1.0, zorder=4)
+    a2.set_ylim(-60, 60)
+    a2.set_ylabel("change on the same month a year earlier, percent")
+    style(a2)
+    title(a2, "Year over year", "Needs no model, and is noisy month to month.")
+
+    for aid, c in [("A012", BLUE), ("A001", ORANGE), ("A007", AQUA), ("A006", YELLOW)]:
+        v = _series(aid)
+        base = v.loc["2019"].mean()
+        idx = (100 * v / base).rolling(12).mean()
+        name = short(monthly[monthly["agency_id"] == aid]["agency_name"].iloc[0])
+        a3.plot(idx.index, idx.values, color=c, lw=2, zorder=3, label=name)
+    a3.axhline(100, color=INK3, lw=1.1, ls=(0, (4, 3)), zorder=2)
+    a3.legend(fontsize=8, frameon=False, loc="lower left")
+    a3.set_ylim(30, 145)
+    a3.set_ylabel("index, the agency's own 2019 average is 100")
+    style(a3)
+    title(a3, "Indexed to a base year",
+          "Agencies of any size on one chart, each against its own past.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_m09_presentations.png", dpi=150)
+    plt.close(fig)
+
+
+# ------------------------------------------------- 10. autocorrelation
+def fig_10():
+    from statsmodels.tsa.stattools import acf
+    import statsmodels.formula.api as smf
+    from statsmodels.stats.diagnostic import acorr_ljungbox
+
+    g = monthly[(monthly["agency_id"] == "A012") & (monthly["provisional"] == 0)].copy()
+    g["rate"] = 100 * g["n_uof"] / g["n_arrests"]
+    g["t"] = np.arange(len(g))
+    g["mon"] = g["year_month"].str[5:7].astype(int)
+    g = g[g["year_month"] <= "2025-12"]
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13, 4.6))
+    band = 1.96 / np.sqrt(len(g))
+
+    for ax, formula, name in [
+            (a1, "np.log(rate) ~ t", "a trend only"),
+            (a2, "np.log(rate) ~ t + C(mon)", "a trend and month terms")]:
+        res = smf.ols(formula, data=g).fit().resid
+        a = acf(res, nlags=24, fft=False)
+        p = acorr_ljungbox(res, lags=[12], return_df=True)["lb_pvalue"].iloc[0]
+        outside = np.abs(a[1:]) > band
+        cols = [ORANGE if o else BLUE for o in outside]
+        ax.bar(range(1, 25), a[1:], width=0.62, color=cols, zorder=3)
+        ax.axhspan(-band, band, color=INK3, alpha=0.13, zorder=1)
+        ax.axhline(0, color=INK2, lw=1.0, zorder=4)
+        ax.set_ylim(-0.85, 0.85)
+        ax.set_xlabel("lag, in months")
+        ax.set_ylabel("correlation with itself")
+        ax.set_xticks([1, 6, 12, 18, 24])
+        style(ax)
+        title(ax, f"What is left after fitting {name}",
+              f"{int(outside.sum())} of 24 lags outside the noise band. "
+              f"Ljung Box p = {p:.3f}")
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_m10_autocorrelation.png", dpi=150)
+    plt.close(fig)
+
+
+# ------------------------------------------------ 11. lead and lag
+def _ccf(x, y, maxlag=12):
+    n = len(x)
+    out = {}
+    for k in range(-maxlag, maxlag + 1):
+        if k < 0:
+            out[k] = float(np.corrcoef(x[-k:], y[:n + k])[0, 1])
+        elif k == 0:
+            out[k] = float(np.corrcoef(x, y)[0, 1])
+        else:
+            out[k] = float(np.corrcoef(x[:n - k], y[k:])[0, 1])
+    return pd.Series(out)
+
+
+def fig_11():
+    from statsmodels.tsa.seasonal import STL
+    resid = lambda s: np.exp(STL(np.log(s), period=12, robust=True).fit().resid)
+
+    cfs, arr, uof = _series("A012", "total_cfs"), _series("A012", "n_arrests"), _series("A012")
+    band = 1.96 / np.sqrt(len(uof))
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13, 4.6))
+
+    raw = _ccf(cfs, uof)
+    a1.bar(raw.index, raw.values, width=0.62, color=ORANGE, zorder=3)
+    a1.axhspan(-band, band, color=INK3, alpha=0.13, zorder=1)
+    a1.axhline(0, color=INK2, lw=1.0, zorder=4)
+    a1.annotate(f"lag 12: {raw[12]:+.2f}", xy=(12, raw[12]), textcoords="offset points",
+                xytext=(-4, 10), ha="right", fontsize=9, color=INK)
+    a1.set_ylim(-0.95, 0.95)
+    a1.set_xlabel("months by which calls lead use of force")
+    a1.set_ylabel("correlation")
+    style(a1)
+    title(a1, "Straight off the raw series",
+          "A wave, because both series carry the same calendar. None of it is real.")
+
+    for lab, x, c, off in [("calls for service", resid(cfs), INK3, -0.21),
+                           ("arrests", resid(arr), BLUE, 0.21)]:
+        v = _ccf(x, resid(uof))
+        a2.bar(v.index + off, v.values, width=0.4, color=c, zorder=3, label=lab)
+    a2.axhspan(-band, band, color=INK3, alpha=0.13, zorder=1)
+    a2.axhline(0, color=INK2, lw=1.0, zorder=4)
+    a2.annotate("arrests at lag 0: +0.44,\nthe only bar that clears the band",
+                xy=(0.21, 0.44), textcoords="offset points", xytext=(16, 6),
+                fontsize=8.5, color=INK,
+                arrowprops=dict(arrowstyle="->", lw=0.9, color=INK2))
+    a2.set_ylim(-0.95, 0.95)
+    a2.set_xlabel("months by which the first series leads use of force")
+    a2.set_ylabel("correlation")
+    a2.legend(fontsize=8.5, frameon=False, loc="lower left")
+    style(a2)
+    title(a2, "After removing trend and season from both",
+          "The wave is gone. What is left is the real link, and it is at lag zero.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_m11_lead_and_lag.png", dpi=150)
+    plt.close(fig)
+
+
+# ------------------------------------------- 12. comparing agencies
+NUMERIC = ["sworn_officers", "population_served", "violent_crime_rate_per_1000",
+           "property_crime_rate_per_1000", "budget_share_public_safety_pct",
+           "county_population"]
+CATEGORICAL = ["agency_type", "region"]
+
+
+def _gower(df):
+    P = df.copy()
+    for c in ["sworn_officers", "population_served", "county_population"]:
+        P[c] = np.log(P[c])
+    n = len(P)
+    D = np.zeros((n, n))
+    for c in NUMERIC:
+        v = P[c].astype(float).values
+        D += np.abs(v[:, None] - v[None, :]) / (v.max() - v.min())
+    for c in CATEGORICAL:
+        v = P[c].values
+        D += (v[:, None] != v[None, :]).astype(float)
+    return D / (len(NUMERIC) + len(CATEGORICAL))
+
+
+def fig_12():
+    from sklearn.manifold import MDS
+
+    y = (monthly[monthly["year_month"].str[:4] == "2023"]
+         .groupby("agency_id", as_index=False)
+         .agg(uof=("n_uof", "sum"), arr=("n_arrests", "sum")))
+    y = y.merge(profile, on="agency_id")
+    y["rate"] = 100 * y["uof"] / y["arr"]
+    y["short"] = y["agency_name"].map(short)
+
+    D = _gower(y)
+    Dd = pd.DataFrame(D, index=y["short"], columns=y["short"])
+    xy = MDS(n_components=2, dissimilarity="precomputed",
+             random_state=1).fit_transform(D)
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13.4, 5.4))
+
+    colors = {"Municipal Police": BLUE, "County Sheriff": ORANGE,
+              "Campus Police": AQUA, "Tribal Police": YELLOW}
+    names = list(y["short"])
+
+    # a thin line from each agency to its single nearest peer
+    for i, nm in enumerate(names):
+        j = names.index(Dd.loc[nm].drop(nm).idxmin())
+        a1.plot([xy[i, 0], xy[j, 0]], [xy[i, 1], xy[j, 1]],
+                color=INK3, lw=0.9, alpha=0.55, zorder=2)
+
+    for t, c in colors.items():
+        sel = (y["agency_type"] == t).values
+        a1.scatter(xy[sel, 0], xy[sel, 1], s=115, color=c, zorder=4,
+                   edgecolors=SURFACE, linewidths=1.2, label=t)
+
+    nudge = {"Northgate": (0, 12), "Millgate": (0, -19), "Cedar Falls": (0, -19),
+             "Harbor Point": (0, 12), "Grandview": (0, 12), "Riverbend": (0, -19),
+             "Summit County": (0, -19), "Lakeshore County": (0, 12)}
+    for i, nm in enumerate(names):
+        a1.annotate(nm, (xy[i, 0], xy[i, 1]), textcoords="offset points",
+                    xytext=nudge.get(nm, (0, 12)), ha="center", fontsize=8, color=INK)
+
+    lonely = {"Grandview": ((0, -30), "center"),
+              "Pinecrest State University": ((16, -13), "left")}
+    for nm, (off, ha) in lonely.items():
+        i = names.index(nm)
+        d = Dd.loc[nm].drop(nm).nsmallest(3).mean()
+        a1.annotate(f"nearest peers are {d:.2f} away", (xy[i, 0], xy[i, 1]),
+                    textcoords="offset points", xytext=off, ha=ha,
+                    fontsize=8, color=ORANGE)
+
+    pad = 0.12
+    a1.set_xlim(xy[:, 0].min() - pad, xy[:, 0].max() + pad)
+    a1.set_ylim(xy[:, 1].min() - pad * 1.6, xy[:, 1].max() + pad)
+    a1.set_xticks([]); a1.set_yticks([])
+    a1.legend(fontsize=8, frameon=False, loc="upper left",
+              bbox_to_anchor=(0.0, 1.0), handletextpad=0.3)
+    a1.spines[["top", "right", "left", "bottom"]].set_visible(False)
+    title(a1, "Agencies placed by how alike they are",
+          "Lines join each agency to its single nearest peer.")
+
+    state = 100 * y["uof"].sum() / y["arr"].sum()
+    rows = []
+    for i, a in enumerate(y["short"]):
+        peers = Dd.loc[a].drop(a).nsmallest(3)
+        pm = y[y["short"].isin(peers.index)]
+        rows.append((a, y["rate"].iloc[i], 100 * pm["uof"].sum() / pm["arr"].sum()))
+    t = pd.DataFrame(rows, columns=["agency", "rate", "peer_rate"]).sort_values("rate")
+
+    ys = np.arange(len(t))
+    for yy, (_, r) in zip(ys, t.iterrows()):
+        a2.plot([r["peer_rate"], r["rate"]], [yy, yy], color=INK3, lw=1.4, zorder=2)
+    a2.scatter(t["peer_rate"], ys, s=52, color=AQUA, zorder=4, label="its three nearest peers")
+    a2.scatter(t["rate"], ys, s=52, color=BLUE, zorder=5, label="the agency")
+    a2.axvline(state, color=ORANGE, lw=1.6, ls=(0, (5, 3)), zorder=3)
+    a2.text(state + 0.03, len(t) - 0.4, f"state {state:.2f}", fontsize=8.5, color=ORANGE)
+    a2.set_yticks(ys)
+    a2.set_yticklabels(t["agency"], fontsize=9)
+    a2.set_xlabel("use of force per 100 arrests, 2023")
+    a2.set_xlim(1.7, 3.6)
+    a2.legend(fontsize=8.5, frameon=False, loc="lower right")
+    style(a2, ygrid=False)
+    a2.grid(axis="x", color=GRID, lw=0.8); a2.set_axisbelow(True)
+    title(a2, "Against the state, and against its own peers",
+          "Some agencies swap sides depending on which comparison is used.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_m12_comparing_agencies.png", dpi=150)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     for fn in (fig_01, fig_02, fig_03, fig_04,
-               fig_05, fig_06, fig_07, fig_08):
+               fig_05, fig_06, fig_07, fig_08,
+               fig_09, fig_10, fig_11, fig_12):
         fn()
         print("built", fn.__name__)
