@@ -34,7 +34,7 @@ Not sure which method your question calls for? See the [method selection guides]
 
 | Level | Modules | For | Code | Status |
 |---|---|---|---|---|
-| [Beginner](Time_Series/Beginner/) | 20 | No statistics background at all | None | In progress |
+| [Beginner](Time_Series/Beginner/) | 20 | No statistics background at all | None | **Complete** |
 | [Intermediate](Time_Series/Intermediate/) | 16 | Some background, wants to do it | Jupyter notebooks, gentle | Planned |
 | [Advanced](Time_Series/Advanced/) | 16 | Fits models and reports results | Jupyter notebooks, complete | Planned |
 

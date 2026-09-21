@@ -704,9 +704,208 @@ def fig_15():
     plt.close(fig)
 
 
+# ------------------------------------------------- 16. autocorrelation
+def fig_16():
+    import itertools
+    fig, (a1, a2, a3) = plt.subplots(1, 3, figsize=(13.8, 4.3))
+
+    d = m[(m["agency_id"] == "A012") & (m["year"] == "2023")].sort_values("mon")
+    v = d["n_uof"].tolist()
+    a1.plot(MONTHS, v, color=BLUE, lw=2, marker="o", ms=5, mfc=SURFACE, mew=1.6, zorder=3)
+    for i in range(11):
+        a1.plot([i, i + 1], [v[i], v[i + 1]], color=ORANGE, lw=3.2, alpha=0.30, zorder=2)
+    cons = np.mean([abs(v[i + 1] - v[i]) for i in range(11)])
+    rand = np.mean([abs(a - b) for a, b in itertools.combinations(v, 2)])
+    a1.text(0.03, 0.93, f"one month to the next: {cons:.0f} apart on average\n"
+                        f"any two months of the year: {rand:.0f} apart",
+            transform=a1.transAxes, fontsize=9, color=INK, va="top")
+    a1.set_ylim(0, 205); a1.set_ylabel("use of force incidents")
+    style(a1)
+    title(a1, "Grandview, 2023", "Neighbouring months stay close to each other.")
+    a1.tick_params(labelsize=8.5)
+    for lab in a1.get_xticklabels()[1::2]:
+        lab.set_visible(False)
+
+    for ax, aid, lab, lim in [(a2, "A012", "Grandview, 902 officers", 205),
+                              (a3, "A006", "Elkhorn, 8 officers", 6)]:
+        d = m[(m["agency_id"] == aid) & (m["provisional"] == 0)].sort_values("year_month")
+        y = d["n_uof"].tolist()
+        jit = 0.10 if aid == "A006" else 0.0
+        rng = np.random.default_rng(7)
+        xs = np.array(y[:-1], dtype=float) + rng.normal(0, jit, len(y) - 1)
+        ys = np.array(y[1:], dtype=float) + rng.normal(0, jit, len(y) - 1)
+        ax.scatter(xs, ys, s=26, color=BLUE, alpha=0.62, edgecolors="none", zorder=3)
+        ax.plot([0, lim], [0, lim], color=INK3, lw=1.1, ls=(0, (4, 3)), zorder=2,
+                label="next month exactly equals this month")
+        ax.legend(fontsize=8, frameon=False, loc="lower right")
+        ax.set_xlim(0, lim); ax.set_ylim(0, lim)
+        ax.set_xlabel("this month"); ax.set_ylabel("the month after")
+        style(ax)
+    title(a2, "Grandview: memory", "Each dot is a pair of neighbouring months. They line up.")
+    title(a3, "Elkhorn: no memory", "The same picture for a tiny agency is a cloud.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_16_autocorrelation.png", dpi=150)
+    plt.close(fig)
+
+
+# -------------------------------------------------- 17. stationarity
+def fig_17():
+    years = [str(y) for y in range(2019, 2026)]
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(12.5, 4.4))
+
+    for ax, aid, name, note in [
+            (a1, "A008", "Lakeshore County", "Steady. The average is a usable forecast."),
+            (a2, "A007", "Summit County", "Falling. The average is a forecast of nothing.")]:
+        d = m[(m["agency_id"] == aid) & (m["year"].isin(years))]
+        r = [100 * d[d["year"] == y]["n_uof"].sum() / d[d["year"] == y]["n_arrests"].sum()
+             for y in years]
+        avg = np.mean(r)
+        ax.axhline(avg, color=ORANGE, lw=2, ls=(0, (5, 3)), zorder=2)
+        ax.text(6.3, avg, f" seven year\n average {avg:.2f}", fontsize=9, color=ORANGE, va="center")
+        ax.plot(years, r, color=BLUE, lw=2.2, marker="o", ms=6, mfc=SURFACE, mew=1.8, zorder=3)
+        for i in (0, 6):
+            ax.annotate(f"{r[i]:.2f}", (i, r[i]), textcoords="offset points",
+                        xytext=(0, 12), ha="center", fontsize=9.5, color=INK, weight="bold")
+        ax.set_xlim(-0.35, 8.4); ax.set_ylim(0, 4.4)
+        ax.set_ylabel("use of force per 100 arrests")
+        ax.tick_params(labelsize=8.5)
+        style(ax)
+        title(ax, name, note)
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_17_stationarity.png", dpi=150)
+    plt.close(fig)
+
+
+# ---------------------------------------------- 18. year over year
+def fig_18():
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(12.8, 4.5))
+
+    d = m[(m["agency_id"] == "A012") & (m["year"].isin(["2022", "2023"]))]
+    p = d.pivot_table(index="mon", columns="year", values="n_uof")
+    a1.plot(MONTHS, p["2022"], color=INK3, lw=2, marker="o", ms=4, mfc=SURFACE,
+            mew=1.2, zorder=3, label="2022")
+    a1.plot(MONTHS, p["2023"], color=BLUE, lw=2.2, marker="o", ms=5, mfc=SURFACE,
+            mew=1.6, zorder=4, label="2023")
+    a1.legend(fontsize=9, frameon=False, loc="upper left")
+    a1.set_ylim(0, 185); a1.set_ylabel("use of force incidents")
+    style(a1)
+    title(a1, "Grandview, the same months two years running",
+          "Both years have the same shape. 2023 sits a little lower.")
+    a1.tick_params(labelsize=8.5)
+    for lab in a1.get_xticklabels()[1::2]:
+        lab.set_visible(False)
+
+    yoy = (100 * (p["2023"] / p["2022"] - 1)).tolist()
+    mom = (100 * (p["2023"] / p["2023"].shift(1) - 1)).tolist()
+    x = np.arange(12)
+    a2.bar(x - 0.2, mom, width=0.38, color=ORANGE, label="against last month", zorder=3)
+    a2.bar(x + 0.2, yoy, width=0.38, color=BLUE, label="against the same month last year", zorder=3)
+    a2.axhline(0, color=INK2, lw=1.0, zorder=4)
+    a2.annotate("June: up 51 percent\non last month,\nup 3 percent on last June",
+                (5.2, 51), textcoords="offset points", xytext=(6, 8),
+                fontsize=8.5, color=INK)
+    a2.set_xticks(x); a2.set_xticklabels(MONTHS, fontsize=8.5)
+    for lab in a2.get_xticklabels()[1::2]:
+        lab.set_visible(False)
+    a2.legend(fontsize=8.5, frameon=False, loc="lower left")
+    a2.set_ylim(-60, 95); a2.set_ylabel("percent change")
+    style(a2)
+    title(a2, "Two ways to report the same twelve months",
+          "One measures the calendar. The other measures the agency.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_18_year_over_year.png", dpi=150)
+    plt.close(fig)
+
+
+# ---------------------------------------------- 19. data quality
+def fig_19():
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(12.8, 4.5))
+
+    c = pd.read_csv(DATA / "cfs_monthly_by_type.csv")
+    h = c[c["agency_id"] == "A003"].pivot_table(index="year_month", columns="incident_type",
+                                                values="n_calls", aggfunc="sum")
+    h = h.loc["2021-07":"2024-06"]
+    base = h.loc["2022-01":"2022-12"]
+    x = pd.PeriodIndex(h.index, freq="M").to_timestamp()
+    a1.plot(x, h["Public Order Offense"] / base["Public Order Offense"].mean(),
+            color=ORANGE, lw=2.2, zorder=4, label="public order calls")
+    a1.plot(x, h.sum(axis=1) / base.sum(axis=1).mean(),
+            color=BLUE, lw=2.2, zorder=3, label="all calls for service")
+    a1.axvline(pd.Timestamp("2023-01-01"), color=INK, lw=1.1, ls=(0, (4, 3)), zorder=5)
+    a1.text(pd.Timestamp("2023-01-20"), 0.42, "the agency changed\nhow it labels calls",
+            fontsize=8.5, color=INK2)
+    a1.axhline(1.0, color=INK3, lw=1.0, zorder=2)
+    a1.legend(fontsize=8.5, frameon=False, loc="upper left")
+    a1.set_ylim(0.3, 2.0); a1.set_ylabel("times the 2022 average")
+    a1.set_xticks([pd.Timestamp(f"{y}-01-01") for y in (2022, 2023, 2024)])
+    a1.set_xticklabels(["2022", "2023", "2024"], fontsize=9)
+    style(a1)
+    title(a1, "Harbor Point: a category jumps, the total does not",
+          "Public order calls rise 54 percent. Total calls rise 3 percent.")
+
+    tot = m.groupby("year_month")[["total_cfs"]].sum().loc["2024-11":"2026-06"]
+    xs = pd.PeriodIndex(tot.index, freq="M").to_timestamp()
+    cols = [ORANGE if i in ("2026-05", "2026-06") else BLUE for i in tot.index]
+    a2.bar(xs, tot["total_cfs"], width=22, color=cols, zorder=3)
+    a2.text(pd.Timestamp("2026-06-20"), 84000, "still being\nentered",
+            fontsize=9, color=ORANGE, ha="right")
+    a2.set_ylim(0, 132000); a2.set_ylabel("calls for service, every agency")
+    a2.set_xticks([pd.Timestamp(f"{y}-01-01") for y in (2025, 2026)])
+    a2.set_xticklabels(["2025", "2026"], fontsize=9)
+    a2.set_yticks([0, 25000, 50000, 75000, 100000, 125000])
+    a2.set_yticklabels(["0", "25,000", "50,000", "75,000", "100,000", "125,000"], fontsize=8.5)
+    style(a2)
+    title(a2, "The most recent months are never finished",
+          "Nothing happened in May 2026. The records have not arrived yet.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_19_data_quality.png", dpi=150)
+    plt.close(fig)
+
+
+# ------------------------------------------------------ 20. checklist
+def fig_20():
+    fig, ax = plt.subplots(figsize=(13, 5.0))
+    d = m[m["agency_id"] == "A002"].sort_values("year_month")
+    x = pd.PeriodIndex(d["year_month"], freq="M").to_timestamp()
+    final = d[d["provisional"] == 0]
+    prov = d[d["provisional"] == 1]
+    ax.plot(x, d["n_uof"], color=BLUE, lw=1.6, zorder=3)
+    ax.plot(pd.PeriodIndex(prov["year_month"], freq="M").to_timestamp(),
+            prov["n_uof"], color=ORANGE, lw=2.6, zorder=4)
+    yr = final[final["year"] <= "2025"].groupby("year")["n_uof"].mean()
+    ax.plot([pd.Timestamp(f"{y}-07-01") for y in yr.index], yr.values,
+            color=INK3, lw=2.2, ls=(0, (5, 3)), zorder=5)
+
+    notes = [
+        ("2021-06-01", 176, "3  one documented outlier,\n    a week of civil unrest", (14, -4)),
+        ("2020-07-01", 62, "2  ordinary variation,\n    roughly 15 to 45 a month", (10, 30)),
+        ("2024-01-01", 40, "4  the level drifts down\n    year after year", (16, 26)),
+        ("2026-05-01", 11, "5  the last two months\n    are incomplete", (-118, 34)),
+    ]
+    for dt, yv, txt, off in notes:
+        ax.annotate(txt, xy=(pd.Timestamp(dt), yv), textcoords="offset points",
+                    xytext=off, fontsize=9, color=INK,
+                    arrowprops=dict(arrowstyle="->", lw=0.9, color=INK2))
+    ax.text(0.012, 0.95, "1  the axis starts at zero", transform=ax.transAxes,
+            fontsize=9, color=INK)
+    ax.set_ylim(0, 195)
+    ax.set_ylabel("use of force incidents")
+    style(ax)
+    title(ax, "Cedar Falls Police Department, every month from 2019 to 2026",
+          "Five of the twelve checklist questions can be answered from this one chart.")
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_20_reading_a_chart.png", dpi=150)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     for fn in (fig_01, fig_02, fig_03, fig_04, fig_05,
                fig_06, fig_07, fig_08, fig_09, fig_10,
-               fig_11, fig_12, fig_13, fig_14, fig_15):
+               fig_11, fig_12, fig_13, fig_14, fig_15,
+               fig_16, fig_17, fig_18, fig_19, fig_20):
         fn()
         print("built", fn.__name__)

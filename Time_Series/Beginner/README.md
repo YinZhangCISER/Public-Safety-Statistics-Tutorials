@@ -4,9 +4,7 @@
 
 *Prepared by Yin Zhang, Center for Interdisciplinary Statistical Education and Research (CISER), Washington State University.*
 
-**No statistics. No math. No code.** Twenty self contained modules, about five minutes each. Read them in order for a complete foundation, or jump to the one that answers the question in front of you.
-
-> **Publication status:** Topics 1 through 15 are published. Topics 16 through 20 are being written and their titles below are not yet links.
+**No statistics. No math. No code.** Twenty self contained modules, about five minutes each. All twenty are published. Read them in order for a complete foundation, or jump to the one that answers the question in front of you.
 
 ---
 
@@ -38,11 +36,11 @@
 | 13 | [Smoothing and Moving Averages](Topic_13_Smoothing_And_Moving_Averages.md) | How do we cut through month to month noise? |
 | 14 | [Comparing Multiple Time Series](Topic_14_Comparing_Multiple_Time_Series.md) | Is this a local problem or a city wide one? |
 | 15 | [Lagged Effects](Topic_15_Lagged_Effects.md) | How long should we wait before deciding a program is working? |
-| 16 | Autocorrelation, the Memory of Data | Why does this month tell us so much about next month? |
-| 17 | Stationarity, the Stable Baseline | What does it mean for data to be stable, and why does forecasting need it? |
-| 18 | Year over Year Comparison | Why compare to the same month last year instead of to last month? |
-| 19 | Data Quality and Common Pitfalls | Is this unusual pattern real, or is it an artifact of the data? |
-| 20 | How to Read a Time Series Chart | What twelve questions should I ask of every chart I am shown? |
+| 16 | [Autocorrelation, the Memory of Data](Topic_16_Autocorrelation.md) | Why does this month tell us so much about next month? |
+| 17 | [Stationarity, the Stable Baseline](Topic_17_Stationarity.md) | What does it mean for data to be stable, and why does forecasting need it? |
+| 18 | [Year over Year Comparison](Topic_18_Year_Over_Year_Comparison.md) | Why compare to the same month last year instead of to last month? |
+| 19 | [Data Quality and Common Pitfalls](Topic_19_Data_Quality_And_Pitfalls.md) | Is this unusual pattern real, or is it an artifact of the data? |
+| 20 | [How to Read a Time Series Chart](Topic_20_How_To_Read_A_Chart_Checklist.md) | What twelve questions should I ask of every chart I am shown? |
 
 ## Appendix
 
