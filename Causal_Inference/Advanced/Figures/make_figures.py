@@ -685,8 +685,182 @@ def fig_09():
     plt.close(fig)
 
 
+
+def _profile_frame():
+    X = profile.set_index("agency_id").copy()
+    X = X.loc[sorted(X.index)]
+    X["treated"] = [1 if a in TREATED else 0 for a in X.index]
+    X["lpop"] = np.log(X["population_served"])
+    X["lsworn"] = np.log(X["sworn_officers"])
+    return X
+
+
+def fig_10():
+    """Module 10. Separation is mechanical, and the overlap that matters is absent."""
+    X = _profile_frame()
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13.6, 5.0))
+
+    sets = [("one covariate", ["lsworn"]),
+            ("two covariates", ["lsworn", "violent_crime_rate_per_1000"]),
+            ("four covariates", ["lsworn", "lpop", "violent_crime_rate_per_1000",
+                                 "property_crime_rate_per_1000"])]
+    for i, (lab, cols) in enumerate(sets):
+        Z = sm.add_constant(X[cols].astype(float))
+        lg = sm.Logit(X["treated"], Z).fit(disp=False)
+        ps = lg.predict(Z)
+        for tr, c, off in [(1, BLUE, 0.13), (0, INK3, -0.13)]:
+            a1.scatter(ps[X["treated"] == tr], np.full((X["treated"] == tr).sum(), i + off),
+                       s=75, color=c, zorder=5, alpha=0.9)
+        a1.text(1.06, i, f"pseudo R2 {lg.prsquared:.2f}", fontsize=9, color=INK2,
+                va="center")
+    a1.set_yticks(range(len(sets)))
+    a1.set_yticklabels([s[0] for s in sets], fontsize=10)
+    a1.set_xlim(-0.06, 1.42)
+    a1.set_ylim(-0.6, len(sets) - 0.4)
+    a1.set_xlabel("estimated propensity score")
+    a1.text(0.02, len(sets) - 0.55, "treated", fontsize=9.5, color=BLUE)
+    a1.text(0.20, len(sets) - 0.55, "not treated", fontsize=9.5, color=INK3)
+    style(a1, ygrid=False)
+    a1.grid(axis="x", color=GRID, lw=0.8, zorder=0)
+    a1.set_axisbelow(True)
+    title(a1, "Add covariates to twelve units and separation arrives",
+          "Four columns of pure noise separate these groups in 6 percent of draws.")
+
+    for tr, c, lab in [(1, BLUE, "took the training"), (0, INK3, "did not")]:
+        v = X[X["treated"] == tr]["pre_program_uof_per_100_arrests"]
+        a2.scatter(v, np.full(len(v), tr), s=110, color=c, zorder=5, label=lab)
+        for a, x in zip(X[X["treated"] == tr].index, v):
+            a2.annotate(SHORT[a], (x, tr), fontsize=8, color=INK2, rotation=40,
+                        xytext=(2, 9 if tr else -20), textcoords="offset points")
+    a2.axvline(3.159, color=ORANGE, lw=2, ls="--", zorder=4)
+    a2.text(3.20, 0.5, "  the only control above\n  the lowest treated agency",
+            fontsize=9, color=ORANGE, va="center")
+    a2.set_yticks([0, 1])
+    a2.set_yticklabels(["not treated", "took the training"], fontsize=10)
+    a2.set_ylim(-0.55, 1.75)
+    a2.set_xlim(1.9, 4.6)
+    a2.set_xlabel("use of force rate before the program")
+    style(a2, ygrid=False)
+    a2.grid(axis="x", color=GRID, lw=0.8, zorder=0)
+    a2.set_axisbelow(True)
+    title(a2, "And the variable that decided selection does not overlap",
+          "One control agency sits above the lowest treated one. There is nothing to match to.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_a10_propensity.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_11():
+    """Module 11. Every candidate instrument, on the two conditions it must meet."""
+    X = _profile_frame()
+    X["east"] = (X["region"] == "East").astype(int)
+    X["sheriff"] = (X["agency_type"] == "County Sheriff").astype(int)
+    X["lbudget"] = np.log(X["county_budget_millions"])
+    X["lcounty"] = np.log(X["county_population"])
+    pre = F[F["period"] == "before"]
+    X["pre_rate"] = pre.groupby("agency_id").apply(
+        lambda g: 100 * g["n_uof"].sum() / g["n_arrests"].sum())
+
+    cands = [("region is East", "east"), ("is a sheriff's office", "sheriff"),
+             ("county budget", "lbudget"), ("county population", "lcounty"),
+             ("public safety budget share", "budget_share_public_safety_pct")]
+    rows = []
+    for lab, c in cands:
+        z1 = sm.OLS(X["treated"], sm.add_constant(X[[c]].astype(float))).fit()
+        z2 = sm.OLS(X["pre_rate"], sm.add_constant(X[[c]].astype(float))).fit()
+        rows.append((lab, z1.fvalue, z2.pvalues.iloc[1]))
+
+    fig, ax = plt.subplots(figsize=(11.8, 5.4))
+    ax.axvspan(10, 100, color=AQUA, alpha=0.10, zorder=1)
+    for lab, fv, pv in rows:
+        c = ORANGE if fv < 10 else AQUA
+        ax.scatter([fv], [pv], s=120, color=c, zorder=5)
+        ax.annotate(lab, (fv, pv), fontsize=9, color=INK2,
+                    xytext=(9, 4), textcoords="offset points")
+    ax.axvline(10, color=AQUA, lw=2, ls="--", zorder=4)
+    ax.axhline(0.05, color=ORANGE, lw=2, ls="--", zorder=4)
+    ax.text(10.6, 0.62, "relevance needs\nF above 10", fontsize=9.5, color=AQUA)
+    ax.text(0.09, 0.043, "below this line, the candidate is\nassociated with the outcome before\n"
+                         "the program, so exclusion fails",
+            fontsize=9, color=ORANGE, va="top")
+    ax.set_xscale("log")
+    ax.set_xlim(0.0025, 80)
+    ax.set_ylim(-0.03, 0.72)
+    ax.set_xlabel("F statistic for predicting treatment, log scale")
+    ax.set_ylabel("p value for association with the pre program outcome")
+    style(ax)
+    title(ax, "Five candidate instruments, neither condition met by any of them",
+          "A usable instrument would sit in the shaded strip and well above the orange line.")
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_a11_instrumental_variables.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_12():
+    """Module 12. The running variable, and why the cutoff is not sharp."""
+    X = _profile_frame()
+    v = X["pre_program_uof_per_100_arrests"].sort_values()
+    cut = 3.159
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13.6, 5.0),
+                                 gridspec_kw={"width_ratios": [1.35, 1]})
+
+    for a, x in v.items():
+        tr = a in TREATED
+        wrong = tr != (x > cut)
+        c = ORANGE if wrong else (BLUE if tr else INK3)
+        a1.scatter([x], [1 if tr else 0], s=150 if wrong else 95, color=c, zorder=5)
+        if wrong:
+            a1.annotate(SHORT[a], (x, 1 if tr else 0), fontsize=9.5, color=ORANGE,
+                        weight="bold", xytext=(-8, 16 if tr else -24),
+                        textcoords="offset points", ha="right")
+    a1.axvline(cut, color=INK, lw=2.2, zorder=4)
+    a1.text(cut, 1.70, " a cutoff at 3.16", fontsize=9.5, color=INK)
+    a1.text(2.62, 1.34, "below the cutoff, and treated",
+            fontsize=8.5, color=ORANGE, ha="center")
+    a1.text(3.20, -0.40, "above the cutoff, and not treated",
+            fontsize=8.5, color=ORANGE, ha="center")
+    a1.text(4.05, 1.03, "the other four treated", fontsize=8.5, color=BLUE, ha="center")
+    a1.text(2.35, 0.19, "the other six controls", fontsize=8.5, color=INK3, ha="center")
+    a1.set_yticks([0, 1])
+    a1.set_yticklabels(["not treated", "treated"], fontsize=10)
+    a1.set_ylim(-0.55, 1.85)
+    a1.set_xlim(1.9, 4.5)
+    a1.set_xlabel("use of force rate before the program, the running variable")
+    style(a1, ygrid=False)
+    a1.grid(axis="x", color=GRID, lw=0.8, zorder=0)
+    a1.set_axisbelow(True)
+    title(a1, "The selection rule was close to a threshold",
+          "Two units fall on the wrong side, so the assignment is fuzzy, not sharp.")
+
+    bws = [0.15, 0.30, 0.50, 0.80]
+    counts = [int((np.abs(v - cut) < b).sum()) for b in bws]
+    a2.bar(range(len(bws)), counts, color=ORANGE, width=0.55, zorder=3)
+    for i, c in enumerate(counts):
+        a2.text(i, c + 0.22, str(c), ha="center", fontsize=12, color=INK, weight="bold")
+    a2.text(0.5, 6.4, "too few to estimate\nanything", fontsize=9, color=ORANGE,
+            ha="center")
+    a2.text(2.5, 8.6, "no longer local:\nthis is most of the sample", fontsize=9,
+            color=ORANGE, ha="center")
+    a2.set_xticks(range(len(bws)))
+    a2.set_xticklabels([f"{b:.2f}" for b in bws], fontsize=10)
+    a2.set_xlabel("bandwidth around the cutoff")
+    a2.set_ylabel("agencies inside the bandwidth")
+    a2.set_ylim(0, 11)
+    style(a2)
+    title(a2, "And there is nothing near it to compare",
+          "Either the window is local and nearly empty, or it holds the whole panel.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_a12_regression_discontinuity.png", dpi=150)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     for fn in (fig_01, fig_02, fig_03, fig_04,
-               fig_05, fig_06, fig_07, fig_08, fig_09):
+               fig_05, fig_06, fig_07, fig_08, fig_09,
+               fig_10, fig_11, fig_12):
         fn()
         print("built", fn.__name__)
