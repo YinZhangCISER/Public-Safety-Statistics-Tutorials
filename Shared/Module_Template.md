@@ -26,7 +26,7 @@ Every module in this repository follows one of the three templates below. The te
 
 **Attribution.** Every module opens with the byline block below and closes with the provenance note. The name and affiliation appear exactly once per module, at the top.
 
-**Punctuation.** Do not use the hyphen or dash as prose punctuation. Write "year over year", not the hyphenated form. Dashes are fine inside code, inside file names, inside official WADEPS category labels, which are reproduced exactly as published, and inside the surnames of cited authors, which are spelled as the author spells them. A misspelled name is a worse error than a hyphen. The scan for stray dashes will flag these; they are the only expected hits.
+**Punctuation.** Do not use the hyphen or dash as prose punctuation. Write "year over year", not the hyphenated form. Dashes are fine inside code, inside file names, inside official WADEPS category labels, which are reproduced exactly as published, and inside the names and titles of cited works, which are reproduced exactly as published. A misspelled author or a paraphrased title is a worse error than a hyphen or a stray pronoun. The dash and first person scans will flag these; citations are the only expected hits, and every other hit is a real one.
 
 ---
 

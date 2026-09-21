@@ -346,7 +346,347 @@ def fig_04():
     plt.close(fig)
 
 
+
+def _mu0(d):
+    """Undo the planted effect, giving each agency month its no program mean."""
+    PH = {0: 0.0, 1: 0.25, 2: 0.58, 3: 0.83}
+    start = (2023 - 2019) * 12 + 6
+    w = np.array([PH.get(k, 1.0) if (a in TREATED and k >= 0) else 0.0
+                  for a, k in zip(d["agency_id"], d["t"] - start)])
+    return d["n_uof"].values / (0.88 ** w)
+
+
+def fig_05():
+    """Module 5. Poisson and linear two way fixed effects are different estimands."""
+    d = panel()
+    d["rate"] = 100 * d["n_uof"] / d["n_arrests"]
+    d["settled"] = ((d["agency_id"].isin(NO_A007)) & (d["period"] == "after")).astype(float)
+    d["phase"] = ((d["agency_id"].isin(NO_A007)) & (d["period"] == "phase")).astype(float)
+
+    zp = smf.glm("n_uof ~ C(agency_id)+C(year_month)+settled+phase", d,
+                 family=sm.families.Poisson(), offset=d["lo"]).fit()
+    ep, lp, hp = PCT(zp.params["settled"]), *[PCT(v) for v in zp.conf_int().loc["settled"]]
+    zo = smf.ols("rate ~ C(agency_id)+C(year_month)+settled+phase", d).fit()
+    base = d[(d["agency_id"].isin(NO_A007)) & (d["period"] == "before")]["rate"].mean()
+    eo = 100 * zo.params["settled"] / base
+    lo_, ho_ = [100 * v / base for v in zo.conf_int().loc["settled"]]
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13.4, 5.0))
+
+    for yy, (lab, e, lo, hi, c) in enumerate([
+            ("linear, on the rate", eo, lo_, ho_, ORANGE),
+            ("Poisson, with an offset", ep, lp, hp, AQUA)]):
+        a1.plot([lo, hi], [yy, yy], color=c, lw=3.4, solid_capstyle="round", zorder=3)
+        a1.scatter([e], [yy], s=110, color=c, zorder=5)
+        a1.text(e, yy + 0.16, f"{e:+.1f}%", ha="center", fontsize=11, color=INK,
+                weight="bold")
+    a1.axvline(-12.0, color=INK, lw=2, ls="--", zorder=6)
+    a1.text(-12.4, -0.42, "the truth ", fontsize=9.5, color=INK, ha="right")
+    a1.set_yticks([0, 1])
+    a1.set_yticklabels(["linear, on the rate", "Poisson, with an offset"], fontsize=10)
+    a1.set_xlim(-32, 2)
+    a1.set_ylim(-0.55, 1.5)
+    a1.set_xlabel("estimated change in the use of force rate")
+    style(a1, ygrid=False)
+    a1.grid(axis="x", color=GRID, lw=0.8, zorder=0)
+    a1.set_axisbelow(True)
+    title(a1, "Two estimators, five points apart",
+          "Neither is biased. They weight the four agencies differently.")
+
+    post = d[(d["agency_id"].isin(NO_A007)) & (d["period"] == "after")]
+    inc = post.groupby("agency_id")["n_uof"].sum()
+    inc = 100 * inc / inc.sum()
+    mon = post.groupby("agency_id").size()
+    mon = 100 * mon / mon.sum()
+    xs = np.arange(len(NO_A007))
+    wdt = 0.36
+    a2.bar(xs - wdt / 2, [inc[a] for a in NO_A007], width=wdt, color=AQUA, zorder=3,
+           label="share of incidents, the Poisson weights")
+    a2.bar(xs + wdt / 2, [mon[a] for a in NO_A007], width=wdt, color=ORANGE, zorder=3,
+           label="share of agency months, the linear weights")
+    for x, a in zip(xs, NO_A007):
+        a2.text(x - wdt / 2, inc[a] + 1.4, f"{inc[a]:.0f}", ha="center", fontsize=9.5,
+                color=INK)
+        a2.text(x + wdt / 2, mon[a] + 1.4, f"{mon[a]:.0f}", ha="center", fontsize=9.5,
+                color=INK)
+    a2.set_xticks(xs)
+    a2.set_xticklabels([SHORT[a] for a in NO_A007], fontsize=9.5)
+    a2.set_ylim(0, 72)
+    a2.set_ylabel("percent")
+    a2.legend(fontsize=8.5, frameon=False)
+    style(a2)
+    title(a2, "Where the difference comes from",
+          "Stonewick carries 60 percent of the incidents and a quarter of the months.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_a05_twfe.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_06():
+    """Module 6. The event study, and the power of the pre period test."""
+    d = panel()
+    d["k"] = d["t"] - ((2023 - 2019) * 12 + 6)
+    d["ek"] = np.clip(d["k"], -8, 10).astype(int)
+    d["trm"] = d["agency_id"].isin(NO_A007)
+    d.loc[~d["trm"], "ek"] = -99
+    js = [j for j in range(-8, 11) if j != -1]
+    terms = " + ".join([f"I(trm&(ek=={j}))" for j in js])
+    z = smf.glm("n_uof ~ C(agency_id)+C(year_month)+" + terms, d,
+                family=sm.families.Poisson(), offset=d["lo"]).fit()
+
+    est, lo, hi = [], [], []
+    for j in js:
+        k = [c for c in z.params.index if f"ek == {j}" in c][0]
+        l, h = z.conf_int().loc[k]
+        est.append(PCT(z.params[k])); lo.append(PCT(l)); hi.append(PCT(h))
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13.6, 5.0),
+                                 gridspec_kw={"width_ratios": [1.4, 1]})
+    jf = np.array(js, dtype=float)
+    cols = [INK3 if j < 0 else BLUE for j in js]
+    a1.errorbar(jf, est, yerr=[np.array(est) - np.array(lo), np.array(hi) - np.array(est)],
+                fmt="o", ms=5, color=INK3, ecolor=GRID, elinewidth=2, zorder=4)
+    a1.scatter(jf, est, s=45, color=cols, zorder=5)
+    frac = np.interp(np.arange(-8, 11), [0, 1, 2, 3, 4], [0, .25, .58, .83, 1.0],
+                     left=0, right=1.0)
+    a1.plot(np.arange(-8, 11), 100 * (np.exp(np.log(0.88) * frac) - 1), color=ORANGE,
+            lw=2.6, zorder=6, label="the effect that is actually there")
+    a1.axhline(0, color=GRID, lw=1)
+    a1.axvline(-0.5, color=INK3, lw=1.2, ls="--", zorder=3)
+    a1.set_xlabel("months since the program started")
+    a1.set_ylabel("estimated change in the rate")
+    a1.set_ylim(-58, 48)
+    a1.legend(fontsize=8.5, frameon=False, loc="lower left")
+    style(a1)
+    title(a1, "The event study, one coefficient per month",
+          "Individually unreadable. The pre period coefficients are the usable output.")
+
+    powers = [(1, 2), (2, 16), (3, 40), (5, 87)]
+    a2.bar([p[0] for p in powers], [p[1] for p in powers], color=AQUA, width=0.55,
+           zorder=3)
+    for x, y in powers:
+        a2.text(x, y + 2.2, f"{y}%", ha="center", fontsize=11, color=INK, weight="bold")
+    a2.axhline(80, color=ORANGE, lw=2, ls="--", zorder=4)
+    a2.text(5.4, 82, "80 percent power", fontsize=9.5, color=ORANGE, ha="right")
+    a2.set_xticks([p[0] for p in powers])
+    a2.set_xlabel("size of the planted pre trend violation, percent a year")
+    a2.set_ylabel("share of simulations where the test rejects")
+    a2.set_ylim(0, 100)
+    a2.set_xlim(0.3, 5.7)
+    style(a2)
+    title(a2, "And how often the pre period test finds a violation",
+          "The violation that mattered in this dataset was 2.16 percent a year.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_a06_event_study.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_07():
+    """Module 7. The staggered adoption bias, decomposed."""
+    d = panel()
+    d["mu0"] = _mu0(d)
+    zp = smf.glm("mu0 ~ C(agency_id)+C(year_month)", d, family=sm.families.Poisson(),
+                 offset=d["lo"]).fit()
+    d["mu0par"] = zp.fittedvalues
+
+    waves = {"A001": (2021 - 2019) * 12, "A002": (2022 - 2019) * 12,
+             "A004": (2023 - 2019) * 12, "A010": (2024 - 2019) * 12}
+    d["D"] = 0.0
+    for a, g in waves.items():
+        d.loc[(d["agency_id"] == a) & (d["t"] >= g), "D"] = 1.0
+    nD = {a: int(((d["agency_id"] == a) & (d["t"] >= g)).sum()) for a, g in waves.items()}
+    tw = np.array([nD[a] for a in waves], float); tw /= tw.sum()
+    het = {"A001": 0.25, "A002": 0.18, "A004": 0.10, "A010": 0.05}
+    hom = {a: 0.12 for a in waves}
+    true_het = -100 * sum(het[a] * x for a, x in zip(waves, tw))
+
+    rng = np.random.default_rng(17)
+
+    def run(base, effects, reps=150):
+        mult = np.ones(len(d))
+        for a, g in waves.items():
+            mult[((d["agency_id"] == a) & (d["t"] >= g)).values] = 1 - effects[a]
+        mu = d[base].values * mult
+        out = []
+        for _ in range(reps):
+            d["y"] = rng.poisson(np.maximum(mu, 0.01))
+            z = smf.glm("y ~ C(agency_id)+C(year_month)+D", d,
+                        family=sm.families.Poisson(), offset=d["lo"]).fit()
+            out.append(PCT(z.params["D"]))
+        return np.mean(out)
+
+    cells = [("trends as they are\nin this panel", "mu0"),
+             ("trends forced\nparallel", "mu0par")]
+    effs = [("constant 12 percent", hom, -12.0), ("heterogeneous by wave", het, true_het)]
+
+    fig, ax = plt.subplots(figsize=(11.2, 5.2))
+    xs = np.arange(len(cells))
+    wdt = 0.22
+    for i, (lab, eff, truth) in enumerate(effs):
+        biases = [run(base, eff) - truth for _, base in cells]
+        c = ORANGE if i else AQUA
+        ax.bar(xs + (i - 0.5) * wdt, biases, width=wdt, color=c, zorder=3, label=lab)
+        for x, b in zip(xs + (i - 0.5) * wdt, biases):
+            dy = 0.26 if b > 0 else -0.38
+            ax.text(x, b + dy, f"{b:+.2f}", ha="center", fontsize=11, color=INK,
+                    weight="bold")
+    ax.axhline(0, color=INK, lw=2, zorder=5)
+    ax.set_xticks(xs)
+    ax.set_xticklabels([c[0] for c in cells], fontsize=10)
+    ax.set_xlim(-0.45, 1.45)
+    ax.set_ylabel("bias of two way fixed effects, percentage points")
+    ax.set_ylim(-8.2, 1.6)
+    ax.legend(fontsize=9.5, frameon=False, loc="lower left")
+    style(ax)
+    title(ax, "Staggered adoption: two problems, separately measured",
+          "Only the green bar on the right is the textbook case, and only it is unbiased.")
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_a07_staggered.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_08():
+    """Module 8. Synthetic control, and the pre period fit that condemns it."""
+    from scipy.optimize import minimize
+    d = panel(drop_a007=False)
+    piv = d.pivot_table(index="year_month", columns="agency_id",
+                        values="uof_per_100_arrests").interpolate()
+    pre = piv[piv.index < "2023-07"]
+    post = piv[piv.index >= "2023-11"]
+    donors = [a for a in piv.columns if a not in TREATED]
+
+    rows = []
+    for t in TREATED:
+        Y, X = pre[t].values, pre[donors].values
+        r = minimize(lambda w: np.mean((Y - X @ w) ** 2),
+                     np.repeat(1 / len(donors), len(donors)),
+                     bounds=[(0, 1)] * len(donors),
+                     constraints=({"type": "eq", "fun": lambda w: w.sum() - 1},))
+        rmse = np.sqrt(np.mean((Y - X @ r.x) ** 2))
+        eff = 100 * (post[t].mean() / (post[donors].values @ r.x).mean() - 1)
+        rows.append((SHORT[t], rmse, rmse / Y.mean(), eff, Y.mean(),
+                     pre[donors].mean().max()))
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13.4, 5.0))
+    xs = np.arange(len(rows))
+    a1.bar(xs, [r[2] * 100 for r in rows], color=ORANGE, width=0.55, zorder=3)
+    for x, r in zip(xs, rows):
+        a1.text(x, r[2] * 100 + 1.2, f"{r[2] * 100:.0f}%", ha="center", fontsize=11,
+                color=INK, weight="bold")
+    a1.axhline(5, color=AQUA, lw=2, ls="--", zorder=4)
+    a1.text(4.45, 6.5, "a fit worth using is below about this", fontsize=9,
+            color=AQUA, ha="right")
+    a1.set_xticks(xs)
+    a1.set_xticklabels([r[0] for r in rows], fontsize=9, rotation=18, ha="right")
+    a1.set_ylabel("pre period fit error, percent of the agency's own mean")
+    a1.set_ylim(0, 58)
+    style(a1)
+    title(a1, "The diagnostic that comes before the answer",
+          "Four of the five sit above every donor. The fifth is inside the range and still fits badly.")
+
+    a2.barh(xs[::-1], [r[3] for r in rows], color=ORANGE, height=0.5, zorder=3)
+    for yy, r in zip(xs[::-1], rows):
+        off = 0.9 if r[3] > 0 else -0.9
+        ha = "left" if r[3] > 0 else "right"
+        a2.text(r[3] + off, yy, f"{r[3]:+.1f}%", ha=ha, va="center", fontsize=10.5,
+                color=INK, weight="bold")
+    a2.axvline(-12.0, color=INK, lw=2, ls="--", zorder=5)
+    a2.text(-12.4, -0.72, "the truth ", fontsize=9.5, color=INK, ha="right")
+    a2.axvline(0, color=INK3, lw=1.2, zorder=2)
+    a2.set_yticks(xs[::-1])
+    a2.set_yticklabels([r[0] for r in rows], fontsize=9.5)
+    a2.set_xlim(-32, 22)
+    a2.set_ylim(-0.95, len(rows) - 0.4)
+    a2.set_xlabel("what synthetic control reports")
+    style(a2, ygrid=False)
+    a2.grid(axis="x", color=GRID, lw=0.8, zorder=0)
+    a2.set_axisbelow(True)
+    title(a2, "And what it reports when the diagnostic is ignored",
+          "Five agencies, one true effect of 12 percent, answers from +11 to -25.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_a08_synthetic_control.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_09():
+    """Module 9. Four ways of putting an interval on the same estimate."""
+    d = panel()
+    d["settled"] = ((d["agency_id"].isin(NO_A007)) & (d["period"] == "after")).astype(float)
+    d["phase"] = ((d["agency_id"].isin(NO_A007)) & (d["period"] == "phase")).astype(float)
+    F0 = "n_uof ~ C(agency_id)+C(year_month)+settled+phase"
+    z = smf.glm(F0, d, family=sm.families.Poisson(), offset=d["lo"]).fit()
+    real = PCT(z.params["settled"])
+    mb = [PCT(v) for v in z.conf_int().loc["settled"]]
+    zc = smf.glm(F0, d, family=sm.families.Poisson(), offset=d["lo"]).fit(
+        cov_type="cluster", cov_kwds={"groups": d["agency_id"]})
+    cr = [PCT(v) for v in zc.conf_int().loc["settled"]]
+
+    rng = np.random.default_rng(21)
+    ids = sorted(d["agency_id"].unique())
+    boots = []
+    for _ in range(400):
+        pick = rng.choice(ids, len(ids), replace=True)
+        s = pd.concat([d[d["agency_id"] == a].assign(agency_id=f"{a}_{i}")
+                       for i, a in enumerate(pick)])
+        try:
+            zz = smf.glm(F0, s, family=sm.families.Poisson(), offset=s["lo"]).fit()
+            boots.append(PCT(zz.params["settled"]))
+        except Exception:
+            pass
+    bs = [np.percentile(boots, 2.5), np.percentile(boots, 97.5)]
+
+    fakes = []
+    for _ in range(400):
+        pick = list(rng.choice(ids, len(NO_A007), replace=False))
+        s = d.copy()
+        s["settled"] = ((s["agency_id"].isin(pick)) & (s["period"] == "after")).astype(float)
+        s["phase"] = ((s["agency_id"].isin(pick)) & (s["period"] == "phase")).astype(float)
+        zz = smf.glm(F0, s, family=sm.families.Poisson(), offset=s["lo"]).fit()
+        fakes.append(PCT(zz.params["settled"]))
+    fakes = np.array(fakes)
+    ri = [np.percentile(fakes, 2.5), np.percentile(fakes, 97.5)]
+    pval = np.mean(fakes <= real)
+
+    rows = [("model based", mb, AQUA, ""),
+            (f"cluster robust, {d['agency_id'].nunique()} clusters", cr, ORANGE,
+             "far below the 40 it needs"),
+            ("cluster bootstrap", bs, AQUA, ""),
+            ("randomisation, the null", ri, INK3,
+             f"the estimate sits at p = {pval:.3f}")]
+    fig, ax = plt.subplots(figsize=(12.6, 5.0))
+    ys = np.arange(len(rows))[::-1]
+    for (lab, iv, c, note), yy in zip(rows, ys):
+        ax.plot(iv, [yy, yy], color=c, lw=3.4, solid_capstyle="round", zorder=3)
+        ax.text(iv[0] - 0.7, yy, f"{iv[0]:+.1f}", ha="right", va="center", fontsize=9.5,
+                color=INK2)
+        ax.text(iv[1] + 0.7, yy, f"{iv[1]:+.1f}", ha="left", va="center", fontsize=9.5,
+                color=INK2)
+        if note:
+            ax.text(20.0, yy, note, fontsize=8.5, color=c, va="center")
+    ax.axvline(real, color=INK, lw=2.4, zorder=6)
+    ax.text(real - 0.6, -0.72, f"the estimate, {real:+.1f}%  ", fontsize=9.5,
+            color=INK, ha="right")
+    ax.axvline(0, color=INK3, lw=1.2, ls=":", zorder=2)
+    ax.set_yticks(ys)
+    ax.set_yticklabels([r[0] for r in rows], fontsize=9.5)
+    ax.set_xlim(-26, 40)
+    ax.set_ylim(-0.95, len(rows) - 0.35)
+    ax.set_xlabel("95 percent interval for the change in the use of force rate")
+    style(ax, ygrid=False)
+    ax.grid(axis="x", color=GRID, lw=0.8, zorder=0)
+    ax.set_axisbelow(True)
+    title(ax, "Four intervals for one estimate, from eleven agencies",
+          "The bootstrap is widest. The cluster robust one is not, which is the warning.")
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_a09_few_clusters.png", dpi=150)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
-    for fn in (fig_01, fig_02, fig_03, fig_04):
+    for fn in (fig_01, fig_02, fig_03, fig_04,
+               fig_05, fig_06, fig_07, fig_08, fig_09):
         fn()
         print("built", fn.__name__)
