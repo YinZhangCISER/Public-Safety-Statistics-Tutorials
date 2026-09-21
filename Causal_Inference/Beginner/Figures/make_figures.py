@@ -624,8 +624,270 @@ def fig_14():
     plt.close(fig)
 
 
+
+def _box(ax, xy, w, h, text, fc, ec, fs=10, tc=None):
+    from matplotlib.patches import FancyBboxPatch
+    x, y = xy
+    ax.add_patch(FancyBboxPatch((x - w / 2, y - h / 2), w, h,
+                                boxstyle="round,pad=0.02,rounding_size=0.06",
+                                fc=fc, ec=ec, lw=1.6, zorder=3))
+    ax.text(x, y, text, ha="center", va="center", fontsize=fs,
+            color=tc or INK, zorder=5)
+
+
+def _arrow(ax, a, b, color, curve=0.0, lw=2.0, dashed=False):
+    ax.annotate("", xy=b, xytext=a, zorder=4,
+                arrowprops=dict(arrowstyle="-|>", color=color, lw=lw,
+                                linestyle="--" if dashed else "-",
+                                shrinkA=16, shrinkB=16,
+                                connectionstyle=f"arc3,rad={curve}"))
+
+
+def fig_15():
+    """Topic 15. One association, three structures that produce it."""
+    fig, axes = plt.subplots(1, 3, figsize=(14.2, 4.0))
+    panels = [
+        ("The training really worked",
+         "the only arrow into the outcome\ncomes from the program", AQUA),
+        ("Something moved both",
+         "the statewide decline lowered the rate\nat every agency, trained or not", ORANGE),
+        ("They were chosen for it",
+         "a high rate got them selected,\nand high rates come down on their own", ORANGE),
+    ]
+    for ax, (t, sub, col) in zip(axes, panels):
+        ax.set_xlim(0, 10); ax.set_ylim(0.7, 6.3); ax.axis("off")
+        title(ax, t, sub)
+        _box(ax, (2.3, 2.0), 3.4, 1.15, "took the\ntraining", "#eaf1fb", BLUE, 10)
+        _box(ax, (7.7, 2.0), 3.4, 1.15, "use of force\nfell", "#eaf1fb", BLUE, 10)
+        _arrow(ax, (2.3, 2.0), (7.7, 2.0), col if t.startswith("The training") else INK3,
+               lw=2.4 if t.startswith("The training") else 1.4,
+               dashed=not t.startswith("The training"))
+        if t.startswith("The training"):
+            ax.text(5.0, 2.55, "the effect", ha="center", fontsize=9.5, color=AQUA)
+        else:
+            ax.text(5.0, 1.05, "the same fall, with no arrow from the program",
+                    ha="center", fontsize=8.5, color=INK3)
+        if t.startswith("Something"):
+            _box(ax, (5.0, 4.9), 4.6, 1.1, "everything was already\nfalling statewide",
+                 "#fdeee7", ORANGE, 9.5)
+            _arrow(ax, (5.0, 4.9), (2.3, 2.0), ORANGE, curve=0.18)
+            _arrow(ax, (5.0, 4.9), (7.7, 2.0), ORANGE, curve=-0.18)
+        if t.startswith("They were"):
+            _box(ax, (5.0, 4.9), 4.6, 1.1, "their rate was the\nhighest in the state",
+                 "#fdeee7", ORANGE, 9.5)
+            _arrow(ax, (5.0, 4.9), (2.3, 2.0), ORANGE, curve=0.18)
+            _arrow(ax, (5.0, 4.9), (7.7, 2.0), ORANGE, curve=-0.18)
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_15_three_structures.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_16():
+    """Topic 16. What random assignment would have done to the imbalance."""
+    base = profile.set_index("agency_id")["pre_program_uof_per_100_arrests"]
+    ids = sorted(base.index)
+    rng = np.random.default_rng(11)
+    ratios = []
+    for _ in range(4000):
+        pick = rng.choice(ids, 5, replace=False)
+        rest = [a for a in ids if a not in pick]
+        ratios.append(base[pick].mean() / base[rest].mean())
+    ratios = np.array(ratios)
+    actual = base[TREATED].mean() / base[[a for a in ids if a not in TREATED]].mean()
+
+    fig, ax = plt.subplots(figsize=(11.6, 5.0))
+    counts, _, _ = ax.hist(ratios, bins=42, color=BLUE, zorder=3)
+    top = counts.max()
+    ax.set_ylim(0, top * 1.42)
+    ax.axvline(1.0, color=INK2, lw=1.6, ls=":", zorder=5)
+    ax.axvline(actual, color=ORANGE, lw=2.6, zorder=6)
+    share = 100 * (ratios >= actual).mean()
+    ax.annotate(f"how the five agencies\nwere actually chosen: {actual:.2f}\n\n"
+                f"{share:.1f} percent of random draws\nreach this far",
+                xy=(actual, top * 0.20), xytext=(actual - 0.33, top * 0.72),
+                fontsize=9.5, color=ORANGE,
+                arrowprops=dict(arrowstyle="->", color=ORANGE, lw=1.8))
+    ax.text(1.005, top * 1.06, "perfectly balanced", fontsize=9, color=INK2)
+    ax.set_xlabel("baseline use of force rate, the five chosen divided by the other seven")
+    ax.set_ylabel("number of random draws")
+    ax.set_xlim(0.66, 1.58)
+    style(ax)
+    title(ax, "Four thousand ways five agencies could have been chosen at random",
+          "Random assignment centres on balanced. The rule that was used does not.")
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_16_randomness.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_17():
+    """Topic 17. Four designs, the assumption each needs, what each gave."""
+    rows = [
+        ("before and after", -33.1, "nothing else changed\nbetween the two periods", ORANGE),
+        ("difference in\ndifferences", _did(TREATED, COMPARISON),
+         "the two groups would\nhave moved together", ORANGE),
+        ("the same, after\nchecking the years before", _did(NO_A007, COMPARISON),
+         "the same, and the check\nfound nothing against it", AQUA),
+        ("randomise within\nthe eligible group", None,
+         "nothing: the two groups\nmatch on average by design", AQUA),
+    ]
+    fig, ax = plt.subplots(figsize=(12.6, 5.2))
+    ys = np.arange(len(rows))[::-1]
+    for (lab, v, ass, c), yy in zip(rows, ys):
+        if v is None:
+            ax.text(-24.0, yy, "not available here:\nthe program was already given out",
+                    fontsize=9, color=INK3, ha="center", va="center", style="italic")
+        else:
+            ax.barh(yy, v, color=c, height=0.36, zorder=3)
+            ax.text(v - 0.8, yy, f"{v:+.1f}%", ha="right", va="center", fontsize=11,
+                    color=INK, weight="bold")
+        ax.text(3.0, yy, ass, fontsize=9, color=INK2, va="center", ha="left")
+    ax.axvline(-12.0, color=INK, lw=2, ls="--", zorder=5)
+    ax.text(-12.5, -0.8, "the truth ", fontsize=9.5, color=INK, ha="right")
+    ax.set_yticks(ys)
+    ax.set_yticklabels([r[0] for r in rows], fontsize=9.5)
+    ax.set_xlim(-38, 22)
+    ax.set_ylim(-1.05, 3.6)
+    ax.set_xlabel("what the design reported")
+    ax.text(3.0, 3.42, "what it has to assume", fontsize=9.5, color=INK, weight="bold")
+    style(ax, ygrid=False)
+    ax.grid(axis="x", color=GRID, lw=0.8, zorder=0)
+    ax.set_axisbelow(True)
+    title(ax, "Four designs, in order of how much they ask you to believe",
+          "Every step down this list buys accuracy by weakening an assumption.")
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_17_when_you_cannot_randomize.png", dpi=150)
+    plt.close(fig)
+
+
+def _followup(end):
+    import statsmodels.api as sm
+    import statsmodels.formula.api as smf
+    g = F[F["agency_id"] != "A007"].copy()
+    g["lo"] = np.log(g["n_arrests"])
+    g = g[g["year_month"] <= end]
+    z = smf.glm("n_uof ~ C(agency_id)+C(year_month)"
+                "+I((trained==1)&(period=='after'))+I((trained==1)&(period=='phase'))",
+                g, family=sm.families.Poisson(), offset=g["lo"]).fit()
+    k = [c for c in z.params.index if "'after'" in c][0]
+    lo, hi = z.conf_int().loc[k]
+    f_ = lambda b: 100 * (np.exp(b) - 1)
+    return f_(z.params[k]), f_(lo), f_(hi)
+
+
+def fig_18():
+    """Topic 18. The same program, reported at five points in time."""
+    pts = [("8 months", "2024-06"), ("14 months", "2024-12"), ("20 months", "2025-06"),
+           ("26 months", "2025-12"), ("30 months", "2026-04")]
+    est, los, his, labs = [], [], [], []
+    for lab, end in pts:
+        e, l, h = _followup(end)
+        est.append(e); los.append(l); his.append(h); labs.append(lab)
+
+    fig, ax = plt.subplots(figsize=(11.6, 5.0))
+    xs = np.arange(len(pts))
+    cols = [ORANGE if l < 0 < h else AQUA for l, h in zip(los, his)]
+    ax.errorbar(xs, est, yerr=[np.array(est) - np.array(los), np.array(his) - np.array(est)],
+                fmt="none", ecolor=cols, elinewidth=2.8, capsize=0, zorder=3)
+    ax.scatter(xs, est, s=100, color=cols, zorder=5)
+    ax.axhline(-12.0, color=INK, lw=2, ls="--", zorder=4)
+    ax.axhline(0, color=INK3, lw=1.4, zorder=4)
+    for x, e in zip(xs, est):
+        ax.text(x + 0.14, e - 1.5, f"{e:+.1f}%", fontsize=10, va="center", color=INK)
+    ax.text(4.42, -13.4, "the truth", fontsize=9.5, color=INK, ha="right")
+    ax.text(0.55, 4.1, "an interval crossing this line gets written up\n"
+                       "as \"no significant effect\"", fontsize=9, color=ORANGE)
+    ax.set_xticks(xs)
+    ax.set_xticklabels(labs, fontsize=10)
+    ax.set_xlim(-0.4, 4.6)
+    ax.set_ylim(-21, 9)
+    ax.set_ylabel("estimated change in the use of force rate")
+    ax.set_xlabel("how long after the training was fully in place the report was written")
+    style(ax)
+    title(ax, "The same program, evaluated at five different moments",
+          "Nothing about the program changed. Only the amount of evidence did.")
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_18_how_long.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_19():
+    """Topic 19. One true effect, five headlines that are all defensible."""
+    one = F[F["agency_id"] == "A001"]
+    ob, oa = rate(one[one["period"] == "before"]), rate(one[one["period"] == "after"])
+    tr = F[F["trained"] == 1]
+    tb, ta = rate(tr[tr["period"] == "before"]), rate(tr[tr["period"] == "after"])
+    e8, l8, h8 = _followup("2024-06")
+
+    rows = [
+        ('"Use of force down a third\nat participating agencies"', 100 * (ta / tb - 1),
+         "before and after, all five", ORANGE),
+        ('"Stonewick cuts use of force\nby more than a quarter"', 100 * (oa / ob - 1),
+         "one agency, before and after", ORANGE),
+        ('"Training linked to 17 percent\nreduction"', _did(TREATED, COMPARISON),
+         "difference in differences", ORANGE),
+        ('"Training cuts use of force\nby 12 percent"', _did(NO_A007, COMPARISON),
+         "difference in differences, checked", AQUA),
+        ('"Study finds no significant\neffect of training"', e8,
+         "the same, written up 8 months in", ORANGE),
+    ]
+    fig, ax = plt.subplots(figsize=(13.0, 5.4))
+    ys = np.arange(len(rows))[::-1]
+    for (lab, v, src, c), yy in zip(rows, ys):
+        ax.barh(yy, v, color=c, height=0.34, zorder=3)
+        ax.text(v - 0.8, yy, f"{v:+.1f}%", ha="right", va="center", fontsize=10.5,
+                color=INK, weight="bold")
+        ax.text(1.2, yy, src, fontsize=9, color=INK2, va="center")
+    ax.axvline(-12.0, color=INK, lw=2, ls="--", zorder=5)
+    ax.text(-12.5, -0.82, "the truth ", fontsize=9.5, color=INK, ha="right")
+    ax.set_yticks(ys)
+    ax.set_yticklabels([r[0] for r in rows], fontsize=9.5)
+    ax.set_xlim(-38, 26)
+    ax.set_ylim(-1.1, 4.6)
+    ax.set_xlabel("the number behind the headline")
+    style(ax, ygrid=False)
+    ax.grid(axis="x", color=GRID, lw=0.8, zorder=0)
+    ax.set_axisbelow(True)
+    title(ax, "Five headlines, one program, one true answer of 12 percent",
+          "None of these is a lie. Only one of them is the answer.")
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_19_reading_a_claim.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_20():
+    """Topic 20. The six questions, as a path."""
+    fig, ax = plt.subplots(figsize=(13.2, 4.6))
+    ax.set_xlim(0, 12); ax.set_ylim(1.1, 6.4); ax.axis("off")
+
+    qs = [("1", "What would have\nhappened otherwise?", "Topic 3"),
+          ("2", "Who did not get it,\nand what happened\nto them?", "Topic 6"),
+          ("3", "Were the two groups\nmoving together\nbefore?", "Topic 9"),
+          ("4", "How were the\nrecipients chosen?", "Topic 13"),
+          ("5", "Could the comparison\ngroup have been\naffected too?", "Topic 10"),
+          ("6", "How long did\nthe study wait?", "Topic 18")]
+    xs = np.linspace(1.35, 10.65, 6)
+    for (num, q, ref), x in zip(qs, xs):
+        _box(ax, (x, 4.3), 1.42, 2.0, q, "#eaf1fb", BLUE, 8.4)
+        ax.text(x, 5.72, num, ha="center", fontsize=13, color=BLUE, weight="bold")
+        ax.text(x, 2.92, ref, ha="center", fontsize=8.5, color=INK3)
+    for a, b in zip(xs[:-1], xs[1:]):
+        ax.annotate("", xy=(b, 4.3), xytext=(a, 4.3), zorder=2,
+                    arrowprops=dict(arrowstyle="-|>", color=INK3, lw=1.6,
+                                    shrinkA=59, shrinkB=59))
+    ax.text(6.0, 1.75,
+            "An answer that is missing to any one of these is not a reason to stop reading.\n"
+            "It is the thing to ask about before believing the number.",
+            ha="center", fontsize=10, color=INK2)
+    title(ax, "Six questions, in the order they are worth asking",
+          "None of them requires any mathematics, and each one has stopped a bad claim.")
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_20_questions_to_ask.png", dpi=150)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     for fn in (fig_01, fig_02, fig_03, fig_04, fig_05, fig_06, fig_07, fig_08,
-               fig_09, fig_10, fig_11, fig_12, fig_13, fig_14):
+               fig_09, fig_10, fig_11, fig_12, fig_13, fig_14,
+               fig_15, fig_16, fig_17, fig_18, fig_19, fig_20):
         fn()
         print("built", fn.__name__)
