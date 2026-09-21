@@ -6,9 +6,7 @@
 
 For officers, agency staff, government analysts, and undergraduate students who can read a chart and a percentage and now want to produce one. Sixteen modules, each about ten minutes to read with a fifteen minute Jupyter notebook that runs in Google Colab with no setup.
 
-Formulas appear, but every one of them is followed by the same statement in plain words.
-
-> **Publication status:** Parts I, II and III, Modules 1 through 12, are published. Modules 13 through 16 are being written and their titles below are not yet links.
+Formulas appear, but every one of them is followed by the same statement in plain words. All sixteen modules are published.
 
 ---
 
@@ -45,10 +43,10 @@ Formulas appear, but every one of them is followed by the same statement in plai
 
 | # | Module | The question it answers |
 |---|---|---|
-| 13 | Baseline Forecasts You Must Beat | What is the simplest forecast, and why does it usually win? |
-| 14 | Exponential Smoothing in Plain Language | How do I forecast a series with both trend and season? |
-| 15 | How Wrong Is the Forecast? | Which error measure, and why does the popular one break on small counts? |
-| 16 | Did Something Change? | How do I compare before and after without fooling myself? |
+| 13 | [Baseline Forecasts You Must Beat](Module_13_Baseline_Forecasts.md) | What is the simplest forecast, and why does it usually win? |
+| 14 | [Exponential Smoothing in Plain Language](Module_14_Exponential_Smoothing.md) | How do I forecast a series with both trend and season? |
+| 15 | [How Wrong Is the Forecast?](Module_15_Measuring_Forecast_Error.md) | Which error measure, and why does the popular one break on small counts? |
+| 16 | [Did Something Change?](Module_16_Did_Something_Change.md) | How do I compare before and after without fooling myself? |
 
 ---
 

@@ -807,9 +807,292 @@ def fig_12():
     plt.close(fig)
 
 
+# ------------------------------------------------- shared helpers, Part IV
+FINAL = None
+
+
+def _uof(aid):
+    return _series(aid)
+
+
+def _split(s, end="2024-12"):
+    return s.loc[:end], s.loc[pd.Timestamp(end) + pd.offsets.MonthBegin(1):][:12]
+
+
+def _mae(a, p):
+    return float(np.mean(np.abs(np.asarray(a, float) - np.asarray(p, float))))
+
+
+# ----------------------------------------------------- 13. baselines
+def fig_13():
+    s = _uof("A012")
+    train, test = _split(s)
+    drift = (train.iloc[-1] - train.iloc[0]) / (len(train) - 1)
+
+    fc = {
+        "same month last year": train.iloc[-12:].values,
+        "last value": np.repeat(train.iloc[-1], 12),
+        "mean of all history": np.repeat(train.mean(), 12),
+        "seasonal naive plus drift": train.iloc[-12:].values + drift * 12,
+        "rolling twelve month mean": np.repeat(train.iloc[-12:].mean(), 12),
+        "drift": train.iloc[-1] + drift * np.arange(1, 13),
+    }
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13.2, 4.8))
+
+    show = s.loc["2022":"2024-12"]
+    a1.plot(show.index, show.values, color=INK3, lw=1.5, zorder=3,
+            label="what happened, used for training")
+    a1.plot(test.index, test.values, color=INK, lw=2.4, zorder=6,
+            label="what happened in 2025, held back")
+    for lab, c in [("same month last year", BLUE), ("last value", ORANGE),
+                   ("mean of all history", AQUA)]:
+        a1.plot(test.index, fc[lab], color=c, lw=2, marker="o", ms=3.5,
+                mfc=SURFACE, mew=1, zorder=5, label=lab)
+    a1.axvline(pd.Timestamp("2025-01-01"), color=INK, lw=1.1, ls=(0, (4, 3)), zorder=4)
+    a1.set_xticks([pd.Timestamp(f"{y}-01-01") for y in (2022, 2023, 2024, 2025, 2026)])
+    a1.set_xticklabels(["2022", "2023", "2024", "2025", "2026"], fontsize=9)
+    a1.set_ylim(0, 195)
+    a1.set_ylabel("use of force incidents")
+    a1.legend(fontsize=8, frameon=False, loc="lower left")
+    style(a1)
+    title(a1, "Grandview: train to the end of 2024, forecast 2025",
+          "Three of the six baselines, against what actually happened.")
+
+    errs = sorted(((k, _mae(test.values, v)) for k, v in fc.items()), key=lambda r: r[1])
+    ys = np.arange(len(errs))
+    cols = [BLUE if i == 0 else INK3 for i in range(len(errs))]
+    a2.barh(ys, [e for _, e in errs], color=cols, height=0.6, zorder=3)
+    for y, (k, e) in zip(ys, errs):
+        a2.text(e + 0.35, y, f"{e:.1f}", va="center", fontsize=9, color=INK2)
+    a2.set_yticks(ys)
+    a2.set_yticklabels([k for k, _ in errs], fontsize=9)
+    a2.invert_yaxis()
+    a2.set_xlim(0, 30)
+    a2.set_xlabel("average error in 2025, incidents a month")
+    style(a2, ygrid=False)
+    a2.grid(axis="x", color=GRID, lw=0.8); a2.set_axisbelow(True)
+    title(a2, "The bar any model has to clear",
+          "Using the same month a year ago is hard to beat and costs nothing.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_m13_baselines.png", dpi=150)
+    plt.close(fig)
+
+
+# -------------------------------------------- 14. exponential smoothing
+def fig_14():
+    from statsmodels.tsa.holtwinters import ExponentialSmoothing, SimpleExpSmoothing
+
+    s = _uof("A012")
+    train, test = _split(s)
+    hw = ExponentialSmoothing(train, trend="add", seasonal="add", seasonal_periods=12,
+                              initialization_method="estimated").fit()
+    pred = hw.forecast(12)
+    snaive = train.iloc[-12:].values
+    sd = float(np.std(hw.resid, ddof=1))
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13.2, 4.8))
+
+    show = s.loc["2022":"2025-12"]
+    a1.plot(show.index, show.values, color=INK3, lw=1.5, zorder=3, label="what happened")
+    a1.fill_between(test.index, pred.values - 1.96 * sd, pred.values + 1.96 * sd,
+                    color=BLUE, alpha=0.14, zorder=2, label="95 percent interval")
+    a1.plot(test.index, pred.values, color=BLUE, lw=2.4, zorder=5, label="Holt Winters")
+    a1.plot(test.index, snaive, color=ORANGE, lw=2, ls=(0, (4, 2)), zorder=4,
+            label="same month last year")
+    a1.axvline(pd.Timestamp("2025-01-01"), color=INK, lw=1.1, ls=(0, (4, 3)), zorder=4)
+    a1.set_xticks([pd.Timestamp(f"{y}-01-01") for y in (2022, 2023, 2024, 2025, 2026)])
+    a1.set_xticklabels(["2022", "2023", "2024", "2025", "2026"], fontsize=9)
+    a1.set_ylim(0, 195)
+    a1.set_ylabel("use of force incidents")
+    a1.legend(fontsize=8, frameon=False, loc="lower left")
+    style(a1)
+    title(a1, "Holt Winters against the baseline it has to beat",
+          f"Average error {_mae(test.values, pred.values):.1f} against "
+          f"{_mae(test.values, snaive):.1f} for the baseline.")
+
+    # what the smoothing parameter does
+    shock = pd.Series(np.r_[np.repeat(50.0, 12), np.repeat(80.0, 12)])
+    for alpha, c in [(0.1, AQUA), (0.35, BLUE), (0.8, ORANGE)]:
+        lvl = SimpleExpSmoothing(shock, initialization_method="known",
+                                 initial_level=50.0).fit(smoothing_level=alpha,
+                                                         optimized=False)
+        a2.plot(range(len(shock)), lvl.fittedvalues, color=c, lw=2.2, zorder=4,
+                label=f"alpha = {alpha}")
+    a2.plot(range(len(shock)), shock.values, color=INK3, lw=1.6, zorder=3,
+            label="the series")
+    a2.axvline(11.5, color=INK, lw=1.1, ls=(0, (4, 3)), zorder=2)
+    a2.set_ylim(40, 90)
+    a2.set_xlabel("months")
+    a2.set_ylabel("level")
+    a2.legend(fontsize=8.5, frameon=False, loc="lower right")
+    style(a2)
+    title(a2, "What the smoothing parameter decides",
+          "How fast the model accepts that the level has moved.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_m14_exponential_smoothing.png", dpi=150)
+    plt.close(fig)
+
+
+# ------------------------------------------------ 15. measuring error
+def fig_15():
+    from statsmodels.tsa.holtwinters import ExponentialSmoothing
+
+    s = _uof("A012")
+    rows = []
+    for end in ["2022-12", "2023-06", "2023-12", "2024-06", "2024-12", "2025-04"]:
+        tr, te = _split(s, end)
+        if len(te) < 12:
+            continue
+        hw = ExponentialSmoothing(tr, trend="add", seasonal="add", seasonal_periods=12,
+                                  initialization_method="estimated").fit().forecast(12)
+        rows.append((end, _mae(te.values, hw.values), _mae(te.values, tr.iloc[-12:].values)))
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13.2, 4.7))
+
+    x = np.arange(len(rows))
+    a1.plot(x, [r[1] for r in rows], color=BLUE, lw=2.2, marker="o", ms=7,
+            mfc=SURFACE, mew=1.8, zorder=4, label="Holt Winters")
+    a1.plot(x, [r[2] for r in rows], color=ORANGE, lw=2.2, marker="o", ms=7,
+            mfc=SURFACE, mew=1.8, zorder=3, label="same month last year")
+    best = int(np.argmin([r[1] for r in rows]))
+    a1.annotate("the single holdout\neveryone reports", (x[best], rows[best][1]),
+                textcoords="offset points", xytext=(-8, -34), ha="center",
+                fontsize=8.5, color=INK,
+                arrowprops=dict(arrowstyle="->", lw=0.9, color=INK2))
+    a1.set_xticks(x)
+    a1.set_xticklabels([r[0] for r in rows], fontsize=8.5)
+    a1.set_ylim(0, 22)
+    a1.set_xlabel("training data ends")
+    a1.set_ylabel("average error over the next 12 months")
+    a1.legend(fontsize=8.5, frameon=False, loc="lower left")
+    style(a1)
+    title(a1, "One holdout is one number",
+          "Six starting points, and the usual one is the most flattering.")
+
+    e = _uof("A006")
+    tr, te = _split(e)
+    pred = np.repeat(tr.iloc[-12:].mean(), 12)
+    ape = np.where(te.values == 0, np.nan, 100 * np.abs(te.values - pred) / np.where(te.values == 0, 1, te.values))
+    idx = np.arange(12)
+    a2.bar(idx - 0.2, np.abs(te.values - pred), width=0.38, color=BLUE, zorder=3,
+           label="absolute error, in incidents")
+    ok = ~np.isnan(ape)
+    a2.bar(idx[ok] + 0.2, ape[ok] / 100, width=0.38, color=ORANGE, zorder=3,
+           label="absolute percentage error, divided by 100")
+    for i in idx[~ok]:
+        a2.text(i + 0.2, 0.06, "undefined", rotation=90, fontsize=7.5,
+                color=ORANGE, ha="center", va="bottom")
+    a2.set_xticks(idx)
+    a2.set_xticklabels(MONTHS, fontsize=8.5)
+    for lab in a2.get_xticklabels()[1::2]:
+        lab.set_visible(False)
+    a2.set_ylim(0, 3.1)
+    a2.legend(fontsize=8, frameon=False, loc="upper left")
+    style(a2)
+    title(a2, "Elkhorn, 2025: why a percentage error fails",
+          "Five months are zero, so the percentage cannot be computed at all.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_m15_measuring_error.png", dpi=150)
+    plt.close(fig)
+
+
+# ---------------------------------------------- 16. did something change
+def fig_16():
+    from statsmodels.tsa.holtwinters import ExponentialSmoothing
+
+    TREATED = ["A001", "A002", "A004", "A010"]          # the violator A007 left out
+    ALL_TREATED = ["A001", "A002", "A004", "A007", "A010"]
+    clean = monthly[monthly["provisional"] == 0].copy()
+    clean = clean[~((clean["agency_id"] == "A002") & (clean["year_month"] == "2021-06"))]
+    control = [a for a in clean["agency_id"].unique() if a not in ALL_TREATED]
+
+    def grp(ids):
+        w = clean[clean["agency_id"].isin(ids)].groupby("year_month")[["n_uof", "n_arrests"]].sum()
+        r = pd.Series((100 * w["n_uof"] / w["n_arrests"]).values,
+                      index=pd.PeriodIndex(w.index, freq="M").to_timestamp())
+        return r
+
+    def pooled(ids, lo, hi):
+        w = clean[(clean["agency_id"].isin(ids)) & (clean["year_month"] >= lo)
+                  & (clean["year_month"] <= hi)]
+        return 100 * w["n_uof"].sum() / w["n_arrests"].sum()
+
+    T, C = grp(TREATED), grp(control)
+    PRE_END, SETTLED = "2023-06", "2023-11"
+
+    pre = T.loc[:PRE_END]
+    hw = ExponentialSmoothing(np.log(pre), trend="add", seasonal="add", seasonal_periods=12,
+                              initialization_method="estimated").fit()
+    horizon = len(T.loc[pd.Timestamp(PRE_END) + pd.offsets.MonthBegin(1):])
+    cf = np.exp(hw.forecast(horizon))
+    sd = float(np.std(hw.resid, ddof=1))
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13.4, 4.9))
+
+    # compare like with like: a six month average of each
+    W = 6
+    act_s = T.rolling(W).mean()
+    spliced = pd.concat([T.loc[:PRE_END], cf])
+    cf_s = spliced.rolling(W).mean().loc[cf.index]
+    half = 1.96 * sd / np.sqrt(W)
+
+    a1.plot(act_s.index, act_s.values, color=ORANGE, lw=2.6, zorder=5,
+            label="agencies that adopted the training")
+    a1.fill_between(cf_s.index, np.exp(np.log(cf_s) - half), np.exp(np.log(cf_s) + half),
+                    color=BLUE, alpha=0.16, zorder=2)
+    a1.plot(cf_s.index, cf_s.values, color=BLUE, lw=2.4, ls=(0, (5, 3)), zorder=3,
+            label="what the pre programme series predicted")
+    a1.fill_between(act_s.loc[cf_s.index].index, act_s.loc[cf_s.index].values,
+                    cf_s.values, color=ORANGE, alpha=0.13, zorder=1)
+    a1.axvline(pd.Timestamp("2023-07-01"), color=INK, lw=1.2, ls=(0, (4, 3)), zorder=6)
+    a1.text(pd.Timestamp("2023-08-10"), 4.05, "training begins", fontsize=8.5, color=INK2)
+    a1.set_ylim(1.8, 4.3)
+    a1.set_ylabel("use of force per 100 arrests")
+    a1.legend(fontsize=8, frameon=False, loc="lower left")
+    style(a1)
+    title(a1, "Forecast what would have happened, then compare",
+          "Both lines are six month averages. The shaded gap is the estimate.")
+
+    tb, ta = pooled(TREATED, "2021-07", PRE_END), pooled(TREATED, SETTLED, "2026-04")
+    cb, ca = pooled(control, "2021-07", PRE_END), pooled(control, SETTLED, "2026-04")
+    post = T.loc[SETTLED:].index
+    est = [
+        ("before and after,\ntrained agencies only", 100 * (ta / tb - 1), ORANGE),
+        ("difference in differences", 100 * ((ta / tb) / (ca / cb) - 1), BLUE),
+        ("forecast counterfactual", 100 * (T.loc[post].mean() / cf.loc[post].mean() - 1), BLUE),
+    ]
+    ys = np.arange(len(est))
+    a2.barh(ys, [e[1] for e in est], color=[e[2] for e in est], height=0.55, zorder=3)
+    for y, (lab, v, _) in zip(ys, est):
+        a2.text(v - 0.6, y, f"{v:.1f}%", va="center", ha="right",
+                fontsize=10.5, color=INK, weight="bold")
+        a2.text(-29.5, y + 0.34, lab.replace("\n", " "), va="bottom", ha="left",
+                fontsize=8.5, color=INK2)
+    a2.axvline(-12.0, color=INK, lw=1.6, ls=(0, (5, 3)), zorder=5)
+    a2.text(-12.5, -0.85, "the true effect\nbuilt into the data", ha="right",
+            va="bottom", fontsize=8.5, color=INK)
+    a2.set_yticks([])
+    a2.set_ylim(-1.15, len(est) - 0.25)
+    a2.set_xlim(-30, 2)
+    a2.set_xlabel("estimated effect, percent")
+    style(a2, ygrid=False)
+    a2.grid(axis="x", color=GRID, lw=0.8); a2.set_axisbelow(True)
+    title(a2, "Three answers from the same data",
+          "Two land on the truth. The one without a comparison doubles it.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_m16_did_something_change.png", dpi=150)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     for fn in (fig_01, fig_02, fig_03, fig_04,
                fig_05, fig_06, fig_07, fig_08,
-               fig_09, fig_10, fig_11, fig_12):
+               fig_09, fig_10, fig_11, fig_12,
+               fig_13, fig_14, fig_15, fig_16):
         fn()
         print("built", fn.__name__)

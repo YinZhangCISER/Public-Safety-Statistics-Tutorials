@@ -7,7 +7,7 @@ Three levels, 52 modules. Each level is complete on its own, and each one assume
 | Level | Modules | Assumes | Code | Time |
 |---|---|---|---|---|
 | **[Beginner](Beginner/)** | 20, all published | Nothing. No statistics, no math, no code. | None | 5 minutes a module |
-| **[Intermediate](Intermediate/)** | 16 | You can read a chart and a percentage. | Jupyter notebooks, gentle | 10 minutes plus 15 in the notebook |
+| **[Intermediate](Intermediate/)** | 16, all published | You can read a chart and a percentage. | Jupyter notebooks, gentle | 10 minutes plus 15 in the notebook |
 | **[Advanced](Advanced/)** | 16 | You have fitted a regression before. | Jupyter notebooks, complete | 20 minutes plus 30 in the notebook |
 
 ## Which level are you?
