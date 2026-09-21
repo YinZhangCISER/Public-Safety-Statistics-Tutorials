@@ -349,7 +349,283 @@ def fig_08():
     plt.close(fig)
 
 
+
+def _did(trained_ids, comparison_ids):
+    t = F[F["agency_id"].isin(trained_ids)]
+    c = F[F["agency_id"].isin(comparison_ids)]
+    tb, ta = rate(t[t["period"] == "before"]), rate(t[t["period"] == "after"])
+    cb, ca = rate(c[c["period"] == "before"]), rate(c[c["period"] == "after"])
+    return 100 * ((ta / tb) / (ca / cb) - 1)
+
+
+def fig_09():
+    """Topic 9. One agency was not moving with the others, before anything happened."""
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13.4, 5.0),
+                                 gridspec_kw={"width_ratios": [1.35, 1]})
+
+    pre_end = pd.Timestamp("2023-07-01")
+    for ids, col, lab, lw in [(NO_A007, BLUE, "the other four that took the training", 2.6),
+                              (COMPARISON, INK3, "the seven that did not", 2.6),
+                              (["A007"], ORANGE, "Summit County, which also took it", 2.8)]:
+        s = group_series(ids)
+        s = s[s.index <= pre_end]
+        a1.plot(s.index, s.values, color=col, lw=lw, zorder=5 if col == ORANGE else 4,
+                label=lab)
+    a1.text(pd.Timestamp("2019-08-01"), 2.14,
+            "Summit County is already pulling away,\nand the training does not exist yet",
+            fontsize=9.5, color=ORANGE)
+    a1.set_ylabel("use of force per 100 arrests")
+    a1.set_ylim(2.0, 4.3)
+    a1.legend(fontsize=8.5, frameon=False, loc="upper right")
+    style(a1)
+    title(a1, "The years before the program started",
+          "Two of the three lines move together. One does not.")
+
+    steps = [("before and after,\nthe trained agencies", -33.1, ORANGE),
+             ("minus what happened\nto everybody else", _did(TREATED, COMPARISON), ORANGE),
+             ("minus the agency that\nwas not moving with them",
+              _did(NO_A007, COMPARISON), AQUA)]
+    ys = np.arange(len(steps))[::-1]
+    for (lab, v, c), yy in zip(steps, ys):
+        a2.barh(yy, v, color=c, height=0.42, zorder=3)
+        a2.text(v - 1.0, yy, f"{v:+.1f}%", ha="right", va="center", fontsize=11,
+                color=INK, weight="bold")
+    a2.axvline(-12.0, color=INK, lw=2, ls="--", zorder=5)
+    a2.text(-12.6, -0.72, "the truth ", fontsize=9.5, color=INK, ha="right")
+    a2.set_yticks(ys)
+    a2.set_yticklabels([s[0] for s in steps], fontsize=9)
+    a2.set_xlim(-40, 2)
+    a2.set_ylim(-1.0, 2.55)
+    a2.set_xlabel("estimated change in the use of force rate")
+    style(a2, ygrid=False)
+    a2.grid(axis="x", color=GRID, lw=0.8, zorder=0)
+    a2.set_axisbelow(True)
+    title(a2, "Two corrections, in order",
+          "Each one removes something that was not the training.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_09_moving_together.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_10():
+    """Topic 10. A comparison agency that was quietly treated too."""
+    correct = _did(NO_A007, [a for a in COMPARISON])
+    rows = [("nobody in the comparison\ngroup was trained", correct, AQUA, "")]
+    for aid in ["A003", "A008", "A012"]:
+        rest = [a for a in COMPARISON if a != aid]
+        rows.append((f"{SHORT[aid]} was trained too,\nand nobody recorded it",
+                     _did(NO_A007 + [aid], rest), ORANGE,
+                     f"{profile.loc[profile.agency_id == aid, 'sworn_officers'].iloc[0]:.0f} officers"))
+
+    fig, ax = plt.subplots(figsize=(11.6, 5.0))
+    ys = np.arange(len(rows))[::-1]
+    for (lab, v, c, note), yy in zip(rows, ys):
+        ax.barh(yy, v, color=c, height=0.44, zorder=3)
+        ax.text(v - 0.45, yy, f"{v:+.1f}%", ha="right", va="center", fontsize=11,
+                color=INK, weight="bold")
+        if note:
+            ax.text(0.6, yy, note, ha="left", va="center", fontsize=9, color=INK2)
+    ax.axvline(-12.0, color=INK, lw=2, ls="--", zorder=5)
+    ax.text(-12.4, -0.78, "the truth ", fontsize=9.5, color=INK, ha="right")
+    ax.set_yticks(ys)
+    ax.set_yticklabels([r[0] for r in rows], fontsize=9.5)
+    ax.set_xlim(-17, 6)
+    ax.set_ylim(-1.05, 3.55)
+    ax.set_xlabel("estimated change in the use of force rate")
+    style(ax, ygrid=False)
+    ax.grid(axis="x", color=GRID, lw=0.8, zorder=0)
+    ax.set_axisbelow(True)
+    title(ax, "What one contaminated comparison agency costs",
+          "The bigger the agency that leaks, the more of the effect disappears.")
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_10_contamination.png", dpi=150)
+    plt.close(fig)
+
+
+def _early_late():
+    """For the seven untrained agencies: rate in 2019 to mid 2020, and in 2022 to mid 2023."""
+    out = {}
+    for aid in COMPARISON:
+        g = F[F["agency_id"] == aid]
+        e = g[g["year_month"] < "2020-07"]
+        l = g[(g["year_month"] >= "2022-07") & (g["year_month"] < "2023-07")]
+        out[aid] = (rate(e), rate(l))
+    return out
+
+
+def fig_11():
+    """Topic 11. Regression to the mean, among agencies that received nothing."""
+    d = _early_late()
+    order = sorted(d, key=lambda a: -d[a][0])
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13.4, 5.0),
+                                 gridspec_kw={"width_ratios": [1.25, 1]})
+
+    for i, aid in enumerate(order):
+        e, l = d[aid]
+        c = ORANGE if i < 3 else (BLUE if i >= len(order) - 3 else INK3)
+        a1.plot([0, 1], [e, l], color=c, lw=2.4, marker="o", ms=8, zorder=4)
+        dy = 0.0
+        for other in order[:i]:
+            if abs(d[other][0] - e) < 0.045:
+                dy = -0.05
+        a1.text(-0.04, e + dy, SHORT[aid], ha="right", va="center", fontsize=9, color=c)
+    a1.set_xticks([0, 1])
+    a1.set_xticklabels(["2019 to mid 2020", "2022 to mid 2023"], fontsize=10)
+    a1.set_xlim(-0.62, 1.12)
+    a1.set_ylabel("use of force per 100 arrests")
+    a1.text(1.02, 3.2, "the three that\nstarted highest", fontsize=9, color=ORANGE)
+    a1.text(1.02, 1.93, "the three that\nstarted lowest", fontsize=9, color=BLUE)
+    style(a1)
+    title(a1, "Seven agencies, none of which took any program",
+          "The ones at the top came down. The ones at the bottom did not.")
+
+    hi = np.mean([100 * (d[a][1] / d[a][0] - 1) for a in order[:3]])
+    lo = np.mean([100 * (d[a][1] / d[a][0] - 1) for a in order[-3:]])
+    a2.bar([0, 1], [hi, lo], color=[ORANGE, BLUE], width=0.5, zorder=3)
+    for x, v in [(0, hi), (1, lo)]:
+        a2.text(x, v + (0.9 if v > 0 else -1.6), f"{v:+.1f}%", ha="center",
+                fontsize=12, color=INK, weight="bold")
+    a2.axhline(0, color=INK2, lw=1.2, zorder=4)
+    a2.set_xticks([0, 1])
+    a2.set_xticklabels(["started highest", "started lowest"], fontsize=10)
+    a2.set_ylim(-17, 12)
+    a2.set_ylabel("change in the use of force rate")
+    style(a2)
+    title(a2, f"A gap of {abs(hi - lo):.0f} points, with no program anywhere",
+          "Being at the top is itself a reason to improve.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_11_regression_to_mean.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_12():
+    """Topic 12. The two groups match on everything except the thing that matters."""
+    p = profile.copy()
+    p["grp"] = np.where(p["agency_id"].isin(TREATED), "trained", "not")
+    rows = [("sworn officers", "sworn_officers"),
+            ("population served", "population_served"),
+            ("violent crime rate", "violent_crime_rate_per_1000"),
+            ("property crime rate", "property_crime_rate_per_1000"),
+            ("public safety budget share", "budget_share_public_safety_pct"),
+            ("use of force rate before the program", "pre_program_uof_per_100_arrests")]
+    ratios, labs = [], []
+    for lab, col in rows:
+        a = p[p["grp"] == "trained"][col].mean()
+        b = p[p["grp"] == "not"][col].mean()
+        ratios.append(a / b)
+        labs.append(lab)
+
+    fig, ax = plt.subplots(figsize=(11.8, 4.8))
+    ys = np.arange(len(labs))[::-1]
+    for r, yy, lab in zip(ratios, ys, labs):
+        far = abs(r - 1) > 0.25
+        c = ORANGE if far else INK3
+        ax.plot([1, r], [yy, yy], color=c, lw=2.4, zorder=3)
+        ax.scatter([r], [yy], s=110, color=c, zorder=5)
+        ax.text(r + 0.022, yy, f"{r:.2f}", va="center", fontsize=10,
+                color=INK, weight="bold" if far else "normal")
+    ax.axvline(1.0, color=INK2, lw=1.6, zorder=4)
+    ax.text(1.0, -0.78, "identical on average", fontsize=9.5, color=INK2, ha="center")
+    ax.set_yticks(ys)
+    ax.set_yticklabels(labs, fontsize=10)
+    ax.set_xlim(0.72, 1.58)
+    ax.set_ylim(-1.05, 5.5)
+    ax.set_xlabel("trained agencies divided by agencies that were not trained")
+    style(ax, ygrid=False)
+    ax.grid(axis="x", color=GRID, lw=0.8, zorder=0)
+    ax.set_axisbelow(True)
+    title(ax, "The two groups, compared on everything in the file",
+          "Alike on every characteristic anyone would check, except one.")
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_12_who_participated.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_13():
+    """Topic 13. A program that does not exist, evaluated two ways."""
+    base = profile.set_index("agency_id")["pre_program_uof_per_100_arrests"]
+    ranked = sorted(COMPARISON, key=lambda a: -base[a])
+    worst, best = ranked[:3], ranked[-3:]
+
+    rows = []
+    for lab, pick, c in [("the three worst performers", worst, ORANGE),
+                         ("the three best performers", best, BLUE)]:
+        rest = [a for a in COMPARISON if a not in pick]
+        rows.append((lab, _did(pick, rest), c, ", ".join(SHORT[a] for a in pick)))
+
+    fig, ax = plt.subplots(figsize=(11.8, 4.7))
+    ys = [1, 0]
+    for (lab, v, c, who), yy in zip(rows, ys):
+        ax.barh(yy, v, color=c, height=0.36, zorder=3)
+        off = -0.45 if v < 0 else 0.45
+        ha = "right" if v < 0 else "left"
+        ax.text(v + off, yy, f"{v:+.1f}%", ha=ha, va="center", fontsize=12,
+                color=INK, weight="bold")
+        ax.text(-13.4, yy - 0.32, who, fontsize=8.5, color=INK2, va="center")
+    ax.axvline(0, color=INK, lw=2, ls="--", zorder=5)
+    ax.text(0.25, -0.62, "the true effect of a program nobody received",
+            fontsize=9.5, color=INK)
+    ax.set_yticks(ys)
+    ax.set_yticklabels([r[0] for r in rows], fontsize=10.5)
+    ax.set_xlim(-14, 14)
+    ax.set_ylim(-0.85, 1.6)
+    ax.set_xlabel("what a difference in differences reports")
+    style(ax, ygrid=False)
+    ax.grid(axis="x", color=GRID, lw=0.8, zorder=0)
+    ax.set_axisbelow(True)
+    title(ax, "Choose the worst performers and you manufacture an effect",
+          "None of these seven agencies received anything. Choose the best and the sign flips.")
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_13_picking_winners.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_14():
+    """Topic 14. Splitting the observed change into its two parts, in rate units."""
+    t = F[F["agency_id"].isin(NO_A007)]
+    c = F[F["agency_id"].isin(COMPARISON)]
+    tb, ta = rate(t[t["period"] == "before"]), rate(t[t["period"] == "after"])
+    cb, ca = rate(c[c["period"] == "before"]), rate(c[c["period"] == "after"])
+    mid = tb * (ca / cb)                      # where the statewide decline alone lands them
+
+    fig, ax = plt.subplots(figsize=(11.4, 5.0))
+    vals = [tb, mid, ta]
+    cols = [INK3, ORANGE, AQUA]
+    labs = ["before the training",
+            "where the statewide\ndecline alone puts them",
+            "where they actually\nended up"]
+    ax.bar([0, 1, 2], vals, color=cols, width=0.5, zorder=3)
+    for x, v in zip([0, 1, 2], vals):
+        ax.text(x, v + 0.20, f"{v:.2f}", ha="center", fontsize=12, color=INK,
+                weight="bold")
+
+    ax.annotate("", xy=(1, mid + 0.02), xytext=(0.5, tb + 0.02),
+                arrowprops=dict(arrowstyle="->", color=ORANGE, lw=2.2))
+    ax.text(0.52, tb + 0.30,
+            f"everything that happened\nto every agency: {100 * (ca / cb - 1):+.1f}%",
+            fontsize=9.5, color=ORANGE)
+    ax.annotate("", xy=(2, ta + 0.02), xytext=(1.5, mid + 0.02),
+                arrowprops=dict(arrowstyle="->", color=AQUA, lw=2.2))
+    ax.text(1.52, mid + 0.30,
+            f"what is left for the\ntraining: {100 * (ta / mid - 1):+.1f}%",
+            fontsize=9.5, color=AQUA)
+
+    ax.set_xticks([0, 1, 2])
+    ax.set_xticklabels(labs, fontsize=10)
+    ax.set_ylim(0, 4.6)
+    ax.set_ylabel("use of force per 100 arrests")
+    style(ax)
+    title(ax, "One observed change, two causes",
+          f"The whole fall is {100 * (ta / tb - 1):+.1f}%. Most of it is not the training.")
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_14_confounding.png", dpi=150)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
-    for fn in (fig_01, fig_02, fig_03, fig_04, fig_05, fig_06, fig_07, fig_08):
+    for fn in (fig_01, fig_02, fig_03, fig_04, fig_05, fig_06, fig_07, fig_08,
+               fig_09, fig_10, fig_11, fig_12, fig_13, fig_14):
         fn()
         print("built", fn.__name__)
