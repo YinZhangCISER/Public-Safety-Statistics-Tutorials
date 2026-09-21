@@ -4,17 +4,23 @@
 
 *Developed by Yin Zhang, PhD, Assistant Professor, Data Analytics Program, Department of Mathematics and Statistics, Washington State University, for the Washington Data Exchange for Public Safety (WADEPS) through the Center for Interdisciplinary Statistical Education and Research (CISER).*
 
-For agency data analysts, graduate students outside statistics, and early career researchers. Sixteen modules with complete Python notebooks. Notation is used freely, proofs are not. The emphasis throughout is on what a model assumes, how you check the assumption, and what it costs you when the assumption fails.
+For agency data analysts, graduate students outside statistics, and early career researchers. Fourteen modules with complete Python notebooks.
+
+Notation is used freely, proofs are not. The emphasis throughout is on **what a model assumes, how you check the assumption, and what it costs you when the assumption fails.**
+
+> **Publication status:** in development. Titles below are not yet links.
 
 ---
 
 ## Part I. Foundations for Modeling
 
+Three habits that every later module depends on.
+
 | # | Module | The question it answers |
 |---|---|---|
 | 1 | Stationarity Tested, Not Eyeballed | ADF, KPSS, differencing, and what over differencing costs you |
 | 2 | Incident Counts Are Not Gaussian | Poisson and negative binomial thinking, and the right way to use exposure |
-| 3 | Model Selection and Diagnostic Discipline | AIC, residual checks, Ljung Box, and rolling origin backtesting |
+| 3 | Model Selection, Diagnostics and Honest Uncertainty | AIC, residual checks, rolling origin backtesting, simulation based intervals, and whether a forecast distribution is any good |
 
 ## Part II. Core Univariate Models
 
@@ -23,7 +29,7 @@ For agency data analysts, graduate students outside statistics, and early career
 | 4 | ARIMA End to End on One Agency | The full workflow, from identification to a defensible forecast |
 | 5 | SARIMA and Seasonal Orders | How to model a July peak rather than removing it |
 | 6 | Regression with ARMA Errors | Adding exposure, policy indicators, and external drivers |
-| 7 | State Space, Unobserved Components, and ETS | When a structural model beats ARIMA, and where Prophet fits |
+| 7 | State Space, Unobserved Components, and ETS | Handling a reporting gap that ARIMA cannot, and where Prophet fits |
 
 ## Part III. Counts, Rare Events, and Many Agencies
 
@@ -41,15 +47,25 @@ For agency data analysts, graduate students outside statistics, and early career
 | 12 | Structural Breaks and Changepoints | Finding the date you were not told about |
 | 13 | Intervention Analysis and Transfer Functions | Modeling the shape of a response, and the handoff to causal inference |
 
-## Part V. Getting It Used
+## Closing
 
 | # | Module | The question it answers |
 |---|---|---|
-| 14 | Communicating Forecast Uncertainty | Prediction intervals, fan charts, and whether yours are calibrated |
-| 15 | Reproducible Analysis for Public Agencies | Structure, seeds, environments, and documentation that survives staff turnover |
-| 16 | Reporting to Decision Makers | What to put in front of a chief, and what you are not entitled to claim |
+| 14 | Reporting, and Work That Outlives You | What to put in front of a chief, what you are not entitled to claim, and how to leave an analysis someone else can rerun |
 
 ---
+
+## What the earlier levels have already promised this one
+
+Thirteen of these fourteen modules are named somewhere in the Beginner or Intermediate series, or in the dataset's answer key, as the place a question gets taken up properly. A few examples:
+
+| Promised by | To | About |
+|---|---|---|
+| [Intermediate Module 8](../Intermediate/Module_08_Rolling_Statistics_And_Control_Limits.md) | Module 2 | why counts are overdispersed, and what to do about it |
+| [Intermediate Module 10](../Intermediate/Module_10_Reading_Autocorrelation.md) | Modules 3, 4, 11 | fitting the structure the residuals still contain |
+| [Intermediate Module 12](../Intermediate/Module_12_Building_A_Peer_Benchmark_Series.md) | Module 10 | many agencies at once, properly |
+| [Intermediate Module 16](../Intermediate/Module_16_Did_Something_Change.md) | Modules 11, 13 | estimating an intervention effect with a model |
+| [Data/GROUND_TRUTH.md](../../Data/GROUND_TRUTH.md) | Modules 1, 2, 3, 5, 8, 9, 10, 11, 12, 13 | every pattern deliberately built into the dataset |
 
 ## Recovering the planted answer
 
@@ -57,10 +73,10 @@ Every module that estimates something compares its estimate against the value de
 
 ## Software
 
-`pandas`, `numpy`, `statsmodels`, `matplotlib`, with `pmdarima` in two modules. Everything is available in Google Colab by default. See [requirements.txt](../../requirements.txt).
+`pandas`, `numpy`, `statsmodels`, `matplotlib`, `scikit-learn`, with `pmdarima` in two modules. Everything is available in Google Colab by default. See [requirements.txt](../../requirements.txt).
 
 ---
 
-*All examples use synthetic data created for teaching. They do not represent any real jurisdiction, agency, officer, or incident.*
+*All examples use synthetic data created for teaching. They do not represent any real jurisdiction, agency, officer, or incident. See [Data/DATA_DICTIONARY.md](../../Data/DATA_DICTIONARY.md).*
 
 *Questions, corrections, or suggestions: yin.zhang@wsu.edu*

@@ -68,7 +68,7 @@ The use of force rate carries a cosine seasonal factor peaking in **July** with 
 
 *Why it is there:* so that the most recent point on every chart looks like a sudden improvement, and so that every tutorial has to drop it before fitting or forecasting.
 
-*Where it is used:* Beginner Topic 19, Intermediate Modules 2 and 13, Advanced Modules 3 and 14.
+*Where it is used:* Beginner Topic 19, Intermediate Modules 2 and 13, Advanced Module 3.
 
 ## 8. One agency with a different pre existing trend
 

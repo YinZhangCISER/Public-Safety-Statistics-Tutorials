@@ -39,7 +39,7 @@ Not sure which method your question calls for? See the [method selection guides]
 |---|---|---|---|---|
 | [Beginner](Time_Series/Beginner/) | 20 | No statistics background at all | None | **Complete** |
 | [Intermediate](Time_Series/Intermediate/) | 16 | Some background, wants to do it | Jupyter notebooks, gentle | **Complete** |
-| [Advanced](Time_Series/Advanced/) | 16 | Fits models and reports results | Jupyter notebooks, complete | Planned |
+| [Advanced](Time_Series/Advanced/) | 14 | Fits models and reports results | Jupyter notebooks, complete | Planned |
 
 ### 🎯 Causal Inference
 
@@ -106,7 +106,7 @@ Public-Safety-Statistics-Tutorials/
 ├── Time_Series/
 │   ├── Beginner/        20 modules, no code
 │   ├── Intermediate/    16 modules + notebooks
-│   └── Advanced/        16 modules + notebooks
+│   └── Advanced/        14 modules + notebooks
 ├── Causal_Inference/    the same three levels
 ├── Data/                the synthetic dataset, its dictionary, its answer key
 ├── Shared/              glossary, method selection guides, module template
@@ -131,7 +131,7 @@ CISER is producing a companion series of foundational statistics videos led by s
 | **Policymakers and legislative staff** | Beginner Topics 5, 11, 12, 18 and 19 cover the ways public safety numbers are most often misread. |
 | **Journalists** | The same five, plus the Causal Inference Beginner series before writing that a program worked. |
 | **Students and instructors** | The dataset has known answers, so the exercises grade themselves. Everything is CC BY 4.0. |
-| **Researchers** | Advanced modules, and the reproducibility practices in Advanced Module 15. |
+| **Researchers** | Advanced modules, and the reproducibility practices in Advanced Module 14. |
 
 ---
 

@@ -133,7 +133,7 @@ Use MAE for readers and MASE for comparison, never MAPE on counts. Score at seve
 | **Previous** | [Module 14: Exponential Smoothing in Plain Language](Module_14_Exponential_Smoothing.md) |
 | **Next** | [Module 16: Did Something Change?](Module_16_Did_Something_Change.md) |
 | **Builds on** | [Module 13](Module_13_Baseline_Forecasts.md), [Module 14](Module_14_Exponential_Smoothing.md) |
-| **Used again in** | [Module 16](Module_16_Did_Something_Change.md), and Advanced Modules 3 and 14 |
+| **Used again in** | [Module 16](Module_16_Did_Something_Change.md), and Advanced Module 3 |
 
 *This module is part of a series developed for the Washington Data Exchange for Public Safety (WADEPS) through the Center for Interdisciplinary Statistical Education and Research (CISER) at Washington State University. Version 1.0, September 2026. Questions, errors, or suggestions: yin.zhang@wsu.edu*
 
