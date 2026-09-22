@@ -89,7 +89,7 @@ The generator gives no effect anywhere before November 2023 and none to the seve
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_13_Placebo_Permutation_And_Falsification.ipynb](Notebooks/Module_13_Placebo_Permutation_And_Falsification.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Advanced/Notebooks/Module_13_Placebo_Permutation_And_Falsification.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Advanced/Notebooks/Module_13_Placebo_Permutation_And_Falsification.ipynb)
 > About 30 minutes.
 
 The exercise restricts the permutation to assignments resembling the real treated group, and the p value moves.

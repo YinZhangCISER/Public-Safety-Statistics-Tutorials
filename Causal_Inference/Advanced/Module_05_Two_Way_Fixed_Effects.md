@@ -83,7 +83,7 @@ The planted effect is multiplicative on the rate, which is what a log link impos
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_05_Two_Way_Fixed_Effects.ipynb](Notebooks/Module_05_Two_Way_Fixed_Effects.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Advanced/Notebooks/Module_05_Two_Way_Fixed_Effects.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Advanced/Notebooks/Module_05_Two_Way_Fixed_Effects.ipynb)
 > About 30 minutes.
 
 The exercise drops the largest and smallest treated agencies and watches the two estimators converge.

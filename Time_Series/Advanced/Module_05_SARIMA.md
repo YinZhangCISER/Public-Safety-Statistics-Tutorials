@@ -104,7 +104,7 @@ The dataset generates a July peak in the use of force rate with a fixed twelve m
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_05_SARIMA.ipynb](Notebooks/Module_05_SARIMA.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Advanced/Notebooks/Module_05_SARIMA.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Advanced/Notebooks/Module_05_SARIMA.ipynb)
 > About 30 minutes.
 
 The exercise runs the same comparison on Millgate, the least seasonal agency, where **AIC prefers the seasonal model by nearly thirty points and the seasonal model forecasts worse than a constant.**

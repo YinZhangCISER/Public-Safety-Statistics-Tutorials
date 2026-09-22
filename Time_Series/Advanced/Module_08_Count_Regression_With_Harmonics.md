@@ -109,7 +109,7 @@ Two parameters.
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_08_Count_Regression_With_Harmonics.ipynb](Notebooks/Module_08_Count_Regression_With_Harmonics.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Advanced/Notebooks/Module_08_Count_Regression_With_Harmonics.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Advanced/Notebooks/Module_08_Count_Regression_With_Harmonics.ipynb)
 > About 35 minutes.
 
 The exercise runs the same comparison at Ashfell, where the third diagnosis turns out to be the right one.

@@ -87,7 +87,7 @@ The interval from the correct models also includes zero. That is the right answe
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_06_Regression_With_ARMA_Errors.ipynb](Notebooks/Module_06_Regression_With_ARMA_Errors.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Advanced/Notebooks/Module_06_Regression_With_ARMA_Errors.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Advanced/Notebooks/Module_06_Regression_With_ARMA_Errors.ipynb)
 > About 30 minutes.
 
 The exercise repeats the comparison on Tarnbridge, where the documented unrest month has to be handled first.

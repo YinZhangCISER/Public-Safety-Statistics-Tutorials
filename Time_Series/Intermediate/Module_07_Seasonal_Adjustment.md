@@ -76,7 +76,7 @@ An adjusted figure published in January 2025 was therefore provisional in a seco
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_07_Seasonal_Adjustment.ipynb](Notebooks/Module_07_Seasonal_Adjustment.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Intermediate/Notebooks/Module_07_Seasonal_Adjustment.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Intermediate/Notebooks/Module_07_Seasonal_Adjustment.ipynb)
 > About 15 minutes.
 
 The notebook builds the factors, adjusts the series, reproduces both tables, compares Ashfell against Pinecrest, demonstrates the revision problem directly, and ends with an exercise on what adjustment does to the Tarnbridge unrest month.

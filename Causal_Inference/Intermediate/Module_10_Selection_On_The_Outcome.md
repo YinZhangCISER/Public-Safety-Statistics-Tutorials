@@ -63,7 +63,7 @@ That is a more useful statement than "never select on the outcome", which is adv
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_10_Selection_On_The_Outcome.ipynb](Notebooks/Module_10_Selection_On_The_Outcome.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Intermediate/Notebooks/Module_10_Selection_On_The_Outcome.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Intermediate/Notebooks/Module_10_Selection_On_The_Outcome.ipynb)
 > About 25 minutes.
 
 - Ranks every agency on the outcome and marks who was selected

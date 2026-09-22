@@ -78,7 +78,7 @@ So the rule is not "autocorrelation inflates your confidence". It is **"ignoring
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_10_Reading_Autocorrelation.ipynb](Notebooks/Module_10_Reading_Autocorrelation.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Intermediate/Notebooks/Module_10_Reading_Autocorrelation.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Intermediate/Notebooks/Module_10_Reading_Autocorrelation.ipynb)
 > About 20 minutes.
 
 The notebook builds both ACFs, runs Ljung Box, compares ordinary against robust standard errors, and ends with an exercise on Tarnbridge that shows an autocorrelation test and an outlier check finding completely different things.

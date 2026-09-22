@@ -85,7 +85,7 @@ Pooled across five origins, 95 percent intervals covered the truth in about **92
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_15_Measuring_Forecast_Error.ipynb](Notebooks/Module_15_Measuring_Forecast_Error.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Intermediate/Notebooks/Module_15_Measuring_Forecast_Error.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Intermediate/Notebooks/Module_15_Measuring_Forecast_Error.ipynb)
 > About 20 minutes.
 
 The notebook implements all four measures, demonstrates both MAPE failures, builds the rolling origin table, checks coverage, and ends with a reusable `rolling_origin` function plus an exercise on Tarnbridge.

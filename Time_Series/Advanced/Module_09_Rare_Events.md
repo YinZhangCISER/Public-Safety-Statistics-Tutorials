@@ -120,7 +120,7 @@ Both come back with 43.2 percent zeros, both match a plain Poisson at every coun
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_09_Rare_Events.ipynb](Notebooks/Module_09_Rare_Events.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Advanced/Notebooks/Module_09_Rare_Events.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Advanced/Notebooks/Module_09_Rare_Events.ipynb)
 > About 30 minutes.
 
 The exercise takes Kelsmoor, the one agency here with more zeros than a Poisson predicts, and works out what the excess really is.

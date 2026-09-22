@@ -87,7 +87,7 @@ The generator gives all agencies the same trend except Summit County, which is e
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_06_Event_Studies_And_Pre_Trend_Testing.ipynb](Notebooks/Module_06_Event_Studies_And_Pre_Trend_Testing.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Advanced/Notebooks/Module_06_Event_Studies_And_Pre_Trend_Testing.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Advanced/Notebooks/Module_06_Event_Studies_And_Pre_Trend_Testing.ipynb)
 > About 30 minutes.
 
 The exercise bins event time into quarters and the plot becomes readable.

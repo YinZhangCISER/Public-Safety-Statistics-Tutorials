@@ -86,7 +86,7 @@ Four things survive compression: **what it was compared to, the range, the windo
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_16_The_Causal_Claim.ipynb](Notebooks/Module_16_The_Causal_Claim.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Advanced/Notebooks/Module_16_The_Causal_Claim.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Advanced/Notebooks/Module_16_The_Causal_Claim.ipynb)
 > About 30 minutes.
 
 The exercise writes the ten second version and lists what it had to drop.

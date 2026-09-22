@@ -60,7 +60,7 @@ Three series, one file, three different stories. The question has to come before
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_01_From_Incident_Records_To_A_Time_Series.ipynb](Notebooks/Module_01_From_Incident_Records_To_A_Time_Series.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Intermediate/Notebooks/Module_01_From_Incident_Records_To_A_Time_Series.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Intermediate/Notebooks/Module_01_From_Incident_Records_To_A_Time_Series.ipynb)
 > Opens in Google Colab, runs top to bottom, about 15 minutes.
 
 The notebook builds the twelve numbers above from the raw records, checks them against the published monthly table, then rebuilds the same records as two entirely different series. It finishes with an exercise on firearm discharges.

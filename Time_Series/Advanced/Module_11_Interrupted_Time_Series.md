@@ -125,7 +125,7 @@ The correct specification returns **−12.6 percent** [−17.9, −6.9]. The pre
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_11_Interrupted_Time_Series.ipynb](Notebooks/Module_11_Interrupted_Time_Series.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Advanced/Notebooks/Module_11_Interrupted_Time_Series.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Advanced/Notebooks/Module_11_Interrupted_Time_Series.ipynb)
 > About 40 minutes.
 
 The exercise varies the intervention date and the length of the follow up, and finds that only one of the two changes the answer.

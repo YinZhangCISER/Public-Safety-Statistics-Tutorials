@@ -86,7 +86,7 @@ The dataset's own rule is selection on the level, and this module measures its c
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_04_Selection_Mechanisms.ipynb](Notebooks/Module_04_Selection_Mechanisms.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Advanced/Notebooks/Module_04_Selection_Mechanisms.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Advanced/Notebooks/Module_04_Selection_Mechanisms.ipynb)
 > About 35 minutes.
 
 The exercise repeats the three rules without agency fixed effects, and the level based biases change most.

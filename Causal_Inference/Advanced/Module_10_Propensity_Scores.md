@@ -75,7 +75,7 @@ So there is exactly one control agency available to match four of the five treat
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_10_Propensity_Scores.ipynb](Notebooks/Module_10_Propensity_Scores.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Advanced/Notebooks/Module_10_Propensity_Scores.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Advanced/Notebooks/Module_10_Propensity_Scores.ipynb)
 > About 30 minutes.
 
 The exercise trims to common support and finds two agencies left, one of them the agency the main analysis excluded.

@@ -48,7 +48,7 @@ Rung three is the same division run on four agencies instead of five. The fifth,
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_01_From_It_Went_Down_To_The_Program_Did_It.ipynb](Notebooks/Module_01_From_It_Went_Down_To_The_Program_Did_It.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Intermediate/Notebooks/Module_01_From_It_Went_Down_To_The_Program_Did_It.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Intermediate/Notebooks/Module_01_From_It_Went_Down_To_The_Program_Did_It.ipynb)
 > About 20 minutes.
 
 - Computes all three rungs from the raw monthly files

@@ -58,7 +58,7 @@ The ATU and the ATE are not available here, and saying so is a finding rather th
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_02_Potential_Outcomes_Without_The_Algebra.ipynb](Notebooks/Module_02_Potential_Outcomes_Without_The_Algebra.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Intermediate/Notebooks/Module_02_Potential_Outcomes_Without_The_Algebra.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Intermediate/Notebooks/Module_02_Potential_Outcomes_Without_The_Algebra.ipynb)
 > About 20 minutes.
 
 - Prints which potential outcome is observed for each agency and which is not

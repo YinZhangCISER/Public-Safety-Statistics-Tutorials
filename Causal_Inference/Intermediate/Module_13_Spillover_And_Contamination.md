@@ -64,7 +64,7 @@ Report both. Dropping the two largest comparison agencies nearly doubles the int
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_13_Spillover_And_Contamination.ipynb](Notebooks/Module_13_Spillover_And_Contamination.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Intermediate/Notebooks/Module_13_Spillover_And_Contamination.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Intermediate/Notebooks/Module_13_Spillover_And_Contamination.ipynb)
 > About 25 minutes.
 
 - Relabels each comparison agency as treated in turn

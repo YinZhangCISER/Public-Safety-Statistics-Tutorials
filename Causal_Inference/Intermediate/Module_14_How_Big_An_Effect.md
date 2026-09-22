@@ -59,7 +59,7 @@ That is not what most people expect. Precision depends on the incidents on **bot
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_14_How_Big_An_Effect.ipynb](Notebooks/Module_14_How_Big_An_Effect.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Intermediate/Notebooks/Module_14_How_Big_An_Effect.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Intermediate/Notebooks/Module_14_How_Big_An_Effect.ipynb)
 > About 20 minutes.
 
 - Computes the detectable effect from the standard error the model already gives

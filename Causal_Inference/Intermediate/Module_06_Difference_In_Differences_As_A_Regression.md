@@ -57,7 +57,7 @@ The phase in coefficient comes out at **−9.4 percent**, between zero and the s
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_06_Difference_In_Differences_As_A_Regression.ipynb](Notebooks/Module_06_Difference_In_Differences_As_A_Regression.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Intermediate/Notebooks/Module_06_Difference_In_Differences_As_A_Regression.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Intermediate/Notebooks/Module_06_Difference_In_Differences_As_A_Regression.ipynb)
 > About 25 minutes.
 
 - Counts the zero months that would break a log rate regression

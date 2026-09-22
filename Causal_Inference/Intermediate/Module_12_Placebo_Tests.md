@@ -72,7 +72,7 @@ It is the right test when there are few units, because the model based interval 
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_12_Placebo_Tests.ipynb](Notebooks/Module_12_Placebo_Tests.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Intermediate/Notebooks/Module_12_Placebo_Tests.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Intermediate/Notebooks/Module_12_Placebo_Tests.ipynb)
 > About 25 minutes.
 
 - Runs the estimator at five fake dates inside the pre period

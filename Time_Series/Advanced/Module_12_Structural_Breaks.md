@@ -135,7 +135,7 @@ The scan finds 2023-01 in both affected categories and nothing in the total. The
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_12_Structural_Breaks.ipynb](Notebooks/Module_12_Structural_Breaks.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Advanced/Notebooks/Module_12_Structural_Breaks.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Advanced/Notebooks/Module_12_Structural_Breaks.ipynb)
 > About 35 minutes.
 
 The exercise repeats the scan on category shares rather than counts, and finds the reason not to.

@@ -123,7 +123,7 @@ Print the environment in every analysis. It costs four lines and it is the diffe
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_14_Reporting_And_Reproducibility.ipynb](Notebooks/Module_14_Reporting_And_Reproducibility.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Advanced/Notebooks/Module_14_Reporting_And_Reproducibility.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Advanced/Notebooks/Module_14_Reporting_And_Reproducibility.ipynb)
 > About 30 minutes.
 
 The exercise is to write the paragraph for the last row of the table above, then check it against the checklist.

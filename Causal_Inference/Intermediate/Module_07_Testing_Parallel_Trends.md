@@ -63,7 +63,7 @@ The violation Summit County creates at the group level is 2.16 percent a year. *
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_07_Testing_Parallel_Trends.ipynb](Notebooks/Module_07_Testing_Parallel_Trends.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Intermediate/Notebooks/Module_07_Testing_Parallel_Trends.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Intermediate/Notebooks/Module_07_Testing_Parallel_Trends.ipynb)
 > About 25 minutes.
 
 - Tabulates every agency's pre program trend with its interval

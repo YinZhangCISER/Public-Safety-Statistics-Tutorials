@@ -57,7 +57,7 @@ One of these produces the wrong sign. But notice that the three **largest** agen
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_04_Building_A_Comparison_Group.ipynb](Notebooks/Module_04_Building_A_Comparison_Group.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Intermediate/Notebooks/Module_04_Building_A_Comparison_Group.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Intermediate/Notebooks/Module_04_Building_A_Comparison_Group.ipynb)
 > About 25 minutes.
 
 - Prints the seven candidate agencies with the characteristics a rule might use

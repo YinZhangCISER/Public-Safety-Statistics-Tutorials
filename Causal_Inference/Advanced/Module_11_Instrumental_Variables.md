@@ -75,7 +75,7 @@ The weak instrument pathology does not announce itself in the estimate. **The fi
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_11_Instrumental_Variables.ipynb](Notebooks/Module_11_Instrumental_Variables.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Advanced/Notebooks/Module_11_Instrumental_Variables.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Advanced/Notebooks/Module_11_Instrumental_Variables.ipynb)
 > About 30 minutes.
 
 The exercise searches 300 pure noise candidates and finds that several clear an F of 4.

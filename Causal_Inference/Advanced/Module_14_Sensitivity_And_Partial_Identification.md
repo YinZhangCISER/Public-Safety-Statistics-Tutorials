@@ -87,7 +87,7 @@ The truth is a 12 percent reduction. Sensitivity analysis does not recover it, w
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_14_Sensitivity_And_Partial_Identification.ipynb](Notebooks/Module_14_Sensitivity_And_Partial_Identification.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Advanced/Notebooks/Module_14_Sensitivity_And_Partial_Identification.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Advanced/Notebooks/Module_14_Sensitivity_And_Partial_Identification.ipynb)
 > About 35 minutes.
 
 The exercise implements the simplest Rambachan and Roth relative magnitude bound: the conclusion survives a post period violation up to twice the largest one visible before the program, and not three times.

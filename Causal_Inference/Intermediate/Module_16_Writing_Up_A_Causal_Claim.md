@@ -83,7 +83,7 @@ The difference is one verb and the absence of a comparison.
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_16_Writing_Up_A_Causal_Claim.ipynb](Notebooks/Module_16_Writing_Up_A_Causal_Claim.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Intermediate/Notebooks/Module_16_Writing_Up_A_Causal_Claim.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Intermediate/Notebooks/Module_16_Writing_Up_A_Causal_Claim.ipynb)
 > About 25 minutes.
 
 - Reproduces every estimate the series produced, in one table

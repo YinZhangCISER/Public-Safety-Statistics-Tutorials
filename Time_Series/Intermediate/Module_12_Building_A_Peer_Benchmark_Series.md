@@ -93,7 +93,7 @@ Screening the peers recovers roughly −7 percent. That is the right method and 
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_12_Building_A_Peer_Benchmark_Series.ipynb](Notebooks/Module_12_Building_A_Peer_Benchmark_Series.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Intermediate/Notebooks/Module_12_Building_A_Peer_Benchmark_Series.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Intermediate/Notebooks/Module_12_Building_A_Peer_Benchmark_Series.ipynb)
 > About 25 minutes.
 
 The notebook implements Gower distance in about ten lines, builds peer groups, constructs the benchmark series, demonstrates pooling against averaging, reproduces the contamination result, and ends with an exercise that drops a variable from the distance to show how much the groups depend on what you chose to include.

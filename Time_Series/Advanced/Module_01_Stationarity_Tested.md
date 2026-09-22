@@ -102,7 +102,7 @@ After the right transform, both tests agree:
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_01_Stationarity_Tested.ipynb](Notebooks/Module_01_Stationarity_Tested.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Advanced/Notebooks/Module_01_Stationarity_Tested.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Advanced/Notebooks/Module_01_Stationarity_Tested.ipynb)
 > About 25 minutes.
 
 The notebook builds a reusable `stationarity` function returning both p values and the verdict, reproduces both tables, and ends with an exercise on whether the Tarnbridge unrest month changes the answer.

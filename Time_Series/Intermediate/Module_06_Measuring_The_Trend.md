@@ -70,7 +70,7 @@ The single line is an average of two different periods, weighted by how many mon
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_06_Measuring_The_Trend.ipynb](Notebooks/Module_06_Measuring_The_Trend.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Intermediate/Notebooks/Module_06_Measuring_The_Trend.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Intermediate/Notebooks/Module_06_Measuring_The_Trend.ipynb)
 > About 20 minutes.
 
 The notebook fits the log linear model, builds the window comparison, contrasts the regression with a simple compound growth rate, splits Stonewick at the programme date, and ends with an exercise recovering Summit County's built in decline of 12.2 percent a year.

@@ -95,7 +95,7 @@ This is what a regression discontinuity produces when it should not have been ru
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_12_Regression_Discontinuity.ipynb](Notebooks/Module_12_Regression_Discontinuity.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Advanced/Notebooks/Module_12_Regression_Discontinuity.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Advanced/Notebooks/Module_12_Regression_Discontinuity.ipynb)
 > About 30 minutes.
 
 The exercise varies the cutoff across five defensible values and the estimated jump moves with it.

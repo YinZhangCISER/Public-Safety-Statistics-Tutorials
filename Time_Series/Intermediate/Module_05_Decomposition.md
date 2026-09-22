@@ -73,7 +73,7 @@ The dataset was built with a July peak in the use of force rate, amplitude 0.20.
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_05_Decomposition.ipynb](Notebooks/Module_05_Decomposition.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Intermediate/Notebooks/Module_05_Decomposition.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Intermediate/Notebooks/Module_05_Decomposition.ipynb)
 > About 20 minutes.
 
 The notebook compares additive with multiplicative, runs STL, verifies that the three pieces multiply back to the original, builds the comparison table above, and ends with an exercise on what happens to Tarnbridge when `robust=True` is switched off.

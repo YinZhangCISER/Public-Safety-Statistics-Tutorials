@@ -87,7 +87,7 @@ The one closest to the truth is Summit County, and it gets there for the wrong r
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_08_Synthetic_Control.ipynb](Notebooks/Module_08_Synthetic_Control.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Advanced/Notebooks/Module_08_Synthetic_Control.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Advanced/Notebooks/Module_08_Synthetic_Control.ipynb)
 > About 35 minutes.
 
 The exercise drops the convexity constraint, which improves the fit and turns the method into extrapolation.

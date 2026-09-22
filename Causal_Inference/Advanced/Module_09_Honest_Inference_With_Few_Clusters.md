@@ -67,7 +67,7 @@ The planted effect is 12.0 percent and every one of the four intervals covers it
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_09_Honest_Inference_With_Few_Clusters.ipynb](Notebooks/Module_09_Honest_Inference_With_Few_Clusters.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Advanced/Notebooks/Module_09_Honest_Inference_With_Few_Clusters.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Advanced/Notebooks/Module_09_Honest_Inference_With_Few_Clusters.ipynb)
 > About 30 minutes.
 
 The exercise restricts the randomisation to plausible assignments and the p value moves, which is the method's central and uncomfortable feature on observational data.

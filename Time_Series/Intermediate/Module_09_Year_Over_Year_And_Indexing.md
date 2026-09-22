@@ -66,7 +66,7 @@ Read across such a chart and you are comparing **how far each agency has moved f
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_09_Year_Over_Year_And_Indexing.ipynb](Notebooks/Module_09_Year_Over_Year_And_Indexing.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Intermediate/Notebooks/Module_09_Year_Over_Year_And_Indexing.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Intermediate/Notebooks/Module_09_Year_Over_Year_And_Indexing.ipynb)
 > About 15 minutes.
 
 The notebook builds all three, compares their variability, and ends with an exercise finding months where year over year and the rolling total point in opposite directions.

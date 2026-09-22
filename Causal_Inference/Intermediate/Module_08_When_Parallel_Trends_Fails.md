@@ -58,7 +58,7 @@ The interval did not widen, and there is a reason: the four that remain still in
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_08_When_Parallel_Trends_Fails.ipynb](Notebooks/Module_08_When_Parallel_Trends_Fails.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Intermediate/Notebooks/Module_08_When_Parallel_Trends_Fails.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Intermediate/Notebooks/Module_08_When_Parallel_Trends_Fails.ipynb)
 > About 25 minutes.
 
 - Runs all four responses against the known answer

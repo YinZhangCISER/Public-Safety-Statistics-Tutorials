@@ -113,7 +113,7 @@ The dataset removed Prairie County's March, April and May 2022 on purpose, and n
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_07_State_Space_And_ETS.ipynb](Notebooks/Module_07_State_Space_And_ETS.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Advanced/Notebooks/Module_07_State_Space_And_ETS.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Advanced/Notebooks/Module_07_State_Space_And_ETS.ipynb)
 > About 30 minutes.
 
 The exercise confirms that the gap is the whole cause by filling it and refitting, and then argues against doing that.

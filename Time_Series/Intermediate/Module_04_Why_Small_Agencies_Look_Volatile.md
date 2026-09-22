@@ -85,7 +85,7 @@ Meanwhile **Ashfell sits only ninth** in the raw ranking, and the funnel flags i
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_04_Why_Small_Agencies_Look_Volatile.ipynb](Notebooks/Module_04_Why_Small_Agencies_Look_Volatile.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Intermediate/Notebooks/Module_04_Why_Small_Agencies_Look_Volatile.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Intermediate/Notebooks/Module_04_Why_Small_Agencies_Look_Volatile.ipynb)
 > Opens in Google Colab, runs top to bottom, about 20 minutes.
 
 The notebook builds both tables, draws both plots, and ends with a reusable `funnel` function. The exercise runs the funnel over one year and then two, so you can watch agencies change verdict without changing behaviour.

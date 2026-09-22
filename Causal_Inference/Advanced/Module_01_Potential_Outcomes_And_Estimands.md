@@ -93,7 +93,7 @@ The dataset builds a **12 percent** reduction, identical at all five agencies. B
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_01_Potential_Outcomes_And_Estimands.ipynb](Notebooks/Module_01_Potential_Outcomes_And_Estimands.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Advanced/Notebooks/Module_01_Potential_Outcomes_And_Estimands.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Advanced/Notebooks/Module_01_Potential_Outcomes_And_Estimands.ipynb)
 > About 30 minutes.
 
 The exercise varies the averaging window and finds that it too is part of the estimand.

@@ -78,7 +78,7 @@ The flat baselines win and the seasonal one comes last. Orrindale has no seasona
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_13_Baseline_Forecasts.ipynb](Notebooks/Module_13_Baseline_Forecasts.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Intermediate/Notebooks/Module_13_Baseline_Forecasts.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Intermediate/Notebooks/Module_13_Baseline_Forecasts.ipynb)
 > About 15 minutes.
 
 The notebook builds all six, ranks them, works out what margin a model would have to achieve, and ends with a reusable `baseline_table` function plus the Orrindale exercise.

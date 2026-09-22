@@ -81,7 +81,7 @@ Checked against 2025, **11 of 12** months fell inside the nominal 95 percent int
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_14_Exponential_Smoothing.ipynb](Notebooks/Module_14_Exponential_Smoothing.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Intermediate/Notebooks/Module_14_Exponential_Smoothing.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Intermediate/Notebooks/Module_14_Exponential_Smoothing.ipynb)
 > About 20 minutes.
 
 The notebook fits the model, reads out the parameters, compares three variants, checks interval coverage, and ends with an exercise on what the Tarnbridge unrest month does to the estimated June seasonal component.

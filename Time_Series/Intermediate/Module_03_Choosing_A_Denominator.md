@@ -101,7 +101,7 @@ One caveat on the arithmetic. The identity is exact for the logarithms of the un
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_03_Choosing_A_Denominator.ipynb](Notebooks/Module_03_Choosing_A_Denominator.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Intermediate/Notebooks/Module_03_Choosing_A_Denominator.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Intermediate/Notebooks/Module_03_Choosing_A_Denominator.ipynb)
 > Opens in Google Colab, runs top to bottom, about 15 minutes.
 
 The notebook builds all four rates, produces the rank comparison, demonstrates the coverage trap, and ends with a reusable `agency_rates` function that reports the number of months behind each figure.

@@ -72,7 +72,7 @@ The right answer required a source outside the incident file. No amount of care 
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_02_Building_An_Honest_Calendar.ipynb](Notebooks/Module_02_Building_An_Honest_Calendar.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Intermediate/Notebooks/Module_02_Building_An_Honest_Calendar.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Intermediate/Notebooks/Module_02_Building_An_Honest_Calendar.ipynb)
 > Opens in Google Colab, runs top to bottom, about 15 minutes.
 
 The notebook works both agencies through, builds the comparison table above, and ends with a reusable `monthly_series` function that handles zeros, gaps and provisional months in one call. Use it at the top of every later module.

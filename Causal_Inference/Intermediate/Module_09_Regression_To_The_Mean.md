@@ -49,7 +49,7 @@ That is why the reversion in the left panel is weak: a two year average has litt
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_09_Regression_To_The_Mean.ipynb](Notebooks/Module_09_Regression_To_The_Mean.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Intermediate/Notebooks/Module_09_Regression_To_The_Mean.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Intermediate/Notebooks/Module_09_Regression_To_The_Mean.ipynb)
 > About 25 minutes.
 
 - Regresses change on starting level among agencies that received nothing

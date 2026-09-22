@@ -138,7 +138,7 @@ That is the planted lesson: the dataset contains a real gradual response, and th
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_13_Intervention_Analysis.ipynb](Notebooks/Module_13_Intervention_Analysis.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Advanced/Notebooks/Module_13_Intervention_Analysis.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Advanced/Notebooks/Module_13_Intervention_Analysis.ipynb)
 > About 35 minutes.
 
 The exercise fits the Tarnbridge unrest month as a pulse, a step and a decay, and works out why shape selection succeeds there and fails for the programme.

@@ -71,7 +71,7 @@ Three sentences, and a reader now knows exactly where the result is fragile.
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_15_Sensitivity.ipynb](Notebooks/Module_15_Sensitivity.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Intermediate/Notebooks/Module_15_Sensitivity.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Intermediate/Notebooks/Module_15_Sensitivity.ipynb)
 > About 25 minutes.
 
 - Breaks parallel trends by a known amount and tracks the estimate

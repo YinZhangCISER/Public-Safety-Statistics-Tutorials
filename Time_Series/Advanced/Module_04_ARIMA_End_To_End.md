@@ -107,7 +107,7 @@ There is no planted ARIMA order to recover. What the dataset supplies is an agen
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_04_ARIMA_End_To_End.ipynb](Notebooks/Module_04_ARIMA_End_To_End.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Advanced/Notebooks/Module_04_ARIMA_End_To_End.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Advanced/Notebooks/Module_04_ARIMA_End_To_End.ipynb)
 > About 30 minutes.
 
 The exercise runs the workflow on Havenbrook, where the recipe that worked for Millgate turns out to be the wrong one.

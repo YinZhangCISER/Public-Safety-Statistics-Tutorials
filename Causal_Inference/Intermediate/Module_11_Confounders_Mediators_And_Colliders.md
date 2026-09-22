@@ -76,7 +76,7 @@ For any variable, in this order:
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_11_Confounders_Mediators_And_Colliders.ipynb](Notebooks/Module_11_Confounders_Mediators_And_Colliders.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Intermediate/Notebooks/Module_11_Confounders_Mediators_And_Colliders.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Intermediate/Notebooks/Module_11_Confounders_Mediators_And_Colliders.ipynb)
 > About 30 minutes.
 
 - Shows the confounder case by removing the month effects

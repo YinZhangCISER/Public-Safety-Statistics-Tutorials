@@ -89,7 +89,7 @@ There is no useful monthly chart here. The fix is to change the time unit until 
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_08_Rolling_Statistics_And_Control_Limits.ipynb](Notebooks/Module_08_Rolling_Statistics_And_Control_Limits.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Intermediate/Notebooks/Module_08_Rolling_Statistics_And_Control_Limits.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Intermediate/Notebooks/Module_08_Rolling_Statistics_And_Control_Limits.ipynb)
 > About 20 minutes.
 
 The notebook walks all three steps, shows what a rolling mean does to an event, demonstrates the dispersion trap directly, pools Orrindale to years, and ends with a reusable `control_chart` function. The exercise runs it on Havenbrook and asks whether a use of force chart notices a reclassification of calls for service.

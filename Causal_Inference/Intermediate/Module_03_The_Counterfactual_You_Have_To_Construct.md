@@ -53,7 +53,7 @@ Assuming Pinecrest would have moved with the others is exactly the assumption to
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_03_The_Counterfactual_You_Have_To_Construct.ipynb](Notebooks/Module_03_The_Counterfactual_You_Have_To_Construct.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Intermediate/Notebooks/Module_03_The_Counterfactual_You_Have_To_Construct.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Intermediate/Notebooks/Module_03_The_Counterfactual_You_Have_To_Construct.ipynb)
 > About 25 minutes.
 
 - Builds all three counterfactuals for one agency, then for four pooled

@@ -96,7 +96,7 @@ The generator satisfies A2, A3 and A4 by construction, and satisfies A1 for four
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_03_Identification_Before_Estimation.ipynb](Notebooks/Module_03_Identification_Before_Estimation.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Advanced/Notebooks/Module_03_Identification_Before_Estimation.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Advanced/Notebooks/Module_03_Identification_Before_Estimation.ipynb)
 > About 30 minutes.
 
 The exercise tests the no anticipation assumption at four dates rather than one.

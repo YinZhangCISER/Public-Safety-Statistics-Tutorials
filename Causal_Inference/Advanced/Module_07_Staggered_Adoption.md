@@ -86,7 +86,7 @@ The generator gives a single adoption date and a homogeneous effect, so the real
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_07_Staggered_Adoption.ipynb](Notebooks/Module_07_Staggered_Adoption.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Advanced/Notebooks/Module_07_Staggered_Adoption.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Advanced/Notebooks/Module_07_Staggered_Adoption.ipynb)
 > About 35 minutes.
 
 The exercise estimates each cohort against never treated agencies only, which is the logic of the modern estimators in one cell.

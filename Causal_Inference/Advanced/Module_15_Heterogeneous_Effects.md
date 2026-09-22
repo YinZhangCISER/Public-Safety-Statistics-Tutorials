@@ -102,7 +102,7 @@ The generator gives all five agencies the identical 12 percent effect. The homog
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_15_Heterogeneous_Effects.ipynb](Notebooks/Module_15_Heterogeneous_Effects.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Advanced/Notebooks/Module_15_Heterogeneous_Effects.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Advanced/Notebooks/Module_15_Heterogeneous_Effects.ipynb)
 > About 30 minutes.
 
 The exercise measures how often a search across only three splits finds an eight point gap when the effect is constant.

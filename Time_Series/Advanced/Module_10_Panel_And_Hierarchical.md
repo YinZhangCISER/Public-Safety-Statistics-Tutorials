@@ -153,7 +153,7 @@ A007's reason is visible in the pre period: it was already declining at **11.96 
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_10_Panel_And_Hierarchical.ipynb](Notebooks/Module_10_Panel_And_Hierarchical.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Advanced/Notebooks/Module_10_Panel_And_Hierarchical.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Advanced/Notebooks/Module_10_Panel_And_Hierarchical.ipynb)
 > About 40 minutes.
 
 The exercise finds out why A007 has to come out, by comparing pre programme trends.

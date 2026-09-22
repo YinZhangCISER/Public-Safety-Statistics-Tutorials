@@ -117,7 +117,7 @@ The dataset built Ashfell with a decline of **4.88 percent a year**. Poisson giv
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_02_Counts_Are_Not_Gaussian.ipynb](Notebooks/Module_02_Counts_Are_Not_Gaussian.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Advanced/Notebooks/Module_02_Counts_Are_Not_Gaussian.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Advanced/Notebooks/Module_02_Counts_Are_Not_Gaussian.ipynb)
 > About 25 minutes.
 
 The notebook builds the dispersion table, fits all three models, reproduces the Orrindale interval failure, and ends with an exercise comparing this module's dispersion estimate against the one Intermediate Module 8 obtained by a different route.

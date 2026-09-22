@@ -55,7 +55,7 @@ The whole method, on one line:
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_05_Difference_In_Differences_By_Hand.ipynb](Notebooks/Module_05_Difference_In_Differences_By_Hand.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Intermediate/Notebooks/Module_05_Difference_In_Differences_By_Hand.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Intermediate/Notebooks/Module_05_Difference_In_Differences_By_Hand.ipynb)
 > About 25 minutes.
 
 - Builds the four cells from raw incident and arrest counts

@@ -135,7 +135,7 @@ The honest position in the meantime: the published intervals condition on the fi
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_03_Model_Selection_And_Uncertainty.ipynb](Notebooks/Module_03_Model_Selection_And_Uncertainty.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Advanced/Notebooks/Module_03_Model_Selection_And_Uncertainty.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Advanced/Notebooks/Module_03_Model_Selection_And_Uncertainty.ipynb)
 > About 30 minutes.
 
 The notebook runs the selection table, the diagnostic battery, the back transform comparison, the pooled calibration check, implements CRPS and pinball loss from scratch, and demonstrates the invertibility failure. The exercise runs the whole sequence on Stonewick.

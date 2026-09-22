@@ -93,7 +93,7 @@ The generator implements exactly the graph above: a common time factor applied t
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_02_DAGs_And_The_Backdoor_Criterion.ipynb](Notebooks/Module_02_DAGs_And_The_Backdoor_Criterion.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Causal_Inference/Advanced/Notebooks/Module_02_DAGs_And_The_Backdoor_Criterion.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Causal_Inference/Advanced/Notebooks/Module_02_DAGs_And_The_Backdoor_Criterion.ipynb)
 > About 30 minutes.
 
 The exercise adds an unmeasured node for reform minded leadership and works out what it does and what can still be tested.

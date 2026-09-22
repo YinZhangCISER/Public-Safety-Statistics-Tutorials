@@ -70,7 +70,7 @@ Each link is real and moderate; the two together are weak. Every step adds its o
 ## Do It Yourself
 
 > 📓 **Notebook:** [Module_11_Lead_And_Lag.ipynb](Notebooks/Module_11_Lead_And_Lag.ipynb)
-> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OWNER/REPO/blob/main/Time_Series/Intermediate/Notebooks/Module_11_Lead_And_Lag.ipynb)
+> [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YinZhangCISER/Public-Safety-Statistics-Tutorials/blob/main/Time_Series/Intermediate/Notebooks/Module_11_Lead_And_Lag.ipynb)
 > About 20 minutes.
 
 The notebook builds the cross correlation from scratch, reproduces both panels, traces the chain, and ends with an exercise running the same analysis on Tarnbridge, where the identical built in relationship turns out to be undetectable.
