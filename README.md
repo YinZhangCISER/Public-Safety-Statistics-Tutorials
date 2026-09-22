@@ -110,7 +110,6 @@ Public-Safety-Statistics-Tutorials/
 ├── Causal_Inference/    the same three levels
 ├── Data/                the synthetic dataset, its dictionary, its answer key
 ├── Shared/              glossary, method selection guides, module template
-├── PDF/                 printable versions of each level
 └── requirements.txt
 ```
 
