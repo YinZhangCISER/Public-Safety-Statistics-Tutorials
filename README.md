@@ -47,7 +47,7 @@ Not sure which method your question calls for? See the [method selection guides]
 |---|---|---|---|---|
 | [Beginner](Causal_Inference/Beginner/) | 20 | No statistics background at all | None | **Complete** |
 | [Intermediate](Causal_Inference/Intermediate/) | 16 | Some background, wants to do it | Jupyter notebooks, gentle | **Complete** |
-| [Advanced](Causal_Inference/Advanced/) | 16 | Fits models and reports results | Jupyter notebooks, complete | **12 of 16 published** |
+| [Advanced](Causal_Inference/Advanced/) | 16 | Fits models and reports results | Jupyter notebooks, complete | **Complete** |
 
 ---
 
@@ -139,7 +139,7 @@ CISER is producing a companion series of foundational statistics videos led by s
 
 Written tutorials: **CC BY 4.0**. Code: **MIT**. Data: public domain. See [LICENSE_TEXT.md](LICENSE_TEXT.md) and [LICENSE](LICENSE).
 
-> Zhang, Y. (2026). *Public Safety Statistics Tutorials: Time Series and Causal Inference.* Washington State University. Developed for the Washington Data Exchange for Public Safety (WADEPS).
+> Zhang, Y. (2026). *Public Safety Statistics Tutorials: Time Series and Causal Inference.* Washington State University. Developed for the Washington Data Exchange for Public Safety (WADEPS). https://orcid.org/0009-0008-9364-1689
 
 GitHub will generate a formatted citation from [CITATION.cff](CITATION.cff) in the sidebar.
 

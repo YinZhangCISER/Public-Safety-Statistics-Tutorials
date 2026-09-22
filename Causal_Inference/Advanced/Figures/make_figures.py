@@ -858,9 +858,277 @@ def fig_12():
     plt.close(fig)
 
 
+
+def fig_13():
+    """Module 13. Two placebo nulls for the same estimate, and only one is right."""
+    d = panel()
+    real = fit(d, NO_A007)[0]
+
+    one = []
+    for a in COMPARISON:
+        rest = [x for x in COMPARISON if x != a]
+        one.append(fit(d[d["agency_id"].isin([a] + rest)], [a])[0])
+    one = np.array(one)
+
+    rng = np.random.default_rng(21)
+    ids = sorted(d["agency_id"].unique())
+    four = []
+    for _ in range(400):
+        pick = list(rng.choice(ids, 4, replace=False))
+        four.append(fit(d, pick)[0])
+    four = np.array(four)
+
+    fig, ax = plt.subplots(figsize=(12.4, 5.2))
+    ax.scatter(one, np.full(len(one), 1) + rng.normal(0, 0.035, len(one)),
+               s=95, color=ORANGE, zorder=5, label="one agency pretended treated, 7 of them")
+    parts = ax.violinplot([four], positions=[0], widths=0.55, showextrema=False,
+                          vert=False)
+    parts["bodies"][0].set_facecolor(AQUA)
+    parts["bodies"][0].set_alpha(0.32)
+    parts["bodies"][0].set_edgecolor(AQUA)
+    ax.scatter(four, np.full(len(four), 0) + rng.normal(0, 0.05, len(four)),
+               s=6, color=AQUA, alpha=0.35, zorder=4)
+    ax.axvline(real, color=INK, lw=2.6, zorder=7)
+    ax.text(real - 1.2, -0.62, f"the estimate, {real:+.1f}%  ", fontsize=9.5,
+            color=INK, ha="right")
+    p1 = (np.sum(one <= real) + 1) / (len(one) + 1)
+    p4 = np.mean(four <= real)
+    ax.text(30, 1, f"p = {p1:.2f}\nthe wrong null", fontsize=10, color=ORANGE,
+            va="center")
+    ax.text(30, 0, f"p = {p4:.3f}\nthe right null", fontsize=10, color=AQUA,
+            va="center")
+    ax.set_yticks([0, 1])
+    ax.set_yticklabels(["four agencies pretended\ntreated, 400 draws",
+                        "one agency pretended\ntreated, 7 of them"], fontsize=9.5)
+    ax.set_xlim(-32, 48)
+    ax.set_ylim(-0.85, 1.6)
+    ax.set_xlabel("estimated effect of a program that was never given")
+    style(ax, ygrid=False)
+    ax.grid(axis="x", color=GRID, lw=0.8, zorder=0)
+    ax.set_axisbelow(True)
+    title(ax, "The placebo null depends on how many units you pretend to treat",
+          "The treatment went to four agencies, so the four agency null is the reference.")
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_a13_placebo.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_14():
+    """Module 14. Three sensitivity analyses with three different verdicts."""
+    d = panel()
+    d["tr"] = d["agency_id"].isin(NO_A007).astype(float)
+    d["yrc"] = d["yr"] - d["yr"].min()
+
+    deltas = np.arange(0.0, -6.1, -0.5)
+    est = []
+    for delta in deltas:
+        dd = d.copy()
+        dd["adj"] = np.log(dd["n_arrests"]) + np.log(1 + delta / 100) * dd["tr"] * dd["yrc"]
+        est.append(fit(dd, NO_A007, offset=dd["adj"])[0])
+    pre = d[d["period"] == "before"]
+    z = smf.glm("n_uof ~ C(agency_id) + yr + tr:yr", pre,
+                family=sm.families.Poisson(), offset=pre["lo"]).fit()
+    k = [x for x in z.params.index if "yr" in x and "tr" in x][0]
+    olo = PCT(z.conf_int().loc[k][0])
+
+    tr = d[d["agency_id"].isin(NO_A007)]
+    y1 = rate(tr[tr["period"] == "after"])
+    before = rate(tr[tr["period"] == "before"])
+    after_c = [rate(d[(d["agency_id"] == a) & (d["period"] == "after")])
+               for a in COMPARISON]
+
+    d["settled"] = ((d["agency_id"].isin(NO_A007)) & (d["period"] == "after")).astype(float)
+    d["phase"] = ((d["agency_id"].isin(NO_A007)) & (d["period"] == "phase")).astype(float)
+    short = smf.glm("n_uof ~ settled+phase", d, family=sm.families.Poisson(),
+                    offset=d["lo"]).fit()
+    full = smf.glm("n_uof ~ C(agency_id)+C(year_month)+settled+phase", d,
+                   family=sm.families.Poisson(), offset=d["lo"]).fit()
+    bs, bf = PCT(short.params["settled"]), PCT(full.params["settled"])
+    delta_o = abs((0 - bf) / (bf - bs))
+
+    fig, (a1, a2) = plt.subplots(1, 2, figsize=(13.6, 5.0),
+                                 gridspec_kw={"width_ratios": [1.25, 1]})
+    a1.axvspan(olo, 0.6, color=AQUA, alpha=0.13, zorder=1)
+    a1.plot(deltas, est, color=BLUE, lw=2.8, zorder=5)
+    a1.axhline(0, color=INK, lw=1.8, zorder=4)
+    cross = np.interp(0, est, deltas)
+    a1.scatter([cross], [0], s=130, color=ORANGE, zorder=7)
+    a1.annotate(f"{abs(cross):.1f}% a year would\nerase the estimate",
+                xy=(cross, 0), xytext=(cross - 0.2, -12), fontsize=9.5, color=ORANGE,
+                ha="center", arrowprops=dict(arrowstyle="->", color=ORANGE, lw=1.7))
+    a1.text(-1.7, 14, "the shaded band is what\nthe pre period cannot rule out",
+            fontsize=9, color=AQUA, ha="center")
+    a1.set_xlim(0.6, -6.2)
+    a1.set_ylim(-20, 18)
+    a1.set_xlabel("hidden trend favouring the treated, percent a year")
+    a1.set_ylabel("estimated change in the rate")
+    style(a1)
+    title(a1, "Sensitivity to an unmeasured trend",
+          "The breakdown point sits just inside what the pre period allows.")
+
+    rows = [("no assumption at all:\nY(0) anywhere the untreated span",
+             100 * (y1 / max(after_c) - 1), 100 * (y1 / min(after_c) - 1), ORANGE),
+            ("Y(0) did not rise above the\ntreated group's own before value",
+             100 * (y1 / before - 1), 100 * (y1 / min(after_c) - 1), INK3)]
+    ys = [1, 0]
+    for (lab, lo, hi, c), yy in zip(rows, ys):
+        a2.plot([lo, hi], [yy, yy], color=c, lw=3.4, solid_capstyle="round", zorder=3)
+        if lo > -10:
+            a2.text(lo, yy + 0.16, f"{lo:+.1f}", ha="center", va="bottom",
+                    fontsize=9.5, color=INK2)
+        else:
+            a2.text(lo - 2.5, yy, f"{lo:+.1f}", ha="right", va="center",
+                    fontsize=9.5, color=INK2)
+        a2.text(hi + 2.5, yy, f"{hi:+.1f}", ha="left", va="center", fontsize=9.5,
+                color=INK2)
+    a2.axvline(-12.0, color=INK, lw=2.2, ls="--", zorder=6)
+    a2.text(-12.5, -0.62, "the truth ", fontsize=9.5, color=INK, ha="right")
+    a2.axvline(0, color=INK3, lw=1, ls=":", zorder=2)
+    a2.text(70, 1, "excludes the truth", fontsize=9, color=ORANGE, va="center")
+    a2.text(70, 0, "contains it, and is\n75 points wide", fontsize=9, color=INK3,
+            va="center")
+    a2.set_yticks(ys)
+    a2.set_yticklabels([r[0] for r in rows], fontsize=9)
+    a2.set_xlim(-46, 132)
+    a2.set_ylim(-0.8, 1.5)
+    a2.set_xlabel("bounds on the effect")
+    style(a2, ygrid=False)
+    a2.grid(axis="x", color=GRID, lw=0.8, zorder=0)
+    a2.set_axisbelow(True)
+    title(a2, "And bounds that assume almost nothing",
+          f"An unobservable would need {delta_o:.1f} times the pull of the observed controls.")
+
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_a14_sensitivity.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_15():
+    """Module 15. Four estimates of one common effect, and the test that says so."""
+    import scipy.stats as st
+    d = panel()
+    for a in NO_A007:
+        d[f"s_{a}"] = ((d["agency_id"] == a) & (d["period"] == "after")).astype(float)
+    d["phase"] = ((d["agency_id"].isin(NO_A007)) & (d["period"] == "phase")).astype(float)
+    terms = " + ".join(f"s_{a}" for a in NO_A007)
+    zh = smf.glm("n_uof ~ C(agency_id)+C(year_month)+phase+" + terms, d,
+                 family=sm.families.Poisson(), offset=d["lo"]).fit()
+    d["settled"] = ((d["agency_id"].isin(NO_A007)) & (d["period"] == "after")).astype(float)
+    z0 = smf.glm("n_uof ~ C(agency_id)+C(year_month)+settled+phase", d,
+                 family=sm.families.Poisson(), offset=d["lo"]).fit()
+    lr = 2 * (zh.llf - z0.llf)
+    pv = 1 - st.chi2.cdf(lr, len(NO_A007) - 1)
+
+    fig, ax = plt.subplots(figsize=(12.4, 5.2))
+    ys = np.arange(len(NO_A007) + 1)[::-1]
+    for a, yy in zip(NO_A007, ys[:-1]):
+        e = PCT(zh.params[f"s_{a}"])
+        lo, hi = [PCT(v) for v in zh.conf_int().loc[f"s_{a}"]]
+        ax.plot([lo, hi], [yy, yy], color=INK3, lw=2.8, solid_capstyle="round", zorder=3)
+        ax.scatter([e], [yy], s=85, color=INK3, zorder=5)
+        ax.text(hi + 1.2, yy, f"{e:+.1f}%", fontsize=9.5, va="center", color=INK2)
+    e = PCT(z0.params["settled"])
+    lo, hi = [PCT(v) for v in z0.conf_int().loc["settled"]]
+    ax.plot([lo, hi], [ys[-1], ys[-1]], color=AQUA, lw=3.6, solid_capstyle="round",
+            zorder=3)
+    ax.scatter([e], [ys[-1]], s=120, color=AQUA, zorder=5)
+    ax.text(hi + 1.2, ys[-1], f"{e:+.1f}%", fontsize=10.5, va="center", color=INK,
+            weight="bold")
+    ax.axvline(-12.0, color=INK, lw=2, ls="--", zorder=6)
+    ax.text(-12.5, -0.78, "the truth, common to all four ", fontsize=9.5, color=INK,
+            ha="right")
+    ax.text(18, 1.7, f"test of a common effect\nchi squared {lr:.2f} on 3 df, p = {pv:.3f}",
+            fontsize=10, color=AQUA)
+    ax.set_yticks(ys)
+    ax.set_yticklabels([SHORT[a] for a in NO_A007] + ["pooled, one common effect"],
+                       fontsize=9.5)
+    ax.set_xlim(-46, 40)
+    ax.set_ylim(-1.0, len(NO_A007) + 0.6)
+    ax.set_xlabel("estimated change in the use of force rate")
+    style(ax, ygrid=False)
+    ax.grid(axis="x", color=GRID, lw=0.8, zorder=0)
+    ax.set_axisbelow(True)
+    title(ax, "Four estimates spanning 12 points, of one identical effect",
+          "The spread is what four noisy estimates of the same number look like.")
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_a15_heterogeneous.png", dpi=150)
+    plt.close(fig)
+
+
+def fig_16():
+    """Module 16. Every design this series tried, and what survived."""
+    d = panel()
+    dall = panel(drop_a007=False)
+    tb = rate(F[F["agency_id"].isin(TREATED) & (F["period"] == "before")])
+    ta = rate(F[F["agency_id"].isin(TREATED) & (F["period"] == "after")])
+
+    rows = [
+        ("before and after", 100 * (ta / tb - 1), ORANGE, "no comparison group"),
+        ("regression discontinuity", None, ORANGE, "two agencies near the cutoff"),
+        ("instrumental variables", None, ORANGE, "strongest first stage F is 1.6"),
+        ("synthetic control", None, ORANGE, "pre period fit error 25 to 48 percent"),
+        ("propensity score", None, ORANGE, "four percent overlap, two units survive trimming"),
+        ("difference in differences,\nall five treated", _did_all(dall), ORANGE,
+         "one agency on its own pre trend"),
+        ("difference in differences,\nchecked", fit(d, NO_A007)[0], AQUA,
+         "reported, with its interval and its caveats"),
+    ]
+    # the regression discontinuity jump, converted to a proportional statement
+    CUT = 3.159
+    X = _profile_frame()
+    X["above"] = (X["pre_program_uof_per_100_arrests"] > CUT).astype(int)
+    X["post_rate"] = F[F["period"] == "after"].groupby("agency_id").apply(
+        lambda g: 100 * g["n_uof"].sum() / g["n_arrests"].sum())
+    ins = X[np.abs(X["pre_program_uof_per_100_arrests"] - CUT) < 0.80]
+    zr = sm.OLS(ins["post_rate"],
+                sm.add_constant(ins[["above",
+                                     "pre_program_uof_per_100_arrests"]])).fit()
+    rd = 100 * zr.params["above"] / CUT
+    stand = {"regression discontinuity": rd, "instrumental variables": -22.8,
+             "synthetic control": -25.1, "propensity score": None}
+
+    fig, ax = plt.subplots(figsize=(13.0, 5.6))
+    ys = np.arange(len(rows))[::-1]
+    for (lab, e, c, note), yy in zip(rows, ys):
+        if e is None:
+            e = stand.get(lab)
+        if e is None:
+            ax.text(-1.5, yy, "no estimate is defensible", fontsize=9.5,
+                    color=INK3, style="italic", ha="right", va="center")
+        else:
+            ax.barh(yy, e, color=c, height=0.34, zorder=3)
+            off = -0.9 if e < 0 else 0.9
+            ha = "right" if e < 0 else "left"
+            ax.text(e + off, yy, f"{e:+.1f}%", ha=ha, va="center", fontsize=10.5,
+                    color=INK, weight="bold")
+        ax.text(42, yy, note, fontsize=8.5, color=INK2, va="center")
+    ax.axvline(-12.0, color=INK, lw=2, ls="--", zorder=6)
+    ax.text(-12.4, -0.82, "the truth ", fontsize=9.5, color=INK, ha="right")
+    ax.axvline(0, color=INK3, lw=1.2, zorder=2)
+    ax.set_yticks(ys)
+    ax.set_yticklabels([r[0] for r in rows], fontsize=9.5)
+    ax.set_xlim(-47, 92)
+    ax.set_ylim(-1.05, len(rows) - 0.3)
+    ax.set_xticks([-40, -20, 0, 20, 40])
+    ax.set_xlabel("what each design reported")
+    style(ax, ygrid=False)
+    ax.grid(axis="x", color=GRID, lw=0.8, zorder=0)
+    ax.set_axisbelow(True)
+    title(ax, "Seven designs, one 12 percent effect, one defensible answer",
+          "Four of the seven had no business being run, and each says so in one diagnostic.")
+    fig.tight_layout()
+    fig.savefig(HERE / "fig_a16_the_causal_claim.png", dpi=150)
+    plt.close(fig)
+
+
+def _did_all(dall):
+    return fit(dall, TREATED)[0]
+
+
 if __name__ == "__main__":
     for fn in (fig_01, fig_02, fig_03, fig_04,
                fig_05, fig_06, fig_07, fig_08, fig_09,
-               fig_10, fig_11, fig_12):
+               fig_10, fig_11, fig_12,
+               fig_13, fig_14, fig_15, fig_16):
         fn()
         print("built", fn.__name__)
