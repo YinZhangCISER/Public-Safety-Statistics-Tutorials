@@ -2,6 +2,8 @@
 
 ### Time Series and Causal Inference, from no background to working analyst
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22887631.svg)](https://doi.org/10.5281/zenodo.22887631)
+
 > **Developed by Yin Zhang, PhD**
 > Assistant Professor, Data Analytics Program, Department of Mathematics and Statistics, Washington State University
 >
@@ -138,9 +140,13 @@ CISER is producing a companion series of foundational statistics videos led by s
 
 Written tutorials: **CC BY 4.0**. Code: **MIT**. Data: public domain. See [LICENSE_TEXT.md](LICENSE_TEXT.md) and [LICENSE](LICENSE).
 
-> Zhang, Y. (2026). *Public Safety Statistics Tutorials: Time Series and Causal Inference.* Washington State University. Developed for the Washington Data Exchange for Public Safety (WADEPS). https://orcid.org/0009-0008-9364-1689
+> Zhang, Y. (2026). *Public Safety Statistics Tutorials: Time Series and Causal Inference.* Washington State University. https://doi.org/10.5281/zenodo.22887631
+>
+> Author ORCID: https://orcid.org/0009-0008-9364-1689. Developed for the Washington Data Exchange for Public Safety (WADEPS) through CISER.
 
 GitHub will generate a formatted citation from [CITATION.cff](CITATION.cff) in the sidebar.
+
+The DOI above is the concept DOI, which always resolves to the newest version. To cite version 1.0.0 specifically, use https://doi.org/10.5281/zenodo.22887632.
 
 ---
 

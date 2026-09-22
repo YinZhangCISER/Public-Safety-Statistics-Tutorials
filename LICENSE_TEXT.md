@@ -15,8 +15,10 @@ indicate whether changes were made.
 
 > Zhang, Y. (2026). *Public Safety Statistics Tutorials: Time Series and
 > Causal Inference.* Washington State University. Developed for the
-> Washington Data Exchange for Public Safety (WADEPS)
-> https://orcid.org/0009-0008-9364-1689
+> Washington Data Exchange for Public Safety (WADEPS).
+> https://doi.org/10.5281/zenodo.22887631
+>
+> Author ORCID: https://orcid.org/0009-0008-9364-1689
 
 The code in this repository is licensed separately under the MIT License.
 See [LICENSE](LICENSE).

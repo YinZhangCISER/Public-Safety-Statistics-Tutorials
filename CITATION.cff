@@ -26,6 +26,16 @@ keywords:
   - statistical education
   - WADEPS
   - public safety data literacy
+doi: 10.5281/zenodo.22887631
+repository-code: "https://github.com/YinZhangCISER/Public-Safety-Statistics-Tutorials"
+url: "https://github.com/YinZhangCISER/Public-Safety-Statistics-Tutorials"
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.22887631
+    description: "The concept DOI, which always resolves to the latest version"
+  - type: doi
+    value: 10.5281/zenodo.22887632
+    description: "The archived snapshot of version 1.0.0"
 license: CC-BY-4.0
 version: "1.0.0"
 date-released: "2026-09-22"
